@@ -77,144 +77,486 @@ const TESTIMONIALS = [
   { quote: "We encourage every startup to switch to QuickInfra. Hassle-free DevOps infra management, period.",             company: "CloudAge",                      role: "Director",          initial: "C" },
 ];
 
-// ─── Auto-Heal Event Feed Data ──────────────────────────────────────────────
+// ─── Terraform Terminal Widget Data ─────────────────────────────────────────
 
-const AUTOFEED_EVENTS = [
-  { id: 1, type: "scale",      icon: "↑", color: "#3b82f6", title: "CPU spike detected on ECS",    detail: "api-service · us-east-1 · 94% CPU",          action: "Scaled 2 → 6 tasks",          actionColor: "#3b82f6", time: "just now" },
-  { id: 2, type: "security",   icon: "⊕", color: "#10b981", title: "SSL cert expiring in 3 days",  detail: "api.quickinfracloud.com · ACM",                action: "Auto-renewed",                actionColor: "#10b981", time: "2m ago"   },
-  { id: 3, type: "cost",       icon: "$", color: "#f59e0b", title: "Idle t3.large detected",        detail: "i-0xa1b2c3 · ap-south-1 · 3% avg CPU",        action: "Rightsized → t3.small",       actionColor: "#f59e0b", time: "11m ago"  },
-  { id: 4, type: "drift",      icon: "⟳", color: "#8b5cf6", title: "Terraform drift on aws_sg",    detail: "sg-0xd4e5f6 · port 22 opened manually",        action: "Corrected to desired state",  actionColor: "#8b5cf6", time: "34m ago"  },
-  { id: 5, type: "compliance", icon: "✦", color: "#ef4444", title: "RDS automated backup missed",  detail: "prod-postgres · backup window skipped",        action: "Triggered & verified",        actionColor: "#ef4444", time: "1h ago"   },
-  { id: 6, type: "cost",       icon: "$", color: "#f59e0b", title: "Unusual spend spike · +38%",   detail: "EC2 on-demand · 14 untagged instances",        action: "Reserved instance purchased", actionColor: "#f59e0b", time: "3h ago"   },
+const TF_SERVICES = [
+  { type: "VPC",       module: "SimpleVPC",     desc: "Simple VPC Network",  status: "Active" },
+  { type: "SG",        module: "SG-Web",        desc: "Web Security Group",  status: "Active" },
+  { type: "KeyPair",   module: "SingleAZ_Key",  desc: "SSH Key Pair",        status: "Active" },
+  { type: "EC2",       module: "EC2-Blue",      desc: "App Server Blue",     status: "Active" },
+  { type: "EC2",       module: "EC2-Green",     desc: "App Server Green",    status: "Active" },
 ];
 
-const FEED_STATS = [
-  { label: "Events Today",  value: 47,   suffix: "",  color: "#3b82f6" },
-  { label: "Cost Saved",    value: 1840, suffix: "$", color: "#10b981" },
-  { label: "Auto-Resolved", value: 23,   suffix: "",  color: "#8b5cf6" },
+const TF_ACTIONS = [
+  "Generate Terraform",
+  "View Terraform Plan",
+  "Create Infrastructure",
+  "Plan and Create",
+  "Remove Infrastructure",
 ];
 
-// ─── Hero Auto-Heal Feed ──────────────────────────────────────────────────────
+// Log sets per action — each line: [text, color]
+// color: "default" | "green" | "yellow" | "cyan" | "red" | "dim"
+const TF_LOGS = {
+  "Generate Terraform": [
+    ["Starting Infrastructure Activity...",              "default"],
+    ["Fetching Infrastructure Project Service details",  "default"],
+    ["Project Status set to 'In-Progress'",              "yellow" ],
+    ["Cleaning Project Output Folder",                   "dim"    ],
+    ["Generating Terraform Files",                       "cyan"   ],
+    ["Formatting Terraform Files",                       "cyan"   ],
+    ["Completed Terraform Generation",                   "green"  ],
+    ["Completed Infrastructure activity...",             "green"  ],
+    ["Project Status reset to 'Active'",                 "default"],
+    ["========================================",         "dim"    ],
+    ["Terraform Generation Status = Success",            "green"  ],
+  ],
+  "View Terraform Plan": [
+    ["Initialising Terraform...",                        "default"],
+    ["terraform init · provider registry.terraform.io", "dim"    ],
+    ["Refreshing state · aws_vpc.main",                  "cyan"   ],
+    ["Refreshing state · aws_subnet.public",             "cyan"   ],
+    ["Refreshing state · aws_instance.ec2_blue",         "cyan"   ],
+    ["Refreshing state · aws_instance.ec2_green",        "cyan"   ],
+    ["Plan: 0 to add, 0 to change, 0 to destroy",        "green"  ],
+    ["========================================",         "dim"    ],
+    ["Terraform Plan Status = No Changes",               "green"  ],
+  ],
+  "Create Infrastructure": [
+    ["Starting Infrastructure Creation...",              "default"],
+    ["Initialising Terraform workspace",                 "default"],
+    ["terraform apply -auto-approve",                    "dim"    ],
+    ["aws_vpc.main: Creating...",                        "cyan"   ],
+    ["aws_vpc.main: Creation complete after 2s",         "green"  ],
+    ["aws_security_group.sg_web: Creating...",           "cyan"   ],
+    ["aws_security_group.sg_web: Creation complete",     "green"  ],
+    ["aws_instance.ec2_blue: Creating...",               "cyan"   ],
+    ["aws_instance.ec2_green: Creating...",              "cyan"   ],
+    ["aws_instance.ec2_blue: Creation complete",         "green"  ],
+    ["aws_instance.ec2_green: Creation complete",        "green"  ],
+    ["Apply complete! Resources: 5 added",               "green"  ],
+    ["========================================",         "dim"    ],
+    ["Infrastructure Creation Status = Success",         "green"  ],
+  ],
+  "Plan and Create": [
+    ["Starting Plan and Create...",                      "default"],
+    ["Running terraform plan first",                     "dim"    ],
+    ["Plan: 5 to add, 0 to change, 0 to destroy",        "yellow" ],
+    ["Proceeding with apply...",                         "default"],
+    ["aws_vpc.main: Creating...",                        "cyan"   ],
+    ["aws_vpc.main: Creation complete after 2s",         "green"  ],
+    ["aws_instance.ec2_blue: Creating...",               "cyan"   ],
+    ["aws_instance.ec2_blue: Creation complete",         "green"  ],
+    ["Apply complete! Resources: 5 added",               "green"  ],
+    ["========================================",         "dim"    ],
+    ["Plan and Create Status = Success",                 "green"  ],
+  ],
+  "Remove Infrastructure": [
+    ["Starting Infrastructure Removal...",               "default"],
+    ["terraform destroy -auto-approve",                  "dim"    ],
+    ["aws_instance.ec2_blue: Destroying...",             "yellow" ],
+    ["aws_instance.ec2_green: Destroying...",            "yellow" ],
+    ["aws_instance.ec2_blue: Destruction complete",      "default"],
+    ["aws_instance.ec2_green: Destruction complete",     "default"],
+    ["aws_security_group.sg_web: Destroying...",         "yellow" ],
+    ["aws_security_group.sg_web: Destruction complete",  "default"],
+    ["aws_vpc.main: Destroying...",                      "yellow" ],
+    ["aws_vpc.main: Destruction complete",               "default"],
+    ["Destroy complete! Resources: 5 destroyed",         "red"    ],
+    ["========================================",         "dim"    ],
+    ["Remove Infrastructure Status = Complete",          "green"  ],
+  ],
+};
 
-function HeroAutoFeed() {
-  const [visibleCount, setVisibleCount] = useState(0);
-  const [mounted, setMounted]           = useState(false);
-  const [statVals, setStatVals]         = useState([0, 0, 0]);
+const LINE_COLORS = {
+  default: "#e2e8f0",
+  green:   "#4ade80",
+  yellow:  "#fbbf24",
+  cyan:    "#67e8f9",
+  red:     "#f87171",
+  dim:     "#64748b",
+};
 
+// ─── Hero Terraform Terminal ──────────────────────────────────────────────────
+
+function HeroTerminal() {
+  // Phase: "select" | "running" | "done"
+  const [phase,          setPhase]          = useState("select");
+  const [selectedAction, setSelectedAction] = useState("Generate Terraform");
+  // Each line: { id, text, color } — id is stable so existing lines never re-animate
+  const [lines,          setLines]          = useState([]);
+  // Track which line id is currently animating in — only THAT line gets slide-in anim
+  const [animatingId,    setAnimatingId]    = useState(null);
+  const [showToast,      setShowToast]      = useState(false);
+  const [mounted,        setMounted]        = useState(false);
+  const terminalRef  = useRef(null);
+  const timersRef    = useRef([]);   // track all pending timeouts for cleanup
+
+  const clearAllTimers = () => {
+    timersRef.current.forEach(clearTimeout);
+    timersRef.current = [];
+  };
+
+  const addTimer = (fn, ms) => {
+    const id = setTimeout(fn, ms);
+    timersRef.current.push(id);
+    return id;
+  };
+
+  // Entrance
   useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 100);
+    const t = setTimeout(() => setMounted(true), 120);
     return () => clearTimeout(t);
   }, []);
 
+  // Auto-demo after entrance
   useEffect(() => {
     if (!mounted) return;
-    const reveal = () => {
-      setVisibleCount((n) => {
-        if (n >= AUTOFEED_EVENTS.length) {
-          setTimeout(() => setVisibleCount(0), 1200);
-          return n;
-        }
-        return n + 1;
-      });
-    };
-    const iv = setInterval(reveal, 1100);
-    return () => clearInterval(iv);
+    const t = addTimer(() => runTerminal("Generate Terraform"), 1800);
+    return () => clearTimeout(t);
   }, [mounted]);
 
-  useEffect(() => {
-    if (!mounted) return;
-    FEED_STATS.forEach((stat, i) => {
-      const steps = 30;
-      const increment = stat.value / steps;
-      let step = 0;
-      const iv = setInterval(() => {
-        step++;
-        setStatVals((prev) => {
-          const next = [...prev];
-          next[i] = step >= steps ? stat.value : Math.round(increment * step);
-          return next;
-        });
-        if (step >= steps) clearInterval(iv);
-      }, 40 + i * 15);
+  // Cleanup on unmount
+  useEffect(() => () => clearAllTimers(), []);
+
+  const runTerminal = (action) => {
+    clearAllTimers();
+    const logs = TF_LOGS[action] || TF_LOGS["Generate Terraform"];
+
+    setPhase("running");
+    setLines([]);
+    setAnimatingId(null);
+    setShowToast(false);
+
+    logs.forEach(([text, color], i) => {
+      addTimer(() => {
+        const lineId = `${action}-${i}`;
+        setAnimatingId(lineId);
+        setLines((prev) => [...prev, { id: lineId, text, color }]);
+        if (terminalRef.current) {
+          terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+        }
+        // After last line
+        if (i === logs.length - 1) {
+          addTimer(() => {
+            setPhase("done");
+            setAnimatingId(null);
+            setShowToast(true);
+            addTimer(() => {
+              setShowToast(false);
+              addTimer(() => {
+                setPhase("select");
+                setLines([]);
+                // Loop
+                addTimer(() => runTerminal("Generate Terraform"), 2000);
+              }, 500);
+            }, 2800);
+          }, 500);
+        }
+      }, i * 350);
     });
-  }, [mounted]);
+  };
+
+  const handleExecute = () => {
+    if (phase === "running") return;
+    runTerminal(selectedAction);
+  };
 
   return (
-    <div style={{
-      height: 500, width: "100%",
-      opacity:   mounted ? 1 : 0,
-      transform: mounted ? "translateY(0) scale(1)" : "translateY(28px) scale(0.97)",
-      transition: "opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)",
-    }}>
-      <div className="h-full" style={{ animation: "float 5s ease-in-out infinite" }}>
-        <div className="h-full flex flex-col rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 bg-white dark:bg-slate-900 shadow-2xl shadow-blue-500/10 dark:shadow-black/50">
+    // Outer: just entrance animation, no float here
+    <div
+      style={{
+        height: 520,
+        width: "100%",
+        opacity:    mounted ? 1 : 0,
+        transform:  mounted ? "translateY(0) scale(1)" : "translateY(28px) scale(0.97)",
+        transition: "opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)",
+        willChange: "opacity, transform",
+      }}
+    >
+      {/* Float wrapper — separate from entrance so transforms don't fight */}
+      <div className="h-full" >
+      <div
+        className="h-full flex flex-col rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 shadow-2xl shadow-blue-500/10 dark:shadow-black/50"
+      >
 
-          <div className="flex-shrink-0 flex items-center justify-between px-5 py-3.5 bg-gradient-to-r from-blue-600 via-blue-600 to-indigo-600">
-            <div className="flex items-center gap-2.5">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-400" />
-              </span>
-              <span className="text-sm font-bold text-white tracking-tight">AutoOps Live</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full bg-green-400/20 border border-green-400/30 text-[10px] font-bold text-green-300">24 / 7 Active</span>
-              <span className="px-2 py-0.5 rounded-full bg-white/15 text-[10px] font-bold text-white border border-white/20">ap-south-1</span>
-            </div>
+        {/* ── Window chrome bar ── */}
+        <div className="shrink-0 flex items-center gap-2 px-4 py-3 bg-[#1a1f2e] border-b border-white/8">
+          {/* Traffic lights */}
+          <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
+            <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
+            <div className="w-3 h-3 rounded-full bg-[#28c840]" />
           </div>
+          <div className="flex items-center gap-2 ml-2">
+            <span className="text-white/40 text-xs">▶_</span>
+            <span className="text-white/80 text-xs font-bold">Terraform Output</span>
+            {phase !== "select" && (
+              <span
+                className="flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md"
+                style={{
+                  background: "#3b82f620",
+                  color: "#60a5fa",
+                  border: "1px solid #3b82f630",
+                }}
+              >
+                <span
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{
+                    background: phase === "running" ? "#fbbf24" : "#4ade80",
+                    animation: phase === "running" ? "dashPulse 1s ease-in-out infinite" : "none",
+                  }}
+                />
+                {selectedAction}
+              </span>
+            )}
+          </div>
+          <div className="ml-auto flex items-center gap-3">
+            {/* Terraform / Ansible tabs */}
+            <div className="flex items-center gap-1">
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-600/30 text-blue-400 border border-blue-500/30">
+                ⬡ Terraform {phase !== "select" ? lines.length : ""}
+              </span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold text-white/30 border border-white/10">
+                Ansible
+              </span>
+            </div>
+            {phase !== "select" && (
+              <span className="text-[10px] text-white/30 font-mono">
+                {lines.length} lines
+              </span>
+            )}
+          </div>
+        </div>
 
-          <div className="flex-shrink-0 flex items-center gap-3 px-5 py-2.5 border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900">
-            {[{ label: "Scaling", color: "#3b82f6" }, { label: "Security", color: "#10b981" }, { label: "Cost", color: "#f59e0b" }, { label: "Drift", color: "#8b5cf6" }, { label: "Compliance", color: "#ef4444" }].map(({ label, color }) => (
-              <div key={label} className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: color }} />
-                <span className="text-[9px] font-bold text-slate-500">{label}</span>
+        {/* ── Project info strip ── */}
+        <div className="shrink-0 flex items-center justify-between px-4 py-2 bg-[#151929] border-b border-white/6">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Project</span>
+            <span className="text-[11px] font-bold text-white/70">EC2 DevOps Infra · ap-south-1</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400" style={{ animation: "dashPulse 2s ease-in-out infinite" }} />
+            <span className="text-[10px] font-bold text-green-400">Connected</span>
+          </div>
+        </div>
+
+        {/* ── Services table (Phase: select) / Terminal output (Phase: running/done) ── */}
+        <div className="flex-1 overflow-hidden bg-[#0d1117] relative">
+
+          {/* Services table */}
+          <div
+            style={{
+              position: "absolute", inset: 0,
+              opacity:    phase === "select" ? 1 : 0,
+              transform:  phase === "select" ? "translateY(0)" : "translateY(-8px)",
+              transition: "opacity 0.3s ease, transform 0.3s ease",
+              pointerEvents: phase === "select" ? "auto" : "none",
+              overflow: "auto",
+            }}
+          >
+            {/* Table header */}
+            <div className="flex items-center gap-3 px-4 py-2.5 border-b border-white/6 bg-[#161b27]">
+              <span className="text-[10px] font-extrabold uppercase tracking-widest text-white/40 w-20">Type</span>
+              <span className="text-[10px] font-extrabold uppercase tracking-widest text-white/40 flex-1">Module</span>
+              <span className="text-[10px] font-extrabold uppercase tracking-widest text-white/40 flex-1 hidden sm:block">Description</span>
+              <span className="text-[10px] font-extrabold uppercase tracking-widest text-white/40 w-16 text-right">Status</span>
+            </div>
+            {TF_SERVICES.map((svc, i) => (
+              <div
+                key={i}
+                className="flex items-center gap-3 px-4 py-2.5 border-b border-white/4 hover:bg-white/3 transition-colors"
+              >
+                <div
+                  className="w-20 flex items-center gap-1.5"
+                >
+                  <span
+                    className="text-[10px] font-extrabold px-1.5 py-0.5 rounded"
+                    style={{
+                      background: ["#3b82f615","#8b5cf615","#10b98115","#f59e0b15","#06b6d415"][i],
+                      color:      ["#60a5fa",  "#a78bfa",  "#34d399",  "#fbbf24",  "#22d3ee" ][i],
+                    }}
+                  >
+                    {svc.type}
+                  </span>
+                </div>
+                <span className="text-[11px] font-mono text-white/60 flex-1 truncate">{svc.module}</span>
+                <span className="text-[11px] text-white/35 flex-1 truncate hidden sm:block">{svc.desc}</span>
+                <div className="w-16 flex justify-end">
+                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-green-500/15 text-green-400 border border-green-500/20">
+                    {svc.status}
+                  </span>
+                </div>
               </div>
             ))}
-            <div className="ml-auto flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 dash-pulse" />
-              <span className="text-[9px] font-bold text-blue-600 dark:text-blue-400">Monitoring</span>
-            </div>
           </div>
 
-          <div className="flex-1 px-4 py-3 overflow-hidden flex flex-col gap-2">
-            {AUTOFEED_EVENTS.map((ev, i) => {
-              const show = i < visibleCount;
+          {/* Terminal log output */}
+          <div
+            ref={terminalRef}
+            style={{
+              position: "absolute", inset: 0,
+              opacity:    phase !== "select" ? 1 : 0,
+              transform:  phase !== "select" ? "translateY(0)" : "translateY(8px)",
+              transition: "opacity 0.3s ease, transform 0.3s ease",
+              pointerEvents: phase !== "select" ? "auto" : "none",
+              overflow: "auto",
+              padding: "12px 16px",
+              fontFamily: "ui-monospace, 'Cascadia Code', 'JetBrains Mono', monospace",
+            }}
+          >
+            {lines.map(({ id, text, color }) => {
+              const isNew = id === animatingId;
               return (
-                <div key={ev.id} style={{ opacity: show ? 1 : 0, transform: show ? "translateX(0)" : "translateX(16px)", transition: "opacity 0.45s ease, transform 0.45s ease", height: 58, flexShrink: 0 }}>
-                  <div className="flex items-start gap-3 px-3.5 py-2.5 rounded-xl h-full" style={{ background: ev.color + "08", border: `1px solid ${ev.color}20` }}>
-                    <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-extrabold mt-0.5" style={{ background: ev.color + "18", color: ev.color, border: `1px solid ${ev.color}30` }}>{ev.icon}</div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-[11px] font-bold text-slate-800 dark:text-slate-100 truncate">{ev.title}</span>
-                        <span className="text-[9px] font-bold text-slate-400 flex-shrink-0">{ev.time}</span>
-                      </div>
-                      <div className="flex items-center justify-between gap-2 mt-0.5">
-                        <span className="text-[9.5px] text-slate-500 truncate font-mono">{ev.detail}</span>
-                        <span className="flex-shrink-0 text-[8.5px] font-bold px-2 py-0.5 rounded-md" style={{ background: ev.actionColor + "15", color: ev.actionColor, border: `1px solid ${ev.actionColor}25` }}>✓ {ev.action}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <div
+                  key={id}
+                  className="flex items-start gap-3 mb-1"
+                  style={isNew ? {
+                    animation: "logLineIn 0.3s cubic-bezier(0.16,1,0.3,1) forwards",
+                  } : {
+                    opacity: 1,
+                    transform: "none",
+                  }}
+                >
+                <span className="text-[11px] select-none w-7 flex-shrink-0 text-right" style={{ color: "#334155" }}>
+                  {String(lines.findIndex(l => l.id === id) + 1).padStart(3, "0")}
+                </span>
+                <span
+                  className="text-[11.5px] leading-relaxed"
+                  style={{ color: LINE_COLORS[color] || LINE_COLORS.default }}
+                >
+                  {text}
+                </span>
+              </div>
               );
             })}
-          </div>
-
-          <div className="flex-shrink-0 border-t border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/60">
-            <div className="grid grid-cols-3 divide-x divide-slate-200 dark:divide-slate-800">
-              {FEED_STATS.map((stat, i) => (
-                <div key={stat.label} className="flex flex-col items-center py-3 px-2">
-                  <span className="text-lg font-extrabold leading-none tabular-nums" style={{ color: stat.color }}>{stat.suffix}{statVals[i].toLocaleString()}</span>
-                  <span className="text-[9px] font-bold text-slate-500 dark:text-slate-600 mt-1 text-center leading-tight">{stat.label}</span>
-                </div>
-              ))}
-            </div>
+            {/* Blinking cursor */}
+            {phase === "running" && (
+              <div className="flex items-start gap-3 mt-1">
+                <span className="text-[11px] w-7 flex-shrink-0" style={{ color: "#334155" }}>
+                  {String(lines.length + 1).padStart(3, "0")}
+                </span>
+                <span
+                  className="inline-block w-2 h-[14px]"
+                  style={{
+                    background: "#4ade80",
+                    animation: "dashBlink 1s step-end infinite",
+                  }}
+                />
+              </div>
+            )}
+            {/* Done indicator */}
+            {phase === "done" && (
+              <div className="mt-3 text-[10px] font-bold text-white/20 font-mono">
+                — process exited with code 0 —
+              </div>
+            )}
           </div>
 
         </div>
+
+        {/* ── Bottom controls ── */}
+        <div className="flex-shrink-0 bg-[#161b27] border-t border-white/8 px-4 py-3">
+          <div className="flex items-center gap-2">
+            {/* Account pill */}
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400 flex-shrink-0" />
+              <span className="text-[10px] font-bold text-white/60 whitespace-nowrap">AWS Account Dev</span>
+            </div>
+
+            {/* Action selector */}
+            <div className="relative flex-1">
+              <select
+                value={selectedAction}
+                onChange={(e) => setSelectedAction(e.target.value)}
+                disabled={phase === "running"}
+                className="w-full appearance-none text-[10px] font-bold rounded-lg px-3 py-1.5 pr-6 cursor-pointer focus:outline-none transition-all"
+                style={{
+                  background: "#1e2535",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  color: "#93c5fd",
+                }}
+              >
+                {TF_ACTIONS.map((a) => <option key={a} value={a}>{a}</option>)}
+              </select>
+              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none text-[10px]">▾</span>
+            </div>
+
+            {/* Execute button */}
+            <button
+              onClick={handleExecute}
+              disabled={phase === "running"}
+              className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-[11px] font-extrabold transition-all"
+              style={{
+                background: phase === "running" ? "#1e40af80" : "#2563eb",
+                color: phase === "running" ? "#93c5fd80" : "#ffffff",
+                border: "1px solid rgba(96,165,250,0.3)",
+                cursor: phase === "running" ? "not-allowed" : "pointer",
+                boxShadow: phase === "running" ? "none" : "0 0 16px #3b82f630",
+              }}
+            >
+              {phase === "running" ? (
+                <>
+                  <span
+                    style={{
+                      width: 10, height: 10, borderRadius: "50%", display: "inline-block",
+                      borderTop: "2px solid #93c5fb", borderRight: "2px solid transparent",
+                      animation: "dashSpin 0.8s linear infinite",
+                    }}
+                  />
+                  Running
+                </>
+              ) : (
+                <>▶ Execute</>
+              )}
+            </button>
+          </div>
+
+          {/* Status bar */}
+          <div className="flex items-center justify-between mt-2">
+            <span className="text-[9px] text-white/20 font-mono">Terraform console ready</span>
+            {phase !== "select" && (
+              <span className="text-[9px] text-white/20 font-mono">
+                {phase === "running" ? "executing..." : "✓ completed"}
+              </span>
+            )}
+          </div>
+        </div>
+
       </div>
+      </div>
+
+      {/* Toast notification */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 90,
+          right: 10,
+          opacity:    showToast ? 1 : 0,
+          transform:  showToast ? "translateY(0) scale(1)" : "translateY(8px) scale(0.96)",
+          transition: "opacity 0.3s ease, transform 0.3s ease",
+          pointerEvents: "none",
+          zIndex: 10,
+        }}
+      >
+        <div
+          className="flex items-center gap-2 px-3 py-2 rounded-xl text-[11px] font-bold"
+          style={{
+            background: "#052e16",
+            border: "1px solid #166534",
+            color: "#4ade80",
+            boxShadow: "0 8px 24px #00000060",
+          }}
+        >
+          <span className="w-4 h-4 rounded-full bg-green-500/20 flex items-center justify-center text-[9px]">✓</span>
+          Success · {selectedAction}
+        </div>
+      </div>
+
     </div>
   );
 }
+
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
@@ -244,7 +586,7 @@ export default function HomePage() {
         setActivePersona((p) => (p + 1) % PERSONAS.length);
         setCardVisible(true);
       }, 300);
-    }, 10000);
+    }, 4000);
   };
 
   useEffect(() => {
@@ -304,7 +646,7 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
-            <HeroAutoFeed />
+            <HeroTerminal />
           </div>
         </div>
       </section>
@@ -517,7 +859,22 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                  
+                  {/* Before / After metrics */}
+                  <div className="border-t border-slate-100 dark:border-slate-800 pt-5">
+                    <p className="text-[9px] font-extrabold tracking-widest uppercase text-slate-400 dark:text-slate-600 mb-3">Real Impact</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      {persona.metrics.map(({ label, before, after }) => (
+                        <div key={label} className="rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 p-4">
+                          <p className="text-[10px] font-bold text-slate-400 dark:text-slate-600 mb-2 uppercase tracking-wider">{label}</p>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-sm font-bold text-red-400 line-through">{before}</span>
+                            <span className="text-slate-300 dark:text-slate-600">→</span>
+                            <span className="text-sm font-extrabold" style={{ color: persona.color }}>{after}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
 
                 </div>
               </div>
@@ -528,7 +885,7 @@ export default function HomePage() {
       </section>
 
       {/* ── INTEGRATIONS ─────────────────────────────────────────────────── */}
-      {/* <section className="py-20 sm:py-24 px-4 sm:px-6 lg:px-8">
+      <section className="py-20 sm:py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           <p className="text-[10px] font-bold tracking-widest uppercase text-blue-600 dark:text-blue-500 mb-3">Integrations</p>
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Works With Your Stack</h2>
@@ -540,7 +897,7 @@ export default function HomePage() {
             <div className="px-4 py-2 rounded-lg border text-sm font-semibold border-slate-100 dark:border-slate-800/50 text-slate-300 dark:text-slate-700">+185 more</div>
           </div>
         </div>
-      </section> */}
+      </section>
 
       {/* ── TESTIMONIALS ─────────────────────────────────────────────────── */}
       <section className="py-20 sm:py-24 px-4 sm:px-6 lg:px-8 border-y border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40">
@@ -568,11 +925,11 @@ export default function HomePage() {
       </section>
 
       {/* ── FINAL CTA ────────────────────────────────────────────────────── */}
-      {/* <section className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <section className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,rgba(59,130,246,0.07),transparent)] dark:bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,rgba(59,130,246,0.12),transparent)]" />
         <div className="relative max-w-2xl mx-auto text-center">
           <p className="text-[10px] font-bold tracking-widest uppercase text-blue-600 dark:text-blue-500 mb-6">Get Started</p>
-          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-6">Your infra, fully automated .</h2>
+          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-6">Done babysitting<br />your infra?</h2>
           <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 font-light leading-relaxed mb-10">
             Start your free trial today. No credit card. No DevOps engineer needed. Production-ready infra in under an hour.
           </p>
@@ -588,7 +945,7 @@ export default function HomePage() {
             ISO 27001 · AWS Select Partner · SOC 2 Ready
           </p>
         </div>
-      </section> */}
+      </section>
 
     </div>
   );
