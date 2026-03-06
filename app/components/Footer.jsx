@@ -1,5 +1,14 @@
 import Link from "next/link";
-import { Twitter, Linkedin, Youtube, Github, Mail, Phone, MapPin, ArrowRight } from "lucide-react";
+import {
+  Twitter,
+  Linkedin,
+  Youtube,
+  Github,
+  Mail,
+  Phone,
+  MapPin,
+  ArrowRight,
+} from "lucide-react";
 
 const FOOTER_LINKS = [
   {
@@ -57,7 +66,6 @@ const BADGES = ["ISO 27001", "ISO 9001", "AWS Select Partner", "SOC 2 Ready"];
 export default function Footer() {
   return (
     <footer className="bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
-
       {/* CTA Banner */}
       <div className="bg-blue-600 dark:bg-blue-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -71,8 +79,8 @@ export default function Footer() {
               </p>
             </div>
             <Link
-              href="/trial"
-              className="flex-shrink-0 flex items-center gap-2 px-6 py-3 rounded-xl
+              href="https://console.quickinfra.cloud/"
+              className="shrink-0 flex items-center gap-2 px-6 py-3 rounded-xl
                 bg-white text-blue-600 font-bold text-sm
                 hover:bg-blue-50 transition-all hover:-translate-y-px
                 shadow-lg shadow-blue-800/20"
@@ -85,10 +93,8 @@ export default function Footer() {
 
       {/* Main Footer Body */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-8">
-
         {/* Top grid */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 lg:gap-8 mb-12">
-
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-2.5 mb-5">
@@ -101,7 +107,8 @@ export default function Footer() {
             </Link>
 
             <p className="text-sm text-slate-700 dark:text-slate-400 leading-relaxed font-light mb-6 max-w-xs">
-              DevOps &amp; InfraOps automation platform helping engineering teams ship faster with automated cloud infrastructure.
+              DevOps &amp; InfraOps automation platform helping engineering
+              teams ship faster with automated cloud infrastructure.
             </p>
 
             <div className="flex gap-2 flex-wrap">
@@ -155,9 +162,11 @@ export default function Footer() {
             className="flex items-center gap-2.5 text-sm text-slate-700 dark:text-slate-400
               hover:text-blue-600 dark:hover:text-blue-400 transition-colors group"
           >
-            <span className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0
+            <span
+              className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0
               bg-blue-50 dark:bg-slate-800 text-blue-500
-              group-hover:bg-blue-100 dark:group-hover:bg-slate-700 transition-colors">
+              group-hover:bg-blue-100 dark:group-hover:bg-slate-700 transition-colors"
+            >
               <Mail size={13} />
             </span>
             info@quickinfracloud.com
@@ -167,20 +176,25 @@ export default function Footer() {
             className="flex items-center gap-2.5 text-sm text-slate-700 dark:text-slate-400
               hover:text-blue-600 dark:hover:text-blue-400 transition-colors group"
           >
-            <span className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0
+            <span
+              className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0
               bg-blue-50 dark:bg-slate-800 text-blue-500
-              group-hover:bg-blue-100 dark:group-hover:bg-slate-700 transition-colors">
+              group-hover:bg-blue-100 dark:group-hover:bg-slate-700 transition-colors"
+            >
               <Phone size={13} />
             </span>
             +91 20 4447 3448
           </a>
           <div className="flex items-start gap-2.5 text-sm text-slate-700 dark:text-slate-400">
-            <span className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5
-              bg-blue-50 dark:bg-slate-800 text-blue-500">
+            <span
+              className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5
+              bg-blue-50 dark:bg-slate-800 text-blue-500"
+            >
               <MapPin size={13} />
             </span>
             <span className="font-light leading-relaxed">
-              Clover Hills Plaza, Office 523, 5th Floor,<br className="hidden sm:block" />
+              Clover Hills Plaza, Office 523, 5th Floor,
+              <br className="hidden sm:block" />
               Kondhwa, Pune — 411048
             </span>
           </div>
@@ -208,17 +222,20 @@ export default function Footer() {
 
           {/* Legal links */}
           <div className="flex gap-5 order-2 md:order-3">
-            <Link href="/privacy"
-              className="text-xs font-light text-slate-400 dark:text-slate-600 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+            <Link
+              href="/privacy"
+              className="text-xs font-light text-slate-400 dark:text-slate-600 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >
               Privacy Policy
             </Link>
-            <Link href="/terms"
-              className="text-xs font-light text-slate-400 dark:text-slate-600 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+            <Link
+              href="/terms"
+              className="text-xs font-light text-slate-400 dark:text-slate-600 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >
               Terms of Use
             </Link>
           </div>
         </div>
-
       </div>
     </footer>
   );

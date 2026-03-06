@@ -630,7 +630,7 @@ export default function HomePage() {
                 QuickInfra automates your entire infrastructure layer — provisioning, CI/CD, compliance, cost optimisation. Your engineers write features, not pipelines.
               </p>
               <div className="flex flex-wrap gap-3">
-                <Link href="/trial" className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40 transition-all hover:-translate-y-0.5">
+                <Link href="https://console.quickinfra.cloud/" className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40 transition-all hover:-translate-y-0.5">
                   Start Free Trial <ArrowRight size={15} />
                 </Link>
                 <button className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-blue-300 dark:hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400 transition-all hover:-translate-y-0.5">
@@ -934,12 +934,10 @@ export default function HomePage() {
             Start your free trial today. No credit card. No DevOps engineer needed. Production-ready infra in under an hour.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/trial" className="flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/25 hover:shadow-blue-600/40 transition-all hover:-translate-y-0.5">
+            <Link href="https://console.quickinfra.cloud/" className="flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/25 hover:shadow-blue-600/40 transition-all hover:-translate-y-0.5">
               Start Free Trial <ArrowRight size={16} />
             </Link>
-            <Link href="/contact" className="flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-blue-300 dark:hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400 transition-all hover:-translate-y-0.5">
-              Schedule a Demo
-            </Link>
+           
           </div>
           <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">
             ISO 27001 · AWS Select Partner · SOC 2 Ready

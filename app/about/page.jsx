@@ -282,7 +282,7 @@ export default function AboutPage() {
             }}
           >
             <Link
-              href="/trial"
+              href="https://console.quickinfra.cloud/"
               className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40 transition-all hover:-translate-y-0.5"
             >
               Start Free Trial <ArrowRight size={15} />
@@ -728,7 +728,7 @@ export default function AboutPage() {
                   Contact Us <ArrowRight size={15} />
                 </Link>
                 <Link
-                  href="/trial"
+                  href="https://console.quickinfra.cloud/"
                   className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-blue-300 dark:hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400 transition-all hover:-translate-y-0.5"
                 >
                   Start Free Trial

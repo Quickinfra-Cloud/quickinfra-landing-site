@@ -6,6 +6,7 @@ import { Menu, X, ChevronDown, ArrowRight } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 
 const NAV_ITEMS = [
+
   {
     label: "Product",
     children: [
@@ -18,23 +19,35 @@ const NAV_ITEMS = [
   {
     label: "Solutions",
     children: [
-      { label: "Startups & Founders", href: "#" },
-      { label: "Engineering Teams",   href: "#" },
-      { label: "Cloud Migration",     href: "#" },
-      { label: "Non-Tech SMEs",       href: "#" },
+      { label: "Startups & Founders", href: "/startups-and-founders" },
+      { label: "Engineering Teams", href: "/engineering-teams" },
+      { label: "Cloud Migration", href: "/cloud-migration" },
+      { label: "Non-Tech SMEs", href: "/non-tech-smes" },
+      { label: "AI/ML Teams", href: "/ai-ml" },
+    ],
+  },
+
+    {
+    label: "Company",
+    children: [
+      { label: "About", href: "/about" },
+      { label: "Partners", href: "/partners" },
+      { label: "AWS Partner", href: "/aws-partner" },
+      { label: "Contact Us", href: "/contact" },
     ],
   },
   { label: "Pricing", href: "/pricing" },
+
   {
     label: "Resources",
     children: [
-      { label: "Blog",       href: "#" },
+      { label: "Blog", href: "#" },
       { label: "Whitepaper", href: "#" },
-      { label: "Videos",     href: "#" },
-      { label: "Docs",       href: "#" },
+      { label: "Videos", href: "#" },
+      { label: "Docs", href: "#" },
     ],
   },
-  { label: "About", href: "/about" },
+  { label: "Docs", href: "https://docs.quickinfra.cloud/" },
 ];
 
 // ── Desktop dropdown — hover with proper enter/exit animation ────────────────
@@ -43,16 +56,16 @@ function NavDropdown({ item }) {
   // `hovered` = mouse is over the zone
   // `rendered` = DOM node exists (stays true during exit animation)
   // `visible`  = CSS "entered" state (drives opacity/transform)
-  const [hovered,  setHovered]  = useState(false);
+  const [hovered, setHovered] = useState(false);
   const [rendered, setRendered] = useState(false);
-  const [visible,  setVisible]  = useState(false);
+  const [visible, setVisible] = useState(false);
 
-  const leaveTimer  = useRef(null);
-  const exitTimer   = useRef(null);
+  const leaveTimer = useRef(null);
+  const exitTimer = useRef(null);
 
-  const ENTER_DELAY = 0;    // ms before panel appears
-  const EXIT_ANIM   = 180;  // ms — must match transition duration below
-  const LEAVE_GRACE = 100;  // ms grace period when mouse leaves
+  const ENTER_DELAY = 0; // ms before panel appears
+  const EXIT_ANIM = 180; // ms — must match transition duration below
+  const LEAVE_GRACE = 100; // ms grace period when mouse leaves
 
   const show = () => {
     clearTimeout(leaveTimer.current);
@@ -60,9 +73,7 @@ function NavDropdown({ item }) {
     setHovered(true);
     setRendered(true);
     // Tick after mount so CSS transition fires
-    requestAnimationFrame(() =>
-      requestAnimationFrame(() => setVisible(true))
-    );
+    requestAnimationFrame(() => requestAnimationFrame(() => setVisible(true)));
   };
 
   const hide = () => {
@@ -74,18 +85,22 @@ function NavDropdown({ item }) {
     }, LEAVE_GRACE);
   };
 
-  useEffect(() => () => {
-    clearTimeout(leaveTimer.current);
-    clearTimeout(exitTimer.current);
-  }, []);
+  useEffect(
+    () => () => {
+      clearTimeout(leaveTimer.current);
+      clearTimeout(exitTimer.current);
+    },
+    [],
+  );
 
   return (
     <div className="relative" onMouseEnter={show} onMouseLeave={hide}>
       <button
         className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150
-          ${hovered
-            ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10"
-            : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800"
+          ${
+            hovered
+              ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10"
+              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800"
           }`}
       >
         {item.label}
@@ -99,10 +114,12 @@ function NavDropdown({ item }) {
         <div
           className="absolute top-full left-0 mt-2 w-52 z-50"
           style={{
-            opacity:       visible ? 1 : 0,
-            transform:     visible ? "translateY(0) scale(1)" : "translateY(-8px) scale(0.97)",
+            opacity: visible ? 1 : 0,
+            transform: visible
+              ? "translateY(0) scale(1)"
+              : "translateY(-8px) scale(0.97)",
             transformOrigin: "top left",
-            transition:    `opacity ${EXIT_ANIM}ms cubic-bezier(0.16,1,0.3,1), transform ${EXIT_ANIM}ms cubic-bezier(0.16,1,0.3,1)`,
+            transition: `opacity ${EXIT_ANIM}ms cubic-bezier(0.16,1,0.3,1), transform ${EXIT_ANIM}ms cubic-bezier(0.16,1,0.3,1)`,
             pointerEvents: visible ? "auto" : "none",
           }}
         >
@@ -119,9 +136,9 @@ function NavDropdown({ item }) {
                 style={{
                   color: "inherit",
                   // Stagger each item's entrance
-                  opacity:       visible ? 1 : 0,
-                  transform:     visible ? "translateX(0)" : "translateX(-6px)",
-                  transition:    `opacity 200ms ease ${80 + i * 40}ms, transform 200ms ease ${80 + i * 40}ms, background 120ms, color 120ms`,
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? "translateX(0)" : "translateX(-6px)",
+                  transition: `opacity 200ms ease ${80 + i * 40}ms, transform 200ms ease ${80 + i * 40}ms, background 120ms, color 120ms`,
                 }}
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-slate-200 dark:bg-slate-700 group-hover:bg-blue-500 dark:group-hover:bg-blue-400 transition-colors duration-150 flex-shrink-0" />
@@ -140,8 +157,8 @@ function NavDropdown({ item }) {
 // ── Main Navbar ───────────────────────────────────────────────────────────────
 
 export default function Navbar() {
-  const [scrolled,       setScrolled]       = useState(false);
-  const [mobileOpen,     setMobileOpen]     = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState(null);
 
   useEffect(() => {
@@ -163,7 +180,9 @@ export default function Navbar() {
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [mobileOpen]);
 
   return (
@@ -171,14 +190,14 @@ export default function Navbar() {
       <nav
         className={`fixed top-0 inset-x-0 z-50 transition-all duration-300
           bg-white dark:bg-slate-950
-          ${scrolled
-            ? "border-b border-slate-200 dark:border-slate-800 shadow-sm shadow-slate-200/50 dark:shadow-black/30"
-            : "border-b border-transparent"
+          ${
+            scrolled
+              ? "border-b border-slate-200 dark:border-slate-800 shadow-sm shadow-slate-200/50 dark:shadow-black/30"
+              : "border-b border-transparent"
           }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-extrabold text-sm select-none shadow-md shadow-blue-500/30">
@@ -204,7 +223,7 @@ export default function Navbar() {
                   >
                     {item.label}
                   </Link>
-                )
+                ),
               )}
             </div>
 
@@ -212,7 +231,7 @@ export default function Navbar() {
             <div className="hidden lg:flex items-center gap-2">
               <ThemeToggle />
               <Link
-                href="/login"
+                href="https://console.quickinfra.cloud/"
                 className="px-4 py-2 rounded-lg text-sm font-semibold transition-all
                   text-slate-600 hover:text-slate-900 hover:bg-slate-100
                   dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800"
@@ -220,7 +239,7 @@ export default function Navbar() {
                 Log In
               </Link>
               <Link
-                href="/trial"
+                href="https://console.quickinfra.cloud/"
                 className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-bold
                   bg-blue-600 hover:bg-blue-500 text-white
                   shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40
@@ -260,7 +279,9 @@ export default function Navbar() {
                   <>
                     <button
                       onClick={() =>
-                        setMobileExpanded(mobileExpanded === item.label ? null : item.label)
+                        setMobileExpanded(
+                          mobileExpanded === item.label ? null : item.label,
+                        )
                       }
                       className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors
                         text-slate-700 hover:bg-slate-100
@@ -274,7 +295,9 @@ export default function Navbar() {
                     </button>
                     <div
                       className={`overflow-hidden transition-all duration-200 ${
-                        mobileExpanded === item.label ? "max-h-48 mt-0.5" : "max-h-0"
+                        mobileExpanded === item.label
+                          ? "max-h-48 mt-0.5"
+                          : "max-h-0"
                       }`}
                     >
                       <div className="ml-3 pl-3 border-l-2 border-blue-500/20 space-y-0.5">
