@@ -14,30 +14,29 @@ const FOOTER_LINKS = [
   {
     title: "Product",
     links: [
-      { label: "Platform Overview", href: "#" },
-      { label: "CI/CD Automation", href: "#" },
-      { label: "Infra Provisioning", href: "#" },
-      { label: "Cloud Migration", href: "#" },
-      { label: "Security & Compliance", href: "#" },
-      { label: "Monitoring", href: "#" },
+      { label: "Platform Overview", href: "/platform" },
+      { label: "CI/CD Automation", href: "/ci-cd" },
+      { label: "Infra Provisioning", href: "/infrastructure" },
+      { label: "Cloud Migration", href: "/cloud-migration" },
+      { label: "Security & Compliance", href: "/security" },
+      { label: "Monitoring", href: "/monitoring" },
     ],
   },
   {
     title: "Solutions",
     links: [
-      { label: "Startups & Founders", href: "#" },
-      { label: "Engineering Teams", href: "#" },
-      { label: "Non-Tech SMEs", href: "#" },
-      { label: "Product Companies", href: "#" },
-      { label: "AI / ML Teams", href: "#" },
+      { label: "Startups & Founders", href: "/startups-and-founders" },
+      { label: "Engineering Teams", href: "/engineering-teams" },
+      { label: "Non-Tech SMEs", href: "/non-tech-smes" },
+      { label: "AI / ML Teams", href: "/ai-ml" },
     ],
   },
   {
     title: "Company",
     links: [
       { label: "About Us", href: "/about" },
-      { label: "Partners", href: "#" },
-      { label: "AWS Partnership", href: "#" },
+      { label: "Partners", href: "/partners" },
+      { label: "AWS Partnership", href: "/aws-partner" },
       { label: "Careers", href: "#" },
       { label: "Contact Us", href: "/contact" },
     ],
@@ -98,7 +97,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-2.5 mb-5">
-              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-extrabold text-sm shadow-md shadow-blue-500/20">
+              <div className="w-9 h-9 rounded-lg bg-linear-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-extrabold text-sm shadow-md shadow-blue-500/20">
                 QI
               </div>
               <span className="font-extrabold text-lg tracking-tight text-slate-900 dark:text-white">

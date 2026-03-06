@@ -6,14 +6,14 @@ import { Menu, X, ChevronDown, ArrowRight } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 
 const NAV_ITEMS = [
-
   {
     label: "Product",
     children: [
-      { label: "Platform Overview", href: "#" },
-      { label: "CI/CD Automation",  href: "#" },
-      { label: "Infra Provisioning", href: "#" },
-      { label: "Monitoring",        href: "#" },
+      { label: "Platform Overview", href: "/platform" },
+      { label: "Infra Provisioning", href: "/infrastructure" },
+      { label: "Security & Compliance", href: "/security" },
+      { label: "Monitoring", href: "/monitoring" },
+      { label: "Cloud Migration", href: "/cloud-migration" },
     ],
   },
   {
@@ -21,13 +21,12 @@ const NAV_ITEMS = [
     children: [
       { label: "Startups & Founders", href: "/startups-and-founders" },
       { label: "Engineering Teams", href: "/engineering-teams" },
-      { label: "Cloud Migration", href: "/cloud-migration" },
       { label: "Non-Tech SMEs", href: "/non-tech-smes" },
       { label: "AI/ML Teams", href: "/ai-ml" },
     ],
   },
 
-    {
+  {
     label: "Company",
     children: [
       { label: "About", href: "/about" },

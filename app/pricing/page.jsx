@@ -34,7 +34,7 @@ const PLANS = [
       landingZone: false, managedService: false, devopsResource: null,
     },
     cta: "Start Free Trial",
-    ctaHref: "/trial",
+    ctaHref: "https://console.quickinfra.cloud/",
     outline: false,
   },
   {
