@@ -2,252 +2,250 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { ArrowRight, Linkedin, Mail, ExternalLink, ChevronDown } from "lucide-react";
+import { ArrowRight, MapPin, Clock, Briefcase, Users, Zap, Shield, ChevronDown, ExternalLink } from "lucide-react";
 
-// ─── Team members in hierarchy order ─────────────────────────────────────────
+// ─── Data ─────────────────────────────────────────────────────────────────────
 
-const TEAM = [
+const STATS = [
+  { value: "4",     label: "Open Positions",     sub: "Across engineering & operations" },
+  { value: "100%",  label: "Remote Friendly",    sub: "Work from anywhere in India"     },
+  { value: "AWS",   label: "Select Partner",     sub: "Work on cutting-edge cloud tech" },
+  { value: "Fast",  label: "Growing Team",       sub: "Early-stage, high ownership"     },
+];
+
+const OPENINGS = [
   {
-    id: "nayil",
-    name: "Nayil Kazi",
-    role: "Co-Founder & CEO",
+    id: 1,
+    title: "DevOps Engineer",
+    type: "Full-Time",
+    location: "Remote / Pune",
+    experience: "2–4 years",
     color: "#3b82f6",
-    gradFrom: "#1d4ed8",
-    gradTo: "#3b82f6",
-    initials: "NK",
-    tier: "founder",
-    bio: "A seasoned sales and business development leader with a track record across enterprise software and SaaS. Co-founded QuickInfra to bridge the cloud skills gap and make DevOps automation accessible to every team — regardless of in-house expertise.",
-    tags: ["GTM Strategy", "Enterprise Sales", "B2B SaaS", "Cloud Partnerships"],
-    prev: ["NatWest Group", "Salesify", "Mlogica"],
-    linkedin: "https://www.linkedin.com/in/nayil/",
-    email: "info@quickinfracloud.com",
+    tag: "Engineering",
+    about: "We're looking for a hands-on DevOps Engineer to help build, improve, and maintain the core automation platform that powers QuickInfra. You'll work directly on Terraform modules, CI/CD pipelines, and cloud provisioning workflows used by our customers daily.",
+    responsibilities: [
+      "Design and maintain production-grade Terraform modules for AWS infrastructure",
+      "Build and optimise CI/CD pipelines using Jenkins, GitLab CI, or GitHub Actions",
+      "Implement monitoring, alerting, and observability across cloud environments",
+      "Collaborate with the product team to automate new infrastructure patterns",
+      "Maintain cloud security posture and compliance controls across customer accounts",
+    ],
+    requirements: [
+      "2–4 years of hands-on DevOps or cloud infrastructure experience",
+      "Strong proficiency in Terraform and AWS core services (EC2, VPC, RDS, EKS)",
+      "Experience with Docker, Kubernetes, and container orchestration",
+      "Familiarity with CI/CD tools and Git workflows",
+      "Understanding of cloud security best practices (IAM, security groups, encryption)",
+    ],
+    niceToHave: ["AWS certifications (Solutions Architect / DevOps Professional)", "Experience with Ansible or configuration management tools", "Python or Bash scripting for automation"],
   },
   {
-    id: "feroz",
-    name: "Feroz Khan",
-    role: "Co-Founder & CTO",
-    color: "#6366f1",
-    gradFrom: "#4338ca",
-    gradTo: "#818cf8",
-    initials: "FK",
-    tier: "founder",
-    bio: "25+ years building enterprise-grade applications. Formerly led the Cloud Centre of Excellence at NTT Data. At QuickInfra, drives the platform vision — automating IaC generation, cloud provisioning, and DevOps pipelines end to end.",
-    tags: ["Cloud Architecture", "IaC / Terraform", "AWS", "Platform Engineering"],
-    prev: ["NTT Data — Cloud CoE Lead", "Enterprise Software"],
-    linkedin: "#",
-    email: "info@quickinfracloud.com",
-  },
-  {
-    id: "asad",
-    name: "Asad Khan",
-    role: "Advisory Board Member",
-    color: "#f59e0b",
-    gradFrom: "#b45309",
-    gradTo: "#fbbf24",
-    initials: "AK",
-    tier: "advisory",
-    badge: "LambdaTest — CEO",
-    bio: "Co-founder and CEO of LambdaTest. Guides QuickInfra's strategic direction with deep expertise in SaaS scaling, testing automation, and product growth. His insights help QuickInfra build for enterprise-scale without enterprise-scale complexity.",
-    tags: ["SaaS Scaling", "Product Strategy", "Testing Automation"],
-    prev: ["LambdaTest (Co-founder & CEO)"],
-    linkedin: "#",
-  },
-  {
-    id: "sudarshan",
-    name: "Sudarshan Jadhav",
-    role: "Senior Engineer",
-    sub: "Full-Stack · Cloud-Native",
+    id: 2,
+    title: "Cloud Solutions Architect",
+    type: "Full-Time",
+    location: "Remote / Pune",
+    experience: "4–7 years",
     color: "#8b5cf6",
-    gradFrom: "#6d28d9",
-    gradTo: "#a78bfa",
-    initials: "SJ",
-    tier: "engineer",
-    bio: "Builds and maintains the QuickInfra console and cloud-native services. Owns the full product stack from API layer to React frontend — making complex infra operations feel intuitive for end users.",
-    tags: ["React", "Node.js", "Cloud-Native", "REST APIs", "PostgreSQL"],
-    linkedin: "#",
+    tag: "Architecture",
+    about: "As a Cloud Solutions Architect at QuickInfra, you'll design scalable, secure, and cost-efficient cloud architectures for our customers and for the platform itself. You'll be the technical authority on AWS best practices and help translate customer requirements into production infrastructure.",
+    responsibilities: [
+      "Design end-to-end AWS architectures for customer projects and platform features",
+      "Lead cloud migration assessments and produce detailed migration plans",
+      "Define architecture standards, patterns, and guardrails across the platform",
+      "Work with customers during onboarding to understand and scope their infrastructure needs",
+      "Stay current with AWS service launches and evaluate relevance for the platform",
+    ],
+    requirements: [
+      "4–7 years of cloud architecture experience, primarily on AWS",
+      "Deep knowledge of AWS services — compute, networking, storage, databases, security",
+      "Experience designing highly available, fault-tolerant distributed systems",
+      "Strong grasp of cloud cost optimisation and FinOps principles",
+      "Excellent communication — comfortable presenting to technical and non-technical stakeholders",
+    ],
+    niceToHave: ["AWS Certified Solutions Architect – Professional", "Multi-cloud experience (Azure, GCP)", "Experience at a cloud consulting or managed services firm"],
   },
   {
-    id: "dhiraj",
-    name: "Dhiraj Dagabaj",
-    role: "Senior Engineer",
-    sub: "Cloud Infrastructure · DevOps",
-    color: "#0ea5e9",
-    gradFrom: "#0369a1",
-    gradTo: "#38bdf8",
-    initials: "DD",
-    tier: "engineer",
-    bio: "Manages the infrastructure backbone of QuickInfra — Terraform modules, Kubernetes clusters, and CI/CD pipelines powering customer cloud environments. Deep AWS and DevOps engineering expertise.",
-    tags: ["Terraform", "Kubernetes", "AWS", "CI/CD", "Ansible"],
-    linkedin: "#",
+    id: 3,
+    title: "Full Stack Developer",
+    type: "Full-Time",
+    location: "Remote / Pune",
+    experience: "2–5 years",
+    color: "#10b981",
+    tag: "Product",
+    about: "We're hiring a Full Stack Developer to build and evolve the QuickInfra console — the web interface our customers use to provision infrastructure, monitor deployments, and manage their cloud. You'll work across the stack with a focus on performance, reliability, and great developer UX.",
+    responsibilities: [
+      "Build new features and improve existing flows in the QuickInfra web console",
+      "Develop robust backend APIs that interface with cloud providers and Terraform",
+      "Implement real-time UI updates for pipeline runs, log streaming, and metrics",
+      "Write well-tested, maintainable code with attention to edge cases and error states",
+      "Collaborate closely with design and product to ship high-quality user experiences",
+    ],
+    requirements: [
+      "2–5 years of full stack development experience",
+      "Strong proficiency in React (hooks, state management) and Node.js or Python backend",
+      "Experience with REST APIs and WebSocket or SSE for real-time data",
+      "Comfortable with PostgreSQL or similar relational databases",
+      "Good understanding of authentication, authorisation, and API security",
+    ],
+    niceToHave: ["Experience with Next.js", "Familiarity with cloud APIs (AWS SDK)", "Prior experience building developer tools or internal platforms"],
   },
   {
-    id: "hr",
-    name: "HR Manager",
-    role: "People & Culture",
-    sub: "Open Role",
-    color: "#ef4444",
-    gradFrom: "#b91c1c",
-    gradTo: "#f87171",
-    initials: "+",
-    tier: "hiring",
-    bio: "We are building our people function from the ground up. Looking for someone passionate about hiring, culture, and scaling a high-trust team at an early-stage cloud startup in Pune.",
-    tags: ["Hiring Now"],
-    hiringHref: "mailto:hr@quickinfracloud.com?subject=Application: HR Manager — QuickInfra",
+    id: 4,
+    title: "Cloud Sales Executive",
+    type: "Full-Time",
+    location: "Remote / Pune",
+    experience: "2–5 years",
+    color: "#f59e0b",
+    tag: "Sales",
+    about: "We're looking for a driven Cloud Sales Executive to grow QuickInfra's customer base across startups, SMEs, and mid-market engineering teams in India. You'll own the full sales cycle — from prospecting to close — and play a direct role in shaping how we sell a technical product.",
+    responsibilities: [
+      "Own the end-to-end sales cycle from outbound prospecting to contract close",
+      "Identify and engage target accounts — startups, tech SMEs, and engineering teams",
+      "Run product demos and technical discovery calls alongside the solutions team",
+      "Develop relationships with AWS partner ecosystem contacts and referral channels",
+      "Maintain accurate pipeline data and provide forecasting to leadership",
+    ],
+    requirements: [
+      "2–5 years of B2B SaaS or cloud services sales experience",
+      "Proven track record of hitting or exceeding quota in a technical sales environment",
+      "Ability to understand and communicate cloud and DevOps concepts at a high level",
+      "Strong consultative selling skills — comfortable with complex, multi-stakeholder deals",
+      "Self-starter who thrives in an early-stage, fast-moving environment",
+    ],
+    niceToHave: ["Existing network in the AWS partner ecosystem", "Experience selling to technical buyers (CTOs, DevOps leads, Engineering Managers)", "Prior experience at a cloud/SaaS startup"],
   },
 ];
 
-// ─── Connector labels (between card[i] and card[i+1]) ────────────────────────
-const CONNECTOR_LABELS = [null, "Advisory Board", null, null, null];
+const VALUES = [
+  { icon: Zap,      title: "Move fast, own it",      color: "#f59e0b", desc: "Small team, high trust. You'll own your work end to end and see the impact directly." },
+  { icon: Shield,   title: "Build things that last",  color: "#ef4444", desc: "We build for production. Quality, reliability, and security are non-negotiables." },
+  { icon: Users,    title: "Customer-first always",   color: "#3b82f6", desc: "Everything we ship solves a real customer problem. We stay close to the people using our product." },
+  { icon: Briefcase,title: "Grow with the company",   color: "#8b5cf6", desc: "Early team members grow with us. We invest in your skills, certifications, and career trajectory." },
+];
 
-// ─── Avatar ───────────────────────────────────────────────────────────────────
+const PERKS = [
+  ["Competitive CTC",         "#3b82f6"],
+  ["100% Remote Option",      "#8b5cf6"],
+  ["AWS Certification Support","#f59e0b"],
+  ["Direct Team Access",      "#10b981"],
+  ["Fast Promotions",         "#ef4444"],
+  ["Health Insurance",        "#06b6d4"],
+  ["Flexible Hours",          "#3b82f6"],
+  ["Learning Budget",         "#8b5cf6"],
+];
 
-function Avatar({ member, size = 72 }) {
-  const br = Math.round(size * 0.22);
-  const fs = Math.round(size * 0.26);
-  const isHiring = member.tier === "hiring";
+const HR_EMAIL = "hr@quickinfracloud.com";
 
-  if (isHiring) return (
-    <div className="flex-shrink-0 flex items-center justify-center"
-      style={{
-        width: size, height: size, borderRadius: br,
-        background: `repeating-linear-gradient(45deg,${member.color}14 0,${member.color}14 4px,transparent 4px,transparent 12px)`,
-        border: `2px dashed ${member.color}55`,
-      }}>
-      <span style={{ color: member.color, fontSize: fs + 6, fontWeight: 900, opacity: 0.65 }}>+</span>
-    </div>
-  );
+// ─── Job Card ─────────────────────────────────────────────────────────────────
 
-  return (
-    <div className="relative flex-shrink-0 flex items-center justify-center"
-      style={{
-        width: size, height: size, borderRadius: br,
-        background: `linear-gradient(145deg, ${member.gradFrom}, ${member.gradTo})`,
-        boxShadow: `0 8px 28px ${member.color}35`,
-        border: `2px solid ${member.color}25`,
-      }}>
-      <span style={{ color: "#fff", fontSize: fs, fontWeight: 900, letterSpacing: "-0.02em" }}>{member.initials}</span>
-      <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full border-2 border-white dark:border-slate-950"
-        style={{ background: "#22c55e" }}>
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-50" />
-      </span>
-    </div>
-  );
-}
-
-// ─── Card ─────────────────────────────────────────────────────────────────────
-
-function MemberCard({ member, side, visible, delay }) {
+function JobCard({ job }) {
   const [open, setOpen] = useState(false);
-  const isHiring = member.tier === "hiring";
+
+  const mailto = `mailto:${HR_EMAIL}?subject=Application — ${encodeURIComponent(job.title)}&body=Hi QuickInfra Team,%0D%0A%0D%0AI'd like to apply for the ${encodeURIComponent(job.title)} role.%0D%0A%0D%0APlease find my resume attached.%0D%0A%0D%0AName:%0D%0ALinkedIn / Portfolio:%0D%0AYears of experience:%0D%0A%0D%0AThank you!`;
 
   return (
     <div
-      className="rounded-3xl border overflow-hidden bg-white dark:bg-slate-900 transition-shadow duration-300 hover:shadow-2xl"
-      style={{
-        borderColor: member.color + "28",
-        boxShadow: `0 4px 20px ${member.color}0d`,
-        opacity: visible ? 1 : 0,
-        transform: visible
-          ? "translateX(0) translateY(0)"
-          : `translateX(${side === "left" ? -28 : 28}px) translateY(10px)`,
-        transition: `opacity 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
-      }}
+      className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden transition-all duration-300"
+      style={{ boxShadow: open ? `0 16px 40px ${job.color}12` : "none", borderColor: open ? job.color + "40" : undefined }}
     >
-      {/* top bar */}
-      <div className="h-1.5" style={{ background: `linear-gradient(90deg, ${member.gradFrom}, ${member.gradTo}, ${member.color}44)` }} />
+      {/* Colored top stripe */}
+      <div className="h-0.5 w-full" style={{ background: `linear-gradient(90deg, ${job.color}, ${job.color}44)` }} />
 
-      <div className="relative p-6 sm:p-8 overflow-hidden">
-        {/* dot grid bg */}
-        <div className="absolute inset-0 pointer-events-none opacity-[0.025] dark:opacity-[0.05]"
-          style={{ backgroundImage: `radial-gradient(${member.color} 1px, transparent 1px)`, backgroundSize: "20px 20px" }} />
+      {/* Card header — always visible */}
+      <button
+        onClick={() => setOpen((p) => !p)}
+        className="w-full text-left px-6 py-5 flex items-start gap-4 focus:outline-none group"
+      >
+        <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: job.color + "15", border: `1.5px solid ${job.color}30` }}>
+          <Briefcase size={18} style={{ color: job.color }} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap mb-1">
+            <h3 className="text-base font-extrabold tracking-tight group-hover:text-inherit transition-colors" style={{ color: open ? job.color : undefined }}>{job.title}</h3>
+            <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-widest" style={{ background: job.color + "15", color: job.color }}>{job.tag}</span>
+          </div>
+          <div className="flex items-center gap-4 flex-wrap">
+            <span className="flex items-center gap-1 text-[11px] text-slate-400"><MapPin size={10} />{job.location}</span>
+            <span className="flex items-center gap-1 text-[11px] text-slate-400"><Clock size={10} />{job.type}</span>
+            <span className="flex items-center gap-1 text-[11px] text-slate-400"><Briefcase size={10} />{job.experience}</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 flex-shrink-0 mt-1">
+          <Link
+            href={mailto}
+            onClick={(e) => e.stopPropagation()}
+            className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-xl text-[11px] font-extrabold text-white transition-all hover:-translate-y-0.5"
+            style={{ background: job.color, boxShadow: `0 4px 14px ${job.color}30` }}
+          >
+            Apply Now <ArrowRight size={11} />
+          </Link>
+          <ChevronDown
+            size={16}
+            className="text-slate-400 transition-transform duration-300"
+            style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
+          />
+        </div>
+      </button>
 
-        <div className="relative">
-          {/* Header */}
-          <div className="flex items-start gap-5 mb-5">
-            <Avatar member={member} size={68} />
-            <div className="flex-1 min-w-0 pt-1">
-              <div className="flex flex-wrap items-center gap-2 mb-1">
-                <h3 className="text-lg font-extrabold tracking-tight">{member.name}</h3>
-                {member.badge && (
-                  <span className="text-[9px] font-extrabold px-2.5 py-0.5 rounded-full"
-                    style={{ background: member.color + "16", color: member.color, border: `1px solid ${member.color}30` }}>
-                    {member.badge}
-                  </span>
-                )}
-                {isHiring && (
-                  <span className="text-[9px] font-extrabold px-2.5 py-0.5 rounded-full animate-pulse"
-                    style={{ background: member.color + "16", color: member.color, border: `1px solid ${member.color}30` }}>
-                    Hiring Now
-                  </span>
-                )}
-              </div>
-              <p className="text-sm font-bold leading-snug" style={{ color: member.color }}>{member.role}</p>
-              {member.sub && (
-                <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5 font-medium">{member.sub}</p>
-              )}
+      {/* Expandable body */}
+      <div
+        className="overflow-hidden transition-all duration-500"
+        style={{ maxHeight: open ? "1200px" : "0", opacity: open ? 1 : 0 }}
+      >
+        <div className="px-6 pb-6 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <p className="text-sm text-slate-500 dark:text-slate-400 font-light leading-relaxed mb-6">{job.about}</p>
+
+          <div className="grid sm:grid-cols-2 gap-6 mb-6">
+            <div>
+              <h4 className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-3">Responsibilities</h4>
+              <ul className="space-y-2">
+                {job.responsibilities.map((r) => (
+                  <li key={r} className="flex items-start gap-2">
+                    <span className="text-[10px] mt-0.5 flex-shrink-0" style={{ color: job.color }}>▸</span>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">{r}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-3">Requirements</h4>
+              <ul className="space-y-2">
+                {job.requirements.map((r) => (
+                  <li key={r} className="flex items-start gap-2">
+                    <span className="text-[10px] mt-0.5 flex-shrink-0 text-green-500">✓</span>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">{r}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
-          {/* Bio */}
-          <p className="text-sm text-slate-500 dark:text-slate-400 font-light leading-relaxed mb-5">{member.bio}</p>
-
-          {/* Tags */}
-          <div className="flex flex-wrap gap-1.5 mb-4">
-            {member.tags.map(t => (
-              <span key={t} className="text-[10px] font-extrabold px-2.5 py-1 rounded-lg"
-                style={{ background: member.color + "12", color: member.color, border: `1px solid ${member.color}1e` }}>
-                {t}
-              </span>
-            ))}
-          </div>
-
-          {/* Expandable prev experience */}
-          {member.prev && (
-            <>
-              <button onClick={() => setOpen(o => !o)}
-                className="flex items-center gap-1.5 text-[11px] font-bold mb-3 transition-opacity hover:opacity-60"
-                style={{ color: member.color }}>
-                {open ? "Hide" : "Show"} background
-                <ChevronDown size={11} className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
-              </button>
-              <div style={{ maxHeight: open ? 100 : 0, overflow: "hidden", transition: "max-height 0.35s cubic-bezier(0.16,1,0.3,1)" }}>
-                <div className="rounded-xl p-3.5 mb-3 border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40">
-                  <p className="text-[9px] font-extrabold uppercase tracking-widest text-slate-400 mb-2">Previous Experience</p>
-                  {member.prev.map(p => (
-                    <p key={p} className="text-xs text-slate-600 dark:text-slate-300 font-medium mb-0.5 flex items-start gap-1.5">
-                      <span style={{ color: member.color, marginTop: 3, flexShrink: 0 }}>▸</span>{p}
-                    </p>
-                  ))}
-                </div>
+          {job.niceToHave.length > 0 && (
+            <div className="mb-6">
+              <h4 className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-3">Nice to Have</h4>
+              <div className="flex flex-wrap gap-2">
+                {job.niceToHave.map((n) => (
+                  <span key={n} className="text-[10px] font-semibold px-3 py-1 rounded-full border" style={{ background: job.color + "0d", borderColor: job.color + "30", color: job.color }}>{n}</span>
+                ))}
               </div>
-            </>
+            </div>
           )}
 
-          {/* Footer */}
-          <div className="flex items-center gap-4 pt-4 border-t border-slate-100 dark:border-slate-800">
-            {isHiring ? (
-              <a href={member.hiringHref || "/careers"}
-                className="flex items-center gap-1.5 text-sm font-bold transition-all hover:gap-2.5"
-                style={{ color: member.color }}>
-                Apply Now <ArrowRight size={13} />
-              </a>
-            ) : (
-              <>
-                {member.linkedin && member.linkedin !== "#" && (
-                  <a href={member.linkedin} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-[11px] font-bold transition-opacity hover:opacity-60"
-                    style={{ color: member.color }}>
-                    <Linkedin size={12} /> LinkedIn <ExternalLink size={9} />
-                  </a>
-                )}
-                {member.email && (
-                  <a href={`mailto:${member.email}`}
-                    className="flex items-center gap-1.5 text-[11px] font-medium text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
-                    <Mail size={11} /> {member.email}
-                  </a>
-                )}
-              </>
-            )}
+          {/* Apply CTA */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+            <Link
+              href={mailto}
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-extrabold text-white transition-all hover:-translate-y-0.5"
+              style={{ background: job.color, boxShadow: `0 4px 14px ${job.color}30` }}
+            >
+              Apply for this Role <ArrowRight size={14} />
+            </Link>
+            <div className="text-[11px] text-slate-400">
+              Send your resume to{" "}
+              <Link href={`mailto:${HR_EMAIL}`} className="font-bold hover:underline" style={{ color: job.color }}>
+                {HR_EMAIL}
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -255,180 +253,166 @@ function MemberCard({ member, side, visible, delay }) {
   );
 }
 
-// ─── Zigzag branch connector ──────────────────────────────────────────────────
-// fromSide = side the upper card sits on
-
-function ZigConnector({ fromSide, toSide, color, nextColor, label }) {
-  const id = `zc-${fromSide}-${color.replace("#", "")}`;
-  // Start point X% and end point X% based on card alignment
-  // Cards are 56% wide. Left-aligned cards centre ≈ 28%, right-aligned ≈ 72%
-  const startX = fromSide === "left" ? "28%" : "72%";
-  const endX   = toSide   === "left" ? "28%" : "72%";
-
-  return (
-    <div className="relative" style={{ height: 72 }} aria-hidden>
-      <svg width="100%" height="72" className="absolute inset-0" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id={id} x1={fromSide === "left" ? "0%" : "100%"} y1="0%" x2={fromSide === "left" ? "100%" : "0%"} y2="100%">
-            <stop offset="0%"   stopColor={color}     stopOpacity="0.5" />
-            <stop offset="100%" stopColor={nextColor} stopOpacity="0.3" />
-          </linearGradient>
-        </defs>
-        {/* Curved path from start card bottom to end card top */}
-        <path
-          d={`M ${startX} 0 C ${startX} 36, ${endX} 36, ${endX} 72`}
-          fill="none"
-          stroke={`url(#${id})`}
-          strokeWidth="2"
-          strokeDasharray="6 4"
-        />
-        {/* endpoint dots */}
-        <circle cx={startX} cy="2"  r="3.5" fill={color}     fillOpacity="0.5" />
-        <circle cx={endX}   cy="70" r="3.5" fill={nextColor} fillOpacity="0.5" />
-      </svg>
-
-      {/* label badge */}
-      {label && (
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-          <span className="text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full border bg-white dark:bg-slate-950"
-            style={{ color, borderColor: color + "35" }}>
-            {label}
-          </span>
-        </div>
-      )}
-    </div>
-  );
-}
-
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default function TeamPage() {
-  const [heroVisible, setHeroVisible] = useState(false);
-  const [visible,     setVisible]     = useState(false);
-  const sectionRef = useRef(null);
+export default function CareersPage() {
+  const [heroVisible,  setHeroVisible]  = useState(false);
+  const [statsVisible, setStatsVisible] = useState(false);
+  const statsRef = useRef(null);
 
   useEffect(() => { const t = setTimeout(() => setHeroVisible(true), 80); return () => clearTimeout(t); }, []);
-
   useEffect(() => {
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) setVisible(true); },
-      { threshold: 0.04 }
-    );
-    if (sectionRef.current) obs.observe(sectionRef.current);
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setStatsVisible(true); }, { threshold: 0.2 });
+    if (statsRef.current) obs.observe(statsRef.current);
     return () => obs.disconnect();
   }, []);
-
-  // alternating sides: left, right, left, right...
-  const sides = TEAM.map((_, i) => i % 2 === 0 ? "left" : "right");
 
   return (
     <div className="bg-white dark:bg-slate-950 text-slate-900 dark:text-white">
 
-      {/* ── HERO ──────────────────────────────────────────────────────────── */}
-      <section className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:28px_28px] opacity-50 dark:opacity-30" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(59,130,246,0.09),transparent)] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(59,130,246,0.16),transparent)]" />
-
+      {/* HERO */}
+      <section className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:32px_32px] opacity-60 dark:opacity-40" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(59,130,246,0.08),transparent)] dark:bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(59,130,246,0.15),transparent)]" />
         <div className="relative max-w-3xl mx-auto text-center">
-          <div style={{ opacity: heroVisible ? 1 : 0, transform: heroVisible ? "translateY(0)" : "translateY(14px)", transition: "opacity 0.6s ease, transform 0.6s ease" }}>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-7 border border-blue-200 dark:border-blue-500/30 bg-blue-50 dark:bg-blue-500/10">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-60" />
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500" />
-              </span>
-              <span className="text-[10px] font-extrabold tracking-widest text-blue-600 dark:text-blue-400 uppercase">Our Team</span>
-            </div>
+          <div
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-7 border border-blue-200 dark:border-blue-500/30 bg-blue-50 dark:bg-blue-500/10"
+            style={{ opacity: heroVisible ? 1 : 0, transform: heroVisible ? "translateY(0)" : "translateY(12px)", transition: "opacity 0.6s ease, transform 0.6s ease" }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+            <span className="text-xs font-bold tracking-widest text-blue-600 dark:text-blue-400 uppercase">We're Hiring · 4 Open Roles</span>
           </div>
-
           <h1
             className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.07] tracking-tight mb-6"
-            style={{ opacity: heroVisible ? 1 : 0, transform: heroVisible ? "translateY(0)" : "translateY(20px)", transition: "opacity 0.7s ease 0.08s, transform 0.7s ease 0.08s" }}
+            style={{ opacity: heroVisible ? 1 : 0, transform: heroVisible ? "translateY(0)" : "translateY(18px)", transition: "opacity 0.65s ease 0.08s, transform 0.65s ease 0.08s" }}
           >
-            The people building<br />
-            <span className="text-blue-600 dark:text-blue-500">the future of cloud ops.</span>
+            Build the future of<br /><span className="text-blue-600 dark:text-blue-500">cloud infrastructure.</span>
           </h1>
-
           <p
-            className="text-base sm:text-lg text-slate-500 dark:text-slate-400 font-light leading-relaxed"
-            style={{ opacity: heroVisible ? 1 : 0, transform: heroVisible ? "translateY(0)" : "translateY(20px)", transition: "opacity 0.7s ease 0.16s, transform 0.7s ease 0.16s" }}
+            className="text-base sm:text-lg text-slate-500 dark:text-slate-400 font-light leading-relaxed mb-10 max-w-xl mx-auto"
+            style={{ opacity: heroVisible ? 1 : 0, transform: heroVisible ? "translateY(0)" : "translateY(18px)", transition: "opacity 0.65s ease 0.16s, transform 0.65s ease 0.16s" }}
           >
-            A small, senior team with decades of cloud infrastructure and enterprise software experience — united by one mission.
+            QuickInfra is a fast-growing cloud DevOps automation platform and AWS Select Partner. We're a small team building tools that make production-grade infrastructure accessible to every engineering team — and we're looking for people who care deeply about that mission.
           </p>
-
-          {/* Avatar stack */}
-          <div className="flex items-center justify-center gap-3 mt-8"
-            style={{ opacity: heroVisible ? 1 : 0, transform: heroVisible ? "translateY(0)" : "translateY(14px)", transition: "opacity 0.7s ease 0.24s, transform 0.7s ease 0.24s" }}>
-            <div className="flex -space-x-3">
-              {[
-                { i: "NK", a: "#1d4ed8", b: "#3b82f6" },
-                { i: "FK", a: "#4338ca", b: "#818cf8" },
-                { i: "AK", a: "#b45309", b: "#fbbf24" },
-                { i: "SJ", a: "#6d28d9", b: "#a78bfa" },
-                { i: "DD", a: "#0369a1", b: "#38bdf8" },
-              ].map((a, idx) => (
-                <div key={idx} className="w-9 h-9 rounded-full flex items-center justify-center border-2 border-white dark:border-slate-950 text-[11px] font-extrabold text-white"
-                  style={{ background: `linear-gradient(135deg, ${a.a}, ${a.b})`, zIndex: 5 - idx }}>
-                  {a.i}
-                </div>
-              ))}
-            </div>
-            <span className="text-sm text-slate-400 font-light">Pune, India · AWS Select Partner</span>
+          <div
+            className="flex flex-wrap gap-4 justify-center"
+            style={{ opacity: heroVisible ? 1 : 0, transform: heroVisible ? "translateY(0)" : "translateY(18px)", transition: "opacity 0.65s ease 0.24s, transform 0.65s ease 0.24s" }}
+          >
+            <a href="#openings" className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/25 transition-all hover:-translate-y-0.5">
+              View Open Roles <ArrowRight size={15} />
+            </a>
+            <Link href={`mailto:${HR_EMAIL}`} className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-blue-300 dark:hover:border-blue-600 hover:text-blue-600 transition-all hover:-translate-y-0.5">
+              <ExternalLink size={14} /> {HR_EMAIL}
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* ── ZIGZAG ORG ────────────────────────────────────────────────────── */}
-      <section ref={sectionRef} className="py-8 pb-24 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          {TEAM.map((member, i) => {
-            const side   = sides[i];
-            const isLast = i === TEAM.length - 1;
-            const nextSide = !isLast ? sides[i + 1] : null;
-            const nextMember = !isLast ? TEAM[i + 1] : null;
-
-            return (
-              <div key={member.id}>
-                {/* Card — pushed left or right */}
-                <div className={`flex ${side === "right" ? "justify-end" : "justify-start"}`}>
-                  <div className="w-full sm:w-[58%]">
-                    <MemberCard member={member} side={side} visible={visible} delay={i * 110} />
-                  </div>
-                </div>
-
-                {/* Connector to next card */}
-                {!isLast && (
-                  <ZigConnector
-                    fromSide={side}
-                    toSide={nextSide}
-                    color={member.color}
-                    nextColor={nextMember.color}
-                    label={CONNECTOR_LABELS[i]}
-                  />
-                )}
-              </div>
-            );
-          })}
+      {/* STATS */}
+      <section ref={statsRef} className="py-14 px-4 sm:px-6 lg:px-8 border-y border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-5">
+          {STATS.map((s) => (
+            <div key={s.label} className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 text-center hover:-translate-y-1 transition-all hover:shadow-lg">
+              <div className={`text-4xl font-extrabold tracking-tight mb-2 transition-colors duration-700 ${statsVisible ? "text-blue-600 dark:text-blue-500" : "text-slate-200 dark:text-slate-800"}`}>{s.value}</div>
+              <div className="font-bold text-sm mb-1">{s.label}</div>
+              <div className="text-xs text-slate-400 font-light">{s.sub}</div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* ── CTA ───────────────────────────────────────────────────────────── */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40">
+      {/* WHY QUICKINFRA */}
+      <section className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-[10px] font-bold tracking-widest uppercase text-blue-600 dark:text-blue-500 mb-3">Why Join Us</p>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">What it's like to work here</h2>
+            <p className="text-base text-slate-500 dark:text-slate-400 font-light max-w-lg mx-auto">Small team. Real ownership. Real impact. We move fast and trust people to do great work.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {VALUES.map(({ icon: Icon, title, color, desc }) => (
+              <div key={title} className="group rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 hover:-translate-y-1 transition-all hover:shadow-lg cursor-default relative overflow-hidden">
+                <div className="absolute top-0 inset-x-0 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: `linear-gradient(90deg, ${color}, ${color}44)` }} />
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style={{ background: color + "15", color, border: `1.5px solid ${color}30` }}>
+                  <Icon size={19} />
+                </div>
+                <h3 className="text-sm font-extrabold mb-2 tracking-tight">{title}</h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400 font-light leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PERKS */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8 border-y border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40">
+        <div className="max-w-7xl mx-auto">
+          <p className="text-center text-[10px] font-bold tracking-widest uppercase text-blue-600 dark:text-blue-500 mb-7">Benefits & Perks</p>
+          <div className="flex flex-wrap gap-2.5 justify-center">
+            {PERKS.map(([label, color]) => (
+              <div key={label} className="px-4 py-2 rounded-full border text-sm font-semibold transition-all cursor-default hover:-translate-y-0.5" style={{ borderColor: color + "35", background: color + "0a", color }}>
+                {label}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* JOB OPENINGS */}
+      <section id="openings" className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-[10px] font-bold tracking-widest uppercase text-blue-600 dark:text-blue-500 mb-3">Open Positions</p>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">4 Roles Available</h2>
+            <p className="text-base text-slate-500 dark:text-slate-400 font-light max-w-lg mx-auto">Click any role to see details, responsibilities, and requirements. Apply directly via email.</p>
+          </div>
+          <div className="space-y-4">
+            {OPENINGS.map((job) => <JobCard key={job.id} job={job} />)}
+          </div>
+        </div>
+      </section>
+
+      {/* GENERAL APPLICATION CTA */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 border-y border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40">
         <div className="max-w-2xl mx-auto text-center">
-          <p className="text-[10px] font-extrabold tracking-widest uppercase text-blue-600 dark:text-blue-500 mb-3">Join Us</p>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Want to be on this page?</h2>
-          <p className="text-base text-slate-500 dark:text-slate-400 font-light leading-relaxed mb-8 max-w-lg mx-auto">
-            We have open roles across engineering, sales, and HR. Or drop us a note directly — we read every speculative application.
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30">
+            <ExternalLink size={22} className="text-blue-600 dark:text-blue-400" />
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-4">Don't see the right role?</h2>
+          <p className="text-base text-slate-500 dark:text-slate-400 font-light leading-relaxed mb-8">
+            We're always interested in talking to strong engineers, cloud architects, and sales professionals. Send us your resume and a brief note about what you're looking for.
+          </p>
+          <Link
+            href={`mailto:${HR_EMAIL}?subject=General Application — QuickInfra&body=Hi QuickInfra Team,%0D%0A%0D%0AI'd love to be considered for any relevant openings at QuickInfra.%0D%0A%0D%0APlease find my resume attached.%0D%0A%0D%0AName:%0D%0ARole of interest:%0D%0ALinkedIn / Portfolio:%0D%0AYears of experience:%0D%0A%0D%0AThank you!`}
+            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/25 transition-all hover:-translate-y-0.5"
+          >
+            Send a General Application <ArrowRight size={16} />
+          </Link>
+          <p className="mt-5 text-sm text-slate-400">
+            Or email us directly at{" "}
+            <Link href={`mailto:${HR_EMAIL}`} className="font-bold text-blue-600 dark:text-blue-400 hover:underline">{HR_EMAIL}</Link>
+          </p>
+        </div>
+      </section>
+
+      {/* FINAL CTA */}
+      <section className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,rgba(59,130,246,0.07),transparent)] dark:bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,rgba(59,130,246,0.13),transparent)]" />
+        <div className="relative max-w-2xl mx-auto text-center">
+          <p className="text-[10px] font-bold tracking-widest uppercase text-blue-600 dark:text-blue-500 mb-6">Join the Team</p>
+          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-6">Ready to build something that matters?</h2>
+          <p className="text-base text-slate-500 dark:text-slate-400 font-light leading-relaxed mb-10">
+            We're a small, fast-moving team on a mission to make cloud infrastructure accessible to every engineering team. Come help us build it.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/careers"
-              className="flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/25 transition-all hover:-translate-y-0.5">
-              View Open Roles <ArrowRight size={15} />
-            </Link>
-            <a href="mailto:hr@quickinfracloud.com"
-              className="flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-blue-300 dark:hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400 transition-all hover:-translate-y-0.5">
-              <Mail size={14} /> hr@quickinfracloud.com
+            <a href="#openings" className="flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/25 transition-all hover:-translate-y-0.5">
+              View Open Roles <ArrowRight size={16} />
             </a>
+            <Link href={`mailto:${HR_EMAIL}`} className="flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-blue-300 dark:hover:border-blue-600 hover:text-blue-600 transition-all hover:-translate-y-0.5">
+              Email HR
+            </Link>
           </div>
+          <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">AWS Select Partner · Pune, India · Remote Friendly</p>
         </div>
       </section>
 
