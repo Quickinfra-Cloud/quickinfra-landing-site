@@ -202,7 +202,7 @@ export default function ContactPage() {
             <a href="tel:+912046021302" className="font-bold text-sky-500 hover:text-sky-400 transition-colors">
               Call +91 20 4602 1302
             </a>
-            {" "}(Mon–Fri, 10 am – 6 pm IST)
+           
           </p>
         </div>
       </section>

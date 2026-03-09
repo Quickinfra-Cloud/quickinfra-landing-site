@@ -37,18 +37,17 @@ const FOOTER_LINKS = [
       { label: "About Us", href: "/about" },
       { label: "Partners", href: "/partners" },
       { label: "AWS Partnership", href: "/aws-partner" },
-      { label: "Careers", href: "#" },
+      { label: "Careers", href: "/careers" },
       { label: "Contact Us", href: "/contact" },
     ],
   },
   {
     title: "Resources",
     links: [
-      { label: "Blog", href: "#" },
+      { label: "Blog", href: "/blogs" },
       { label: "Whitepaper", href: "#" },
       { label: "Videos", href: "#" },
-      { label: "Documentation", href: "#" },
-      { label: "Support", href: "#" },
+      { label: "Documentation", href: "https://docs.quickinfra.cloud/" },
     ],
   },
 ];
@@ -202,7 +201,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-slate-400 dark:text-slate-600 font-light order-3 md:order-1 text-center md:text-left">
-            © 2025 QuickInfra Cloud Solutions Pvt. Ltd. All rights reserved.
+            © {new Date().getFullYear()} QuickInfra Cloud Solutions Pvt. Ltd. All rights reserved.
           </p>
 
           {/* Certification badges */}

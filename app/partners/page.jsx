@@ -176,7 +176,7 @@ function PartnerWidget() {
         <div className="h-full flex flex-col rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 bg-white dark:bg-slate-900 shadow-2xl shadow-orange-500/10 dark:shadow-black/50">
 
           {/* Header */}
-          <div className="flex-shrink-0 flex items-center justify-between px-5 py-3.5 bg-gradient-to-r from-orange-500 via-orange-500 to-rose-500">
+          <div className="shrink-0 flex items-center justify-between px-5 py-3.5 bg-linear-to-r from-orange-500 via-orange-500 to-rose-500">
             <div className="flex items-center gap-2.5">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-60" />
@@ -188,7 +188,7 @@ function PartnerWidget() {
           </div>
 
           {/* Revenue + tier breakdown */}
-          <div className="flex-shrink-0 px-4 py-3.5 border-b border-slate-100 dark:border-slate-800">
+          <div className="shrink-0 px-4 py-3.5 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-end justify-between mb-3">
               <div>
                 <p className="text-[9px] font-extrabold uppercase tracking-widest text-slate-400 mb-0.5">Partner-Driven Revenue</p>
