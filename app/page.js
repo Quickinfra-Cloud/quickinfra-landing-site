@@ -633,9 +633,7 @@ export default function HomePage() {
                 <Link href="https://console.quickinfra.cloud/" className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40 transition-all hover:-translate-y-0.5">
                   Start Free Trial <ArrowRight size={15} />
                 </Link>
-                <button className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-blue-300 dark:hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400 transition-all hover:-translate-y-0.5">
-                  <Play size={14} /> Watch Demo
-                </button>
+                
               </div>
               <div className="flex flex-wrap gap-6 mt-10">
                 {[["ISO 27001", "Certified"], ["AWS", "Select Partner"], ["SOC 2", "Ready"]].map(([l, s]) => (
@@ -885,7 +883,7 @@ export default function HomePage() {
       </section>
 
       {/* ── INTEGRATIONS ─────────────────────────────────────────────────── */}
-      <section className="py-20 sm:py-24 px-4 sm:px-6 lg:px-8">
+      {/* <section className="py-20 sm:py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           <p className="text-[10px] font-bold tracking-widest uppercase text-blue-600 dark:text-blue-500 mb-3">Integrations</p>
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Works With Your Stack</h2>
@@ -897,7 +895,7 @@ export default function HomePage() {
             <div className="px-4 py-2 rounded-lg border text-sm font-semibold border-slate-100 dark:border-slate-800/50 text-slate-300 dark:text-slate-700">+185 more</div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ── TESTIMONIALS ─────────────────────────────────────────────────── */}
       <section className="py-20 sm:py-24 px-4 sm:px-6 lg:px-8 border-y border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40">

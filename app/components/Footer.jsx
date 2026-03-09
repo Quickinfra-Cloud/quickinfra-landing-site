@@ -45,18 +45,18 @@ const FOOTER_LINKS = [
     title: "Resources",
     links: [
       { label: "Blog", href: "/blogs" },
-      { label: "Whitepaper", href: "#" },
-      { label: "Videos", href: "#" },
+      // { label: "Whitepaper", href: "#" },
+      // { label: "Videos", href: "#" },
       { label: "Documentation", href: "https://docs.quickinfra.cloud/" },
     ],
   },
 ];
 
 const SOCIALS = [
-  { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Youtube, href: "#", label: "YouTube" },
-  { icon: Github, href: "#", label: "GitHub" },
+  { icon: Twitter, href: "https://twitter.com/quickinfra", label: "Twitter" },
+  { icon: Linkedin, href: "https://www.linkedin.com/company/quickinfra-cloud/", label: "LinkedIn" },
+  { icon: Youtube, href: "https://www.youtube.com/@quickinfracloud467", label: "YouTube" },
+  // { icon: Github, href: "", label: "GitHub" },
 ];
 
 const BADGES = ["ISO 27001", "ISO 9001", "AWS Select Partner", "SOC 2 Ready"];
