@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Menu, X, ChevronDown, ArrowRight } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
+import Image from "next/image";
 
 const NAV_ITEMS = [
   {
@@ -42,7 +43,11 @@ const NAV_ITEMS = [
       { label: "Blog", href: "/blogs" },
       { label: "Whitepaper", href: "/whitepaper" },
       { label: "Videos", href: "/videos" },
-      { label: "Documentation", href: "https://docs.quickinfra.cloud/", newTab: true },
+      {
+        label: "Documentation",
+        href: "https://docs.quickinfra.cloud/",
+        newTab: true,
+      },
     ],
   },
 ];
@@ -76,22 +81,29 @@ function NavDropdown({ item }) {
     }, LEAVE_GRACE);
   };
 
-  useEffect(() => () => {
-    clearTimeout(leaveTimer.current);
-    clearTimeout(exitTimer.current);
-  }, []);
+  useEffect(
+    () => () => {
+      clearTimeout(leaveTimer.current);
+      clearTimeout(exitTimer.current);
+    },
+    [],
+  );
 
   return (
     <div className="relative" onMouseEnter={show} onMouseLeave={hide}>
       <button
         className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150
-          ${hovered
-            ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10"
-            : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800"
+          ${
+            hovered
+              ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10"
+              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800"
           }`}
       >
         {item.label}
-        <ChevronDown size={13} className={`transition-transform duration-200 ${hovered ? "rotate-180" : ""}`} />
+        <ChevronDown
+          size={13}
+          className={`transition-transform duration-200 ${hovered ? "rotate-180" : ""}`}
+        />
       </button>
 
       {rendered && (
@@ -99,7 +111,9 @@ function NavDropdown({ item }) {
           className="absolute top-full left-0 mt-2 w-52 z-50"
           style={{
             opacity: visible ? 1 : 0,
-            transform: visible ? "translateY(0) scale(1)" : "translateY(-8px) scale(0.97)",
+            transform: visible
+              ? "translateY(0) scale(1)"
+              : "translateY(-8px) scale(0.97)",
             transformOrigin: "top left",
             transition: `opacity ${EXIT_ANIM}ms cubic-bezier(0.16,1,0.3,1), transform ${EXIT_ANIM}ms cubic-bezier(0.16,1,0.3,1)`,
             pointerEvents: visible ? "auto" : "none",
@@ -111,7 +125,9 @@ function NavDropdown({ item }) {
               <Link
                 key={child.label}
                 href={child.href}
-                {...(child.newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                {...(child.newTab
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
                 className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium transition-all duration-150 group"
                 style={{
                   opacity: visible ? 1 : 0,
@@ -158,7 +174,9 @@ export default function Navbar() {
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [mobileOpen]);
 
   return (
@@ -166,22 +184,38 @@ export default function Navbar() {
       <nav
         className={`fixed top-0 inset-x-0 z-50 transition-all duration-300
           bg-white dark:bg-slate-950
-          ${scrolled
-            ? "border-b border-slate-200 dark:border-slate-800 shadow-sm shadow-slate-200/50 dark:shadow-black/30"
-            : "border-b border-transparent"
+          ${
+            scrolled
+              ? "border-b border-slate-200 dark:border-slate-800 shadow-sm shadow-slate-200/50 dark:shadow-black/30"
+              : "border-b border-transparent"
           }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2.5 shrink-0">
-              <div className="w-8 h-8 rounded-lg bg-linear-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-extrabold text-sm select-none shadow-md shadow-blue-500/30">
-                QI
+            <Link href="/" className="flex items-center gap-0.5 shrink-0">
+              {/* Icon */}
+              <div className="relative w-9  h-8 shrink-0">
+                <Image
+                  src="/companyLogo/quickInfra-logo.png"
+                  alt="QuickInfra Logo"
+                  fill
+                  sizes="40px"
+                  className="object-contain"
+                  priority
+                />
               </div>
-              <span className="font-extrabold text-lg tracking-tight text-slate-900 dark:text-white">
-                QuickInfra
-              </span>
+              {/* Wordmark */}
+              <div className="relative  mt-2 h-8 w-28 shrink-0">
+                <Image
+                  src="/companyLogo/quickinfra.png"
+                  alt="QuickInfra"
+                  fill
+                  sizes="112px"
+                  className="object-contain"
+                  priority
+                />
+              </div>
             </Link>
 
             {/* Desktop nav */}
@@ -199,7 +233,7 @@ export default function Navbar() {
                   >
                     {item.label}
                   </Link>
-                )
+                ),
               )}
             </div>
 
@@ -254,21 +288,32 @@ export default function Navbar() {
                 {item.children ? (
                   <>
                     <button
-                      onClick={() => setMobileExpanded(mobileExpanded === item.label ? null : item.label)}
+                      onClick={() =>
+                        setMobileExpanded(
+                          mobileExpanded === item.label ? null : item.label,
+                        )
+                      }
                       className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors
                         text-slate-700 hover:bg-slate-100
                         dark:text-slate-300 dark:hover:bg-slate-800"
                     >
                       {item.label}
-                      <ChevronDown size={15} className={`transition-transform duration-200 ${mobileExpanded === item.label ? "rotate-180" : ""}`} />
+                      <ChevronDown
+                        size={15}
+                        className={`transition-transform duration-200 ${mobileExpanded === item.label ? "rotate-180" : ""}`}
+                      />
                     </button>
-                    <div className={`overflow-hidden transition-all duration-200 ${mobileExpanded === item.label ? "max-h-64 mt-0.5" : "max-h-0"}`}>
+                    <div
+                      className={`overflow-hidden transition-all duration-200 ${mobileExpanded === item.label ? "max-h-64 mt-0.5" : "max-h-0"}`}
+                    >
                       <div className="ml-3 pl-3 border-l-2 border-blue-500/20 space-y-0.5">
                         {item.children.map((child) => (
                           <Link
                             key={child.label}
                             href={child.href}
-                            {...(child.newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                            {...(child.newTab
+                              ? { target: "_blank", rel: "noopener noreferrer" }
+                              : {})}
                             onClick={() => setMobileOpen(false)}
                             className="block px-3 py-2 text-sm font-medium rounded-lg transition-colors
                               text-slate-500 hover:text-blue-600 hover:bg-blue-50

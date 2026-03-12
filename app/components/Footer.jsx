@@ -9,6 +9,7 @@ import {
   MapPin,
   ArrowRight,
 } from "lucide-react";
+import Image from "next/image";
 
 const FOOTER_LINKS = [
   {
@@ -95,13 +96,29 @@ export default function Footer() {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 lg:gap-8 mb-12">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <Link href="/" className="inline-flex items-center gap-2.5 mb-5">
-              <div className="w-9 h-9 rounded-lg bg-linear-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-extrabold text-sm shadow-md shadow-blue-500/20">
-                QI
+            <Link href="/" className="flex items-center gap-0.5 shrink-0">
+              {/* Icon */}
+              <div className="relative w-9  h-8 shrink-0">
+                <Image
+                  src="/companyLogo/quickInfra-logo.png"
+                  alt="QuickInfra Logo"
+                  fill
+                  sizes="40px"
+                  className="object-contain"
+                  priority
+                />
               </div>
-              <span className="font-extrabold text-lg tracking-tight text-slate-900 dark:text-white">
-                QuickInfra
-              </span>
+              {/* Wordmark */}
+              <div className="relative  mt-2 h-8 w-28 shrink-0">
+                <Image
+                  src="/companyLogo/quickinfra.png"
+                  alt="QuickInfra"
+                  fill
+                  sizes="112px"
+                  className="object-contain"
+                  priority
+                />
+              </div>
             </Link>
 
             <p className="text-sm text-slate-700 dark:text-slate-400 leading-relaxed font-light mb-6 max-w-xs">
@@ -161,7 +178,7 @@ export default function Footer() {
               hover:text-blue-600 dark:hover:text-blue-400 transition-colors group"
           >
             <span
-              className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0
+              className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0
               bg-blue-50 dark:bg-slate-800 text-blue-500
               group-hover:bg-blue-100 dark:group-hover:bg-slate-700 transition-colors"
             >
@@ -175,7 +192,7 @@ export default function Footer() {
               hover:text-blue-600 dark:hover:text-blue-400 transition-colors group"
           >
             <span
-              className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0
+              className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0
               bg-blue-50 dark:bg-slate-800 text-blue-500
               group-hover:bg-blue-100 dark:group-hover:bg-slate-700 transition-colors"
             >
@@ -185,7 +202,7 @@ export default function Footer() {
           </a>
           <div className="flex items-start gap-2.5 text-sm text-slate-700 dark:text-slate-400">
             <span
-              className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5
+              className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5
               bg-blue-50 dark:bg-slate-800 text-blue-500"
             >
               <MapPin size={13} />
