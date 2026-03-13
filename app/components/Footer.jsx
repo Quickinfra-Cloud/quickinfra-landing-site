@@ -238,17 +238,12 @@ export default function Footer() {
           {/* Legal links */}
           <div className="flex gap-5 order-2 md:order-3">
             <Link
-              href="/privacy"
+              href="/privacy-policy"
               className="text-xs font-light text-slate-400 dark:text-slate-600 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               Privacy Policy
             </Link>
-            <Link
-              href="/terms"
-              className="text-xs font-light text-slate-400 dark:text-slate-600 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-            >
-              Terms of Use
-            </Link>
+           
           </div>
         </div>
       </div>
