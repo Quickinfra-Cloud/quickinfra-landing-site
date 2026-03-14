@@ -42,7 +42,7 @@ const NAV_ITEMS = [
     children: [
       { label: "Blog", href: "/blogs" },
       { label: "Whitepaper", href: "/whitepaper" },
-      { label: "Videos", href: "/videos" },
+      // { label: "Videos", href: "/videos" },
       {
         label: "Documentation",
         href: "https://docs.quickinfra.cloud/",

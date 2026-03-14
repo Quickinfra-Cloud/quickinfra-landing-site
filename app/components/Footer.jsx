@@ -46,7 +46,7 @@ const FOOTER_LINKS = [
     title: "Resources",
     links: [
       { label: "Blog", href: "/blogs" },
-      // { label: "Whitepaper", href: "#" },
+      { label: "Whitepaper", href: "#" },
       // { label: "Videos", href: "#" },
       { label: "Documentation", href: "https://docs.quickinfra.cloud/" },
     ],
@@ -173,7 +173,7 @@ export default function Footer() {
         {/* Contact strip */}
         <div className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-8 py-6 border-t border-b border-slate-200 dark:border-slate-800 mb-8">
           <a
-            href="mailto:info@quickinfracloud.com"
+            href="mailto:support@quickinfracloud.com"
             className="flex items-center gap-2.5 text-sm text-slate-700 dark:text-slate-400
               hover:text-blue-600 dark:hover:text-blue-400 transition-colors group"
           >
@@ -184,7 +184,7 @@ export default function Footer() {
             >
               <Mail size={13} />
             </span>
-            info@quickinfracloud.com
+            support@quickinfracloud.com
           </a>
           <a
             href="tel:+912044473448"
