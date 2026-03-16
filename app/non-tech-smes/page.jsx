@@ -265,10 +265,7 @@ function SMEDashboardWidget() {
     >
       <div
         className="h-full"
-        style={{
-          animation: "float 5s ease-in-out infinite",
-          willChange: "transform",
-        }}
+        
       >
         <div className="h-full flex flex-col rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 bg-white dark:bg-slate-900 shadow-2xl shadow-emerald-500/10 dark:shadow-black/50">
           {/* Header */}

@@ -1406,4 +1406,1384 @@ Once you're comfortable with how the platform works, migrate your staging enviro
     `,
   },
 
+
+  // ── POST 31 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "quickinfra-onboarding-first-project",
+    title:    "Your First QuickInfra Project: A Complete Onboarding Walkthrough",
+    excerpt:  "New to QuickInfra? This guide walks you through connecting your AWS account, creating your first Infrastructure Project, and running your first Terraform apply — step by step.",
+    category: "DevOps",
+    tags:     ["Getting Started", "Onboarding", "QuickInfra", "AWS", "Terraform"],
+    author:   "QuickInfra Team",
+    date:     "2025-05-26",
+    readTime: "6 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&q=80",
+    content: `
+Getting to your first successful \`terraform apply\` on QuickInfra takes under thirty minutes if you follow this guide. Here's exactly what to do.
+
+## Step 1: Create Your Organisation
+
+Sign up at console.quickinfra.cloud. You'll be prompted to create an Organisation — this is the top-level entity that all your cloud accounts, projects, and team members belong to. Give it your company name.
+
+## Step 2: Connect an AWS Account
+
+Navigate to **Manage → Cloud Accounts → Add Account**. Select AWS. The wizard generates a CloudFormation template — open your AWS console in another tab, go to CloudFormation, create a new stack using the template URL, and let it run. Once complete, copy the Role ARN output back into QuickInfra. The account status turns green within a few seconds.
+
+## Step 3: Create an Infrastructure Project
+
+Go to **Projects → Infrastructure → New Project**. Give it a name (e.g., "dev-webapp"), select your connected AWS account, choose ap-south-1 (Mumbai) as the region, and select the "Web Application" base template. QuickInfra pre-populates the service list: VPC, public subnet, internet gateway, security group, key pair, EC2 instance, and Application Load Balancer.
+
+Adjust the instance type (t3.micro is sufficient for a dev environment) and click Save.
+
+## Step 4: Review the Generated Terraform
+
+Click the **Terraform Output** tab. You'll see the full Terraform codebase QuickInfra generated from your project configuration — vpc.tf, ec2.tf, security_groups.tf, variables.tf, outputs.tf. Review it before applying anything.
+
+## Step 5: Plan and Apply
+
+Click **View Terraform Plan**. The console streams the plan output — you'll see a list of resources Terraform will create with their types, names, and key attributes. No surprises. Once you're satisfied, click **Create Infrastructure**. Watch the apply stream in real time. After three to five minutes, your infrastructure is live.
+
+## Step 6: Verify in AWS
+
+Jump to the EC2 console in AWS and confirm your instance is running. Check the VPC console to see your network. Everything Terraform created is in your account — QuickInfra manages it, but you own it.
+
+## What's Next
+
+Connect a CI/CD pipeline to this project, add monitoring alerts for the EC2 instance, and run the initial security compliance scan. Your development environment is ready for use.
+    `,
+  },
+
+  // ── POST 32 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "aws-iam-best-practices-quickinfra",
+    title:    "AWS IAM Best Practices: How QuickInfra Enforces Least-Privilege Access by Default",
+    excerpt:  "IAM misconfigurations are the leading cause of AWS security incidents. QuickInfra builds IAM best practices into every project — here's what that looks like in practice.",
+    category: "Security",
+    tags:     ["IAM", "AWS", "Security", "Least Privilege", "Access Control"],
+    author:   "QuickInfra Team",
+    date:     "2025-06-02",
+    readTime: "7 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1510511459019-5dda7724fd87?w=1200&q=80",
+    content: `
+The most common path into an AWS account isn't a sophisticated exploit — it's an over-privileged IAM credential that gets exposed. A developer commits an access key to a public GitHub repo. An EC2 instance profile has AdministratorAccess attached. A cross-account trust policy is too permissive. QuickInfra's approach to IAM is to make these mistakes structurally difficult.
+
+## No AdministratorAccess on Application Resources
+
+Every EC2 instance QuickInfra provisions gets a dedicated IAM instance profile with only the permissions that instance actually needs. An application server that reads from S3 and writes to DynamoDB gets a policy with s3:GetObject on its specific bucket and dynamodb:PutItem on its specific table — nothing more.
+
+QuickInfra generates these scoped policies from your project configuration. You declare what AWS services your application uses; the platform generates the minimum-permission policy.
+
+## Separating Human and Machine Identities
+
+Human access to AWS infrastructure should go through IAM roles assumed via SSO — not through long-lived IAM user credentials. QuickInfra's documentation and templates encourage this pattern: the platform's own access uses a dedicated IAM role (not a user), and it flags IAM users with active access keys as a compliance finding.
+
+## Rotating Credentials
+
+QuickInfra monitors IAM users with access keys older than 90 days and surfaces them in the Security section as rotation findings. For applications, rotating secrets is handled through AWS Secrets Manager integration — secrets are fetched at runtime, not baked into instance configurations.
+
+## SCPs at the Org Level
+
+For teams using an AWS Organisation, Service Control Policies applied through Control Tower provide the guardrail layer above IAM policies. No matter how permissive an IAM policy in a workload account is, an SCP can prevent certain actions at the org level. QuickInfra's Landing Zone templates include a set of recommended SCPs: no root user API access, no disabling CloudTrail, no creating IAM users without MFA.
+
+## Auditing IAM with QuickInfra
+
+The Security section's IAM compliance checks run against your connected accounts and flag: unused IAM users (not logged in for 90+ days), users without MFA, access keys older than 90 days, roles with wildcard permissions, and policies attached directly to users rather than to groups or roles.
+
+Each finding links to the specific IAM entity so you can remediate directly in the AWS console.
+    `,
+  },
+
+  // ── POST 33 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "rds-postgres-mysql-aws-quickinfra-setup",
+    title:    "Setting Up RDS on AWS With QuickInfra: PostgreSQL and MySQL the Right Way",
+    excerpt:  "A database is the most critical resource in your stack. Here's how QuickInfra provisions RDS instances with production-appropriate defaults — multi-AZ, encrypted, backed up, and not reachable from the internet.",
+    category: "Cloud Infrastructure",
+    tags:     ["RDS", "PostgreSQL", "MySQL", "AWS", "Database"],
+    author:   "QuickInfra Team",
+    date:     "2025-06-09",
+    readTime: "6 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=1200&q=80",
+    content: `
+RDS is where most cloud architecture mistakes have the most expensive consequences. A database instance in a public subnet, without encryption, without a backup policy, or without multi-AZ failover is a time bomb. QuickInfra's RDS configuration defaults make it structurally hard to deploy a database incorrectly.
+
+## Default Configuration
+
+Every RDS instance provisioned through QuickInfra starts with these defaults:
+
+- **Private subnet placement** — no public IP, not reachable from the internet
+- **Encryption at rest** — AES-256 via AWS KMS
+- **Automated backups** — 7-day retention window, configurable up to 35 days
+- **Enhanced monitoring** — 60-second granularity metrics to CloudWatch
+- **Deletion protection** — enabled by default on production instances
+
+## Multi-AZ
+
+Multi-AZ deploys a synchronous standby replica in a different availability zone. If the primary instance fails, RDS promotes the standby automatically in 60 to 120 seconds. For any database serving a production workload, multi-AZ is the correct configuration.
+
+In QuickInfra's RDS resource configuration, multi-AZ defaults to enabled for production environment tags and can be disabled for cost savings in development environments.
+
+## Parameter Groups and Security
+
+QuickInfra generates a custom parameter group for each RDS instance rather than using AWS defaults. The custom group enforces: SSL connections required (rds.force_ssl = 1 for PostgreSQL), slow query logging enabled, and audit logging for MySQL.
+
+## Connection Security
+
+The security group attached to an RDS instance QuickInfra provisions allows inbound traffic only from the application server security group — not from a CIDR range, not from the internet, not from 0.0.0.0/0. Database port access is restricted to the application tier.
+
+## Snapshot Management
+
+QuickInfra's Custom Scripts library includes an RDS snapshot script that can be scheduled to run on any frequency — useful for taking additional snapshots before a risky database migration or immediately before a major deployment.
+
+## Read Replicas
+
+For read-heavy workloads, QuickInfra supports provisioning RDS Read Replicas as a separate infrastructure resource in the same project. The replica connection string is output from the Terraform apply and available in the project outputs view.
+    `,
+  },
+
+  // ── POST 34 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "auto-scaling-ec2-quickinfra-configuration",
+    title:    "EC2 Auto Scaling With QuickInfra: Handle Traffic Spikes Without Manual Intervention",
+    excerpt:  "Auto Scaling groups that actually work require more than just setting min/max counts. Here's how QuickInfra configures EC2 Auto Scaling correctly — including launch templates, scaling policies, and health checks.",
+    category: "Cloud Infrastructure",
+    tags:     ["Auto Scaling", "EC2", "AWS", "High Availability", "Load Balancing"],
+    author:   "QuickInfra Team",
+    date:     "2025-06-16",
+    readTime: "7 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1200&q=80",
+    content: `
+An EC2 Auto Scaling Group that's misconfigured is sometimes worse than no Auto Scaling at all. Groups that scale up on the wrong metric, use stale launch configurations, or don't drain connections properly before terminating instances can cause more downtime than a fixed-size deployment. QuickInfra generates Auto Scaling configurations that actually work under production conditions.
+
+## Launch Templates Instead of Launch Configurations
+
+AWS deprecated Launch Configurations in favour of Launch Templates. Launch Templates support versioning — you can update the template while the ASG continues running the previous version, then roll out the new version in a controlled way. QuickInfra generates Launch Templates exclusively, with a pinned version reference in the ASG configuration so version updates don't apply automatically.
+
+## Scaling Policies
+
+QuickInfra supports two scaling policy types: **Target Tracking** and **Step Scaling**.
+
+Target Tracking is the recommended starting point for most workloads. You declare a target metric and value — "keep average CPU utilisation at 60%" — and AWS calculates the exact scaling actions needed. QuickInfra sets this up with a 300-second scale-in cooldown to prevent thrashing.
+
+Step Scaling is useful when you want different scaling aggressiveness at different load levels — scale by 2 instances when CPU hits 70%, by 4 instances when it hits 85%. QuickInfra generates the step scaling policy with configurable thresholds.
+
+## Health Checks
+
+The default ASG health check uses EC2 status checks. For instances behind an Application Load Balancer, you want ELB health checks — the ASG will terminate and replace instances that the ALB considers unhealthy, not just instances with failed hardware checks. QuickInfra configures ELB health checks automatically when an ASG is associated with a load balancer target group.
+
+## Connection Draining
+
+When an instance is scaled in (terminated), the ALB needs time to drain existing connections before the instance is removed. QuickInfra sets a deregistration delay on the target group (default 30 seconds) so in-flight requests complete cleanly rather than getting a connection reset.
+
+## Multi-AZ Placement
+
+QuickInfra distributes ASG instances across all available AZs in the selected region. The Availability Zone rebalancing feature is enabled so the group re-distributes when one AZ has more instances than others after scaling events.
+    `,
+  },
+
+  // ── POST 35 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "s3-bucket-architecture-best-practices",
+    title:    "S3 Bucket Architecture on AWS: QuickInfra's Approach to Secure, Cost-Efficient Storage",
+    excerpt:  "S3 is deceptively simple until you're managing dozens of buckets across accounts. Here's the bucket architecture pattern QuickInfra recommends — and how it enforces it in every project.",
+    category: "Cloud Infrastructure",
+    tags:     ["S3", "AWS", "Storage", "Security", "Cost Optimisation"],
+    author:   "QuickInfra Team",
+    date:     "2025-06-23",
+    readTime: "6 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1527689368864-3a821dbccc34?w=1200&q=80",
+    content: `
+S3 is AWS's most widely used service and one of the most frequently misconfigured. A bucket with public access enabled, no lifecycle policy, and no versioning is a security risk and a cost inefficiency. QuickInfra's S3 resource configuration applies secure, cost-conscious defaults from the start.
+
+## Public Access Block
+
+Every S3 bucket QuickInfra provisions has the Block Public Access settings applied at both the bucket and account level. No bucket-level ACL or bucket policy can accidentally make objects publicly readable unless these blocks are explicitly removed — an action that requires a deliberate override and creates a security finding in the compliance dashboard.
+
+## Versioning and Object Lock
+
+Versioning is enabled by default on buckets that store application data or deployment artefacts. This protects against accidental deletes and enables point-in-time recovery without a separate backup process. Object Lock (WORM — Write Once Read Many) is available for compliance-sensitive buckets where data must be immutable for a defined period.
+
+## Lifecycle Policies
+
+Without a lifecycle policy, S3 storage accumulates indefinitely. QuickInfra applies a tiered lifecycle policy to all new buckets:
+
+- Objects transition to S3 Standard-IA after 30 days
+- Objects transition to S3 Glacier Flexible Retrieval after 90 days
+- Delete markers and incomplete multipart uploads are cleaned up after 7 days
+
+For buckets where long-term retention isn't needed (deployment artefact staging, temporary files), QuickInfra configures a shorter expiry — 30 days is typical for staging buckets.
+
+## Server-Side Encryption
+
+All buckets use SSE-S3 (AES-256) encryption by default. Buckets holding sensitive data — PII, payment information, health records — are configured with SSE-KMS using a dedicated KMS key for fine-grained access control and CloudTrail logging of decryption events.
+
+## Bucket Naming and Tagging
+
+QuickInfra enforces consistent bucket naming: {org}-{environment}-{purpose}-{account-id-suffix}. Mandatory tags (project, environment, team, data-classification) are applied at creation. These tags feed into cost allocation reports and compliance evidence.
+
+## Cross-Account Bucket Access
+
+For architectures where a central logging bucket or artefact bucket is shared across accounts, QuickInfra generates the bucket policy with explicit account-based principals — no wildcard account access.
+    `,
+  },
+
+  // ── POST 36 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "github-gitlab-integration-quickinfra-cicd",
+    title:    "GitHub and GitLab Integration With QuickInfra: How Source Control Triggers Everything",
+    excerpt:  "QuickInfra integrates directly with GitHub and GitLab — webhooks, OAuth, deploy keys, and branch-based pipeline triggers. Here's exactly how the integration works and how to configure it.",
+    category: "CI/CD",
+    tags:     ["GitHub", "GitLab", "CI/CD", "Integration", "Webhooks"],
+    author:   "QuickInfra Team",
+    date:     "2025-06-30",
+    readTime: "5 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=1200&q=80",
+    content: `
+Source control is the trigger point for everything that happens downstream — build, test, deploy. QuickInfra's GitHub and GitLab integrations are built around webhooks and OAuth app permissions, not long-lived personal access tokens that expire at the worst moment.
+
+## OAuth App Connection
+
+Go to **Manage → Integrations → Source Control**. Select GitHub or GitLab and complete the OAuth authorisation flow. QuickInfra is granted repository access (read and webhook management) on the repositories you select during the OAuth flow — it doesn't get access to all your repositories automatically.
+
+## Webhook Installation
+
+When you create a CI/CD Pipeline project and link it to a repository, QuickInfra automatically installs a webhook on the selected repo. The webhook fires on push events to the configured branch (usually main or production). You don't configure webhooks manually. If you disconnect the integration or delete the pipeline project, QuickInfra removes the webhook automatically.
+
+## Branch-Based Triggers
+
+Each pipeline project has a trigger configuration: which branch, which event (push, pull request, tag). A standard setup has two pipeline projects for one repository: one triggered by pull requests (runs tests, does not deploy), and one triggered by merge to main (runs tests and deploys to development). Production deployment is triggered by a git tag matching a version pattern, with a manual approval gate.
+
+## Build Environment Variables
+
+Secrets needed in the build environment — API keys, database connection strings, registry credentials — are defined in the pipeline project's environment variable configuration in QuickInfra. They're injected into the build environment at runtime and never appear in logs. They're not committed to the repository.
+
+## GitLab Self-Hosted Support
+
+QuickInfra supports GitLab.com and GitLab self-hosted installations. For self-hosted GitLab, you configure the GitLab instance URL and a system-level access token in the integration settings. The webhook mechanism is the same as for GitLab.com.
+
+## Pull Request Status Checks
+
+QuickInfra posts pipeline status back to GitHub/GitLab pull requests. A failed test run shows as a failed status check on the PR. This prevents merging code that breaks the build.
+    `,
+  },
+
+  // ── POST 37 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "docker-container-registry-ecr-quickinfra",
+    title:    "Docker and Amazon ECR With QuickInfra: Container Image Lifecycle Made Simple",
+    excerpt:  "Where your container images are stored, how they're scanned, and how they're pulled into deployments matters more than most teams realise. Here's how QuickInfra handles the full container registry workflow.",
+    category: "CI/CD",
+    tags:     ["Docker", "ECR", "Containers", "AWS", "Image Scanning"],
+    author:   "QuickInfra Team",
+    date:     "2025-07-07",
+    readTime: "6 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1605745341112-85968b19335b?w=1200&q=80",
+    content: `
+Container images are the deployment unit for most modern applications. Where they're stored, how they're tagged, how they're scanned for vulnerabilities, and how old images are cleaned up are operational concerns that matter at production scale. QuickInfra integrates with Amazon ECR to handle the full image lifecycle.
+
+## ECR Repository Provisioning
+
+QuickInfra creates ECR repositories as part of your Infrastructure Project when you're deploying a containerised workload. Each repository is provisioned with image scanning enabled (both on push and on-demand), a lifecycle policy to expire old images, and encryption using a KMS key.
+
+Repositories follow a consistent naming convention tied to your project: {org}/{project}/{service}. This makes cross-account image references predictable.
+
+## Image Scanning
+
+ECR's native image scanning uses the Common Vulnerabilities and Exposures (CVE) database to check images for known vulnerabilities. QuickInfra surfaces scan results in the Security section — images with CRITICAL or HIGH vulnerabilities are flagged and can trigger a pipeline failure if configured.
+
+Enhanced scanning with Amazon Inspector integration is supported for teams that need more thorough vulnerability assessment, including OS-level and application dependency scanning.
+
+## Lifecycle Policies
+
+Without lifecycle policies, ECR repositories accumulate images indefinitely. QuickInfra configures a lifecycle policy that retains the last 10 tagged images and deletes untagged images after 7 days. Specific tags (production, latest) can be excluded from expiry.
+
+## Cross-Account Image Pulling
+
+In multi-account setups, images typically live in a central account (your CI/CD account) and are pulled by workload accounts (dev, staging, prod). QuickInfra generates the ECR repository policy that allows cross-account pull access from your connected accounts — no manual policy editing required.
+
+## Image Tagging Strategy
+
+QuickInfra's CI/CD pipelines tag images with the git commit SHA and a semantic version tag if a version tag triggered the build. Using git SHA as the image tag makes deployments fully traceable — you always know which exact code is running in any environment.
+    `,
+  },
+
+  // ── POST 38 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "terraform-state-management-best-practices",
+    title:    "Terraform State Management: Why It Matters and How QuickInfra Handles It",
+    excerpt:  "Terraform state is the source of truth for your infrastructure. Corrupt or lost state means Terraform can no longer manage your resources. Here's why state management is critical and how QuickInfra makes it automatic.",
+    category: "IaC",
+    tags:     ["Terraform", "State Management", "IaC", "S3", "DynamoDB"],
+    author:   "QuickInfra Team",
+    date:     "2025-07-14",
+    readTime: "7 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80",
+    content: `
+Terraform state is the data layer that makes infrastructure-as-code work. Without state, Terraform has no memory — it can't tell the difference between "this resource doesn't exist yet" and "this resource exists and was created by this configuration." Teams that manage state poorly accumulate technical debt that eventually prevents them from using Terraform effectively.
+
+## What State Contains
+
+Terraform state is a JSON file that maps every resource in your configuration to the corresponding real-world infrastructure object. For an EC2 instance, state stores the instance ID, the current instance type, the AMI ID, the availability zone, the tags, and dozens of other attributes. When you run \`terraform plan\`, Terraform reads the current state, queries the real AWS resources, and computes the diff.
+
+## Why Remote State Is Non-Negotiable for Teams
+
+Local state (the default when you run \`terraform init\` without a backend configuration) works for solo use on a single machine. The moment a second person needs to run Terraform against the same infrastructure, local state becomes dangerous. Two engineers running \`terraform apply\` simultaneously against the same local state will corrupt it.
+
+Remote state — stored in S3 with DynamoDB locking — solves this. The state file lives in S3. DynamoDB provides a mutex: only one Terraform process can hold the lock at a time. Concurrent applies queue rather than conflict.
+
+## State Encryption
+
+Terraform state can contain sensitive data — database passwords, API keys, private keys — depending on what resources you're managing. State stored in S3 should have server-side encryption enabled and bucket policies that restrict access to the IAM roles that actually need it.
+
+## How QuickInfra Handles This
+
+QuickInfra manages Terraform state completely automatically. Every Infrastructure Project gets its own state file, stored in encrypted S3 with DynamoDB locking, versioned, and locked during active operations. State is never exposed directly in the console. If an operation fails partway through and leaves state in a partial apply, QuickInfra's error handling surfaces the issue clearly and provides recovery options.
+
+## State Versioning and Recovery
+
+QuickInfra retains the last 20 state versions for every project. If a bad apply corrupts your infrastructure and you need to roll back the state to a previous known-good version, you can do this from the project settings without needing S3 console access or Terraform CLI knowledge.
+    `,
+  },
+
+  // ── POST 39 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "vpc-design-aws-production-patterns",
+    title:    "VPC Design Patterns for AWS Production Workloads: QuickInfra's Recommended Architectures",
+    excerpt:  "Your VPC design determines your security posture, network performance, and operational complexity for years. Here are the three VPC patterns QuickInfra recommends for production workloads — and when to use each.",
+    category: "Cloud Infrastructure",
+    tags:     ["VPC", "Networking", "AWS", "Security", "Architecture"],
+    author:   "QuickInfra Team",
+    date:     "2025-07-21",
+    readTime: "8 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1551808525-51a94da548ce?w=1200&q=80",
+    content: `
+A poorly designed VPC is painful to fix once workloads are running in it. CIDR ranges that don't have room to grow, subnets in only one availability zone, databases in public subnets — these architectural mistakes get compounded over time. QuickInfra's VPC templates encode three production-tested patterns for common workload types.
+
+## Pattern 1: Simple Public/Private Split
+
+For single-application deployments, the minimal correct VPC has:
+- A /16 VPC CIDR (65,536 addresses — plenty of room to grow)
+- Two public subnets across two AZs for the load balancer and NAT gateways
+- Two private subnets across two AZs for application servers
+- Two isolated subnets across two AZs for databases
+
+The internet gateway is attached to the public subnets. Private subnets route outbound internet traffic through NAT gateways in the public subnets. Isolated subnets have no route to the internet — they can only communicate with resources in other subnets via VPC-internal routing.
+
+## Pattern 2: Three-Tier With Transit Gateway Connectivity
+
+For multi-account architectures where multiple VPCs need to communicate, Transit Gateway provides a hub-and-spoke routing model. Each workload VPC attaches to the central Transit Gateway instead of using VPC Peering (which doesn't scale to many accounts). The central VPC (typically in a shared services account) hosts DNS, internal tooling, and egress inspection.
+
+## Pattern 3: Shared VPC (Resource Access Manager)
+
+AWS Resource Access Manager allows subnets from one account's VPC to be shared with other accounts. Workload accounts attach resources directly to the shared subnets without owning their own VPC. This simplifies network management for large organisations — you manage one set of VPCs in a central account rather than one per workload account.
+
+## CIDR Planning
+
+Plan your CIDR ranges before deploying anything. VPC CIDR ranges cannot overlap with each other if you want to use VPC Peering or Transit Gateway. QuickInfra's CIDR planning view shows all existing VPC CIDRs across your connected accounts and validates that a new VPC's CIDR doesn't conflict with existing ones.
+
+## Flow Logs
+
+VPC Flow Logs capture metadata about the IP traffic flowing through your network interfaces. This data is essential for security investigations, compliance evidence, and network troubleshooting. QuickInfra enables Flow Logs on every provisioned VPC by default, with logs stored in a dedicated S3 bucket in your account.
+    `,
+  },
+
+  // ── POST 40 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "quickinfra-api-automation-integrations",
+    title:    "QuickInfra API: Automating Infrastructure Operations From Your Own Tooling",
+    excerpt:  "QuickInfra's console is powerful, but the most productive teams connect it to their existing workflows via the API. Here's what the QuickInfra API enables and how to get started.",
+    category: "Automation",
+    tags:     ["API", "Automation", "Integration", "Developer Tools", "Workflows"],
+    author:   "QuickInfra Team",
+    date:     "2025-07-28",
+    readTime: "6 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=1200&q=80",
+    content: `
+QuickInfra's web console is the right tool for most teams. But mature engineering organisations often want to trigger infrastructure operations from their own tooling — a Slack bot that provisions dev environments on demand, a post-merge GitHub Action that triggers a deployment project, an internal developer portal that creates projects via the API. QuickInfra's REST API enables all of this.
+
+## Authentication
+
+The QuickInfra API uses API tokens for authentication. Generate a token in **Organisation Settings → API Tokens**. Tokens are scoped to specific permissions and can be set to expire. Use short-lived tokens for automated workflows and rotate them through your secrets management system (AWS Secrets Manager or Vault).
+
+## Core API Capabilities
+
+The API surface covers the same operations available in the console:
+
+- Create, read, update, and delete Infrastructure Projects
+- Trigger project actions (generate, plan, apply, destroy)
+- Create and trigger CI/CD Pipeline runs
+- Execute Custom Scripts
+- Read monitoring metrics and alerts
+- Query compliance posture scores
+- Manage user access and invitations
+
+## Triggering a Deployment
+
+To trigger a deployment project from an external system (e.g., after a successful CI build in your own pipeline):
+
+\`\`\`
+POST /v1/projects/deployment/{project-id}/trigger
+Authorization: Bearer {api-token}
+Content-Type: application/json
+
+{
+  "image_tag": "v1.4.2",
+  "environment": "staging",
+  "triggered_by": "github-actions-build-1234"
+}
+\`\`\`
+
+The response includes a run ID you can poll for status. When the deployment completes (or fails), you get the outcome with the full log URL.
+
+## Webhooks
+
+QuickInfra can POST event data to a URL of your choice when specific events occur: pipeline run completed, compliance scan found new critical findings, cost anomaly detected. This enables integrations with Slack (via Slack's incoming webhooks), PagerDuty, and internal notification systems.
+
+## Rate Limits and Versioning
+
+The API is versioned at /v1/ with a documented deprecation policy. Rate limits apply per token. The API documentation is available at docs.quickinfra.cloud/api.
+    `,
+  },
+
+  // ── POST 41 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "load-balancer-alb-nlb-aws-quickinfra",
+    title:    "Application Load Balancer vs Network Load Balancer: Choosing the Right AWS LB for Your Workload",
+    excerpt:  "ALB and NLB solve different problems. Using the wrong one adds latency, cost, or complexity. Here's when to use each — and how QuickInfra configures both correctly.",
+    category: "Cloud Infrastructure",
+    tags:     ["ALB", "NLB", "Load Balancer", "AWS", "Networking"],
+    author:   "QuickInfra Team",
+    date:     "2025-08-04",
+    readTime: "6 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1200&q=80",
+    content: `
+AWS offers four types of load balancers. Two of them — ALB and NLB — cover the vast majority of production use cases. Understanding which one to use matters because they operate at different OSI layers, have different performance profiles, and cost differently.
+
+## Application Load Balancer (ALB)
+
+ALB operates at Layer 7 (HTTP/HTTPS). It terminates TLS, reads the HTTP request, and routes based on content: URL path, hostname, HTTP headers, query parameters. This is what enables you to run multiple services on a single ALB — /api/* routes to one target group, /static/* routes to another.
+
+ALB supports WebSockets, gRPC, and HTTP/2. It integrates with AWS WAF for application-layer protection. It can authenticate users via Cognito or OIDC before the request reaches your application.
+
+Use ALB for: web applications, REST APIs, microservices that need path-based routing, workloads that benefit from WAF integration.
+
+## Network Load Balancer (NLB)
+
+NLB operates at Layer 4 (TCP/UDP). It forwards packets at the transport layer without terminating connections. It doesn't read HTTP headers — it routes based on IP and port. This makes it significantly faster than ALB with lower latency (single-digit milliseconds) and higher throughput.
+
+NLB supports static IPs and can be used as a target for AWS PrivateLink. It handles extreme traffic volumes without warm-up time (ALB needs time to scale capacity).
+
+Use NLB for: TCP applications, UDP workloads (gaming, streaming, IoT), workloads requiring static IPs for firewall whitelisting, PrivateLink endpoints.
+
+## QuickInfra's Load Balancer Configuration
+
+QuickInfra provisions ALBs with:
+- TLS termination with an ACM certificate
+- HTTP to HTTPS redirect on port 80
+- Security group restricting inbound to 443 only
+- Deletion protection enabled
+- Access logging to S3
+
+For NLBs, QuickInfra configures cross-zone load balancing, preserves client IP addresses, and sets appropriate health check configurations for TCP workloads.
+
+## Choosing in QuickInfra
+
+When adding a load balancer to an Infrastructure Project, QuickInfra's service selector asks three questions: Do you need content-based routing? Do you need sub-millisecond latency? Do you need a static IP? The answers point to ALB or NLB.
+    `,
+  },
+
+  // ── POST 42 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "secrets-management-aws-secrets-manager-quickinfra",
+    title:    "Secrets Management on AWS: Vault vs Secrets Manager vs Parameter Store — And How QuickInfra Uses Them",
+    excerpt:  "Hardcoded credentials in application code are still the most common misconfiguration in small teams. Here's the right way to manage secrets on AWS — and how QuickInfra enforces it.",
+    category: "Security",
+    tags:     ["Secrets Management", "AWS Secrets Manager", "Security", "Credentials", "Vault"],
+    author:   "QuickInfra Team",
+    date:     "2025-08-11",
+    readTime: "7 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&q=80",
+    content: `
+Secrets — database passwords, API keys, TLS certificates, OAuth tokens — are the keys to your kingdom. The most common way teams manage them badly is also the simplest: they put them in environment variables on the server, in .env files committed to git, or hardcoded in application code. QuickInfra's approach to secrets treats them as infrastructure resources, not configuration.
+
+## The Three AWS Options
+
+**AWS Secrets Manager** stores structured secrets (username/password pairs, API keys) with automatic rotation support. Secrets can be referenced by ARN and fetched at runtime. Rotation uses Lambda functions to update both the secret value and the resource it authenticates to (e.g., rotating an RDS password also updates the database and the secret simultaneously). Cost: $0.40 per secret per month.
+
+**AWS Systems Manager Parameter Store** stores configuration values and secrets. SecureString parameters are encrypted with KMS. Standard tier is free. Does not support automatic rotation. Better for configuration values that change infrequently.
+
+**HashiCorp Vault** is a dedicated secrets management platform with more advanced features — dynamic secrets (Vault generates a time-limited credential on demand, rather than storing a long-lived one), fine-grained access policies, and multi-cloud support. Higher operational cost than AWS-native options.
+
+## QuickInfra's Approach
+
+For infrastructure secrets (database connection strings, API keys used by deployed applications), QuickInfra stores them in AWS Secrets Manager. When you define an environment variable in a pipeline project or a deployment project, sensitive values are stored as Secrets Manager entries rather than in QuickInfra's own storage. The application fetches them at runtime using the instance profile or task role.
+
+## Rotation
+
+QuickInfra includes a Custom Script template for RDS password rotation. The script generates a new password, updates the RDS instance, updates the Secrets Manager secret, and restarts the application to pick up the new value. This can be scheduled on any cadence.
+
+## Detecting Hardcoded Credentials
+
+QuickInfra's security scanning checks for known credential patterns in Custom Script definitions and environment variable values (e.g., AWS access key patterns starting with AKIA). Findings of this type are flagged as CRITICAL — hardcoded credentials are one of the most severe security issues in any cloud environment.
+    `,
+  },
+
+  // ── POST 43 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "disaster-recovery-aws-rto-rpo-quickinfra",
+    title:    "Disaster Recovery on AWS: Designing for RTO and RPO With QuickInfra",
+    excerpt:  "Most teams have a disaster recovery plan that's never been tested. Here's how to design, implement, and actually test a DR strategy on AWS — with QuickInfra automating the infrastructure layer.",
+    category: "Cloud Infrastructure",
+    tags:     ["Disaster Recovery", "RTO", "RPO", "AWS", "High Availability"],
+    author:   "QuickInfra Team",
+    date:     "2025-08-18",
+    readTime: "8 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=1200&q=80",
+    content: `
+Disaster recovery is one of those capabilities that organisations claim to have and rarely test. When an actual incident occurs — a region goes down, a critical resource is accidentally deleted, a ransomware attack hits — the gap between the DR plan and reality becomes visible at the worst possible time.
+
+## RTO and RPO — What They Mean
+
+**Recovery Time Objective (RTO)** is the maximum acceptable downtime: how long your application can be unavailable before the business impact becomes unacceptable. **Recovery Point Objective (RPO)** is the maximum acceptable data loss: how much data (measured in time) can you afford to lose if you have to restore from backup.
+
+An application with RTO = 4 hours and RPO = 24 hours has very different infrastructure requirements than one with RTO = 5 minutes and RPO = 0 (zero data loss). The cost difference is significant — design for your actual requirements.
+
+## The Four DR Strategies
+
+**Backup and Restore** (highest RTO/RPO, lowest cost): Take snapshots regularly, restore to new infrastructure when needed. RTO is measured in hours. Use for non-critical workloads or where cost is the primary constraint.
+
+**Pilot Light** (moderate RTO, low cost): Keep a minimal version of your infrastructure running in the DR region — just the core database replication and critical services. Scale it up when needed. RTO is 30–60 minutes.
+
+**Warm Standby** (low RTO, moderate cost): Run a scaled-down but fully functional copy of your production environment in the DR region. Data is in sync. Failover means scaling up and cutting over. RTO is under 15 minutes.
+
+**Multi-Site Active-Active** (near-zero RTO/RPO, highest cost): Full production workload running in two or more regions simultaneously. Failover is a routing change.
+
+## How QuickInfra Supports DR
+
+QuickInfra's Infrastructure Templates can be deployed across multiple regions from the same project configuration with different variable sets. This makes standing up a pilot light or warm standby environment significantly faster.
+
+Custom Scripts handle scheduled operations: RDS snapshot copy to the DR region, S3 cross-region replication verification, DNS failover testing. Scheduling these through QuickInfra ensures they run consistently and their output is logged.
+
+## DR Testing
+
+An untested DR plan provides false confidence. QuickInfra recommends quarterly DR tests: trigger a failover to the DR environment in a maintenance window, validate that the application works correctly from DR infrastructure, measure the actual RTO against the target, then fail back. The QuickInfra audit log provides a timestamped record of the test for compliance evidence.
+    `,
+  },
+
+  // ── POST 44 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "cloudwatch-alarms-monitoring-quickinfra-setup",
+    title:    "CloudWatch Alarms and Metrics: Setting Up Meaningful Monitoring on AWS",
+    excerpt:  "Most teams set up too many low-signal CloudWatch alarms or too few. Here's QuickInfra's opinionated approach to setting up monitoring that actually tells you something useful when something breaks.",
+    category: "Automation",
+    tags:     ["CloudWatch", "Monitoring", "AWS", "Alerts", "Observability"],
+    author:   "QuickInfra Team",
+    date:     "2025-08-25",
+    readTime: "6 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80",
+    content: `
+Good monitoring tells you something is wrong before your users do, and gives you enough context to know where to look. Bad monitoring either floods you with noise until you start ignoring alerts, or misses real problems because the thresholds are calibrated to be permissive. QuickInfra's monitoring configuration aims for the former.
+
+## The Signal vs Noise Problem
+
+An EC2 instance sending a CPU alarm every time it spikes to 80% during normal batch processing is a noise alarm. It fires frequently, nothing bad happens, and the team learns to ignore it. When the instance eventually has a genuine problem — stuck process, runaway thread — the alarm fires again and nobody acts on it.
+
+QuickInfra's approach: alarm on anomaly, not on threshold. For CPU, the alarm fires when current utilisation deviates significantly from the 30-day baseline for that specific instance at that time of day — not when it crosses a fixed number.
+
+## The Standard Alarm Set
+
+For each EC2 instance, QuickInfra configures:
+
+- **CPU Utilisation** — anomaly detection model
+- **StatusCheckFailed** — fires when the EC2 status check fails (immediate action required)
+- **Disk Utilisation** — threshold at 85%, predictive alarm if trending to 85% within 6 hours
+- **Memory Utilisation** — threshold at 80% (requires CloudWatch Agent)
+- **Network In/Out** — anomaly detection for unexpected traffic patterns
+
+For RDS:
+- **FreeStorageSpace** — threshold alarm when below 20% of allocated storage
+- **DatabaseConnections** — threshold alarm near max_connections
+- **CPUUtilisation** — threshold alarm above 80%
+- **ReplicaLag** — for read replicas, threshold alarm above 30 seconds
+
+## Alert Routing
+
+QuickInfra configures SNS topics as alarm actions and lets you route alert notifications to email, Slack, or PagerDuty. Alarms are tiered by severity — StatusCheckFailed goes to PagerDuty (immediate response), disk usage warning goes to Slack (next business day).
+
+## Dashboard Generation
+
+QuickInfra auto-generates a CloudWatch Dashboard for each Infrastructure Project with the most useful widgets: CPU, memory, disk, and network metrics per instance, plus an alarm status panel showing the current state of all alarms in the project.
+    `,
+  },
+
+  // ── POST 45 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "infrastructure-as-code-team-collaboration",
+    title:    "Infrastructure as Code for Teams: Version Control, Code Review, and Collaboration Patterns",
+    excerpt:  "IaC code is code — it should be reviewed, tested, and version controlled with the same rigour as application code. Here's how QuickInfra's project model supports team-based IaC workflows.",
+    category: "IaC",
+    tags:     ["IaC", "Team Collaboration", "Code Review", "Git", "Terraform"],
+    author:   "QuickInfra Team",
+    date:     "2025-09-01",
+    readTime: "7 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80",
+    content: `
+The value of infrastructure-as-code is only fully realised when it's treated as code: reviewed before application, tested for correctness, tracked in version control, and auditable. Many teams write Terraform but don't apply these practices — they run \`terraform apply\` directly from a developer's laptop, with no review and no audit trail.
+
+## Review Before Apply
+
+QuickInfra enforces a plan-review step before any infrastructure change. The generated plan must be viewed before the apply action is enabled. For production environments, QuickInfra supports a mandatory peer review step: the plan is displayed, a reviewer approves or rejects it, and only after approval does the apply become available to trigger.
+
+This is the infrastructure equivalent of a pull request review — a second set of eyes on every change before it hits production.
+
+## Change History
+
+Every Infrastructure Project in QuickInfra maintains a full change history: every Generate, Plan, Apply, and Destroy action is recorded with the user, timestamp, and the diff from the previous state. You can see exactly what changed and who changed it without digging through CloudTrail logs.
+
+## Template Version Control
+
+Infrastructure Templates in QuickInfra are versioned. When you update a template, the previous version is retained. Projects deployed from an older template version can be viewed — you can see what version they're running and compare it with the current template version to understand what has changed.
+
+## Environment Promotion Gates
+
+QuickInfra's project model supports environment promotion with review gates. Applying a change to development doesn't automatically apply it to staging. An explicit promotion action is required, with a diff showing what will change in the target environment. Production promotion requires explicit approval.
+
+## Exporting Generated Terraform
+
+Teams that want to bring their Terraform code into their own version control system can export the generated Terraform from any Infrastructure Project. The exported code is standard Terraform — it runs independently of QuickInfra. This lets you use QuickInfra as a scaffolding and management tool while retaining the option to own the raw configuration.
+    `,
+  },
+
+  // ── POST 46 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "aws-cost-explorer-rightsizing-quickinfra",
+    title:    "AWS Cost Explorer and QuickInfra: A Combined Approach to Cloud Cost Control",
+    excerpt:  "AWS Cost Explorer gives you the data. QuickInfra gives you the actions. Here's how to use both together to consistently reduce and control your AWS spend.",
+    category: "Cloud Infrastructure",
+    tags:     ["Cost Optimisation", "AWS Cost Explorer", "FinOps", "Cloud Spend", "Right-Sizing"],
+    author:   "QuickInfra Team",
+    date:     "2025-09-08",
+    readTime: "7 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1200&q=80",
+    content: `
+AWS Cost Explorer is excellent at showing you where your money went. It's less good at telling you what to do about it. QuickInfra's cost features bridge the gap — taking the signal from Cost Explorer data and providing direct actions to reduce waste.
+
+## Using Cost Explorer Effectively
+
+Most teams open Cost Explorer, see the total monthly spend, and close it. The value of Cost Explorer is in the drill-down: spend by service, by region, by usage type, by tag, filtered to a specific date range. Comparing the current week's spend to the same week last month identifies what changed — a new service, a misconfiguration, a scaling event.
+
+The key views to bookmark: Daily spend grouped by service (catch anomalies early), spend by tag (which team/project is spending what), and Reserved Instance coverage (how much of your on-demand EC2 is covered by commitments).
+
+## QuickInfra's Cost Layer
+
+QuickInfra ingests your Cost and Usage Report data alongside AWS API data about your actual resource configurations. This combination enables insights that Cost Explorer alone can't provide: knowing both that EC2 is your biggest cost driver and that specific EC2 instances in that cost are running at 8% average CPU.
+
+The **Cost Recommendations** view in QuickInfra cross-references utilisation data with spend data to produce ranked recommendations with specific, actionable items: resize this instance from m5.xlarge to m5.large, terminate this stopped instance that's accumulating EBS costs, purchase a 1-year Reserved Instance for this consistently-used instance class.
+
+## Tagging Strategy for Cost Attribution
+
+Cost attribution requires consistent tagging. QuickInfra enforces mandatory tags on all provisioned resources: project, environment, team, and cost-centre. These tags appear in Cost Explorer groupings, enabling per-project and per-team cost breakdowns.
+
+Teams that haven't tagged resources consistently will see an "Untagged" category in Cost Explorer that can represent significant spend. QuickInfra's compliance scan flags untagged resources as findings, gradually reducing the unattributed spend percentage.
+
+## Savings Plan Recommendations
+
+After 30 days of usage data, QuickInfra generates Savings Plan recommendations: the compute commitment level that would cover your baseline on-demand usage, the estimated savings versus on-demand pricing, and the payback period. A 1-year Compute Savings Plan at the right commitment level typically reduces EC2 and Fargate costs by 30-40%.
+    `,
+  },
+
+  // ── POST 47 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "devops-team-structure-platform-engineering",
+    title:    "DevOps Team Structures in 2025: Platform Engineering, Embedded SREs, and the Role of Automation",
+    excerpt:  "How engineering organisations structure DevOps and infrastructure teams has changed significantly. Here's the current state — and how automation platforms like QuickInfra change the calculation.",
+    category: "DevOps",
+    tags:     ["Platform Engineering", "SRE", "Team Structure", "DevOps", "Org Design"],
+    author:   "QuickInfra Team",
+    date:     "2025-09-15",
+    readTime: "7 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&q=80",
+    content: `
+The DevOps movement started with "you build it, you run it" — the idea that development teams should own their services end-to-end, including operations. In practice, most organisations found that pure "you build it, you run it" creates inconsistency: every team invents its own deployment process, its own monitoring setup, its own infrastructure patterns.
+
+The pendulum has swung back toward specialisation, but in a more nuanced form. Platform engineering — building and maintaining the internal tooling that application teams use to ship — has emerged as the dominant model for organisations above a certain scale.
+
+## The Platform Engineering Model
+
+A platform engineering team (sometimes called an Internal Developer Platform team or Enablement team) builds and maintains the "paved road" — the opinionated, supported path that application teams follow to provision infrastructure, set up CI/CD, manage deployments, and get monitoring.
+
+The platform team doesn't run application teams' workloads for them. They provide the tools, templates, and processes that make it easy for application teams to do it themselves correctly. The platform team owns the platform; the application teams own their products.
+
+## Where QuickInfra Fits
+
+QuickInfra is infrastructure for a platform team to offer to application teams. The platform team configures QuickInfra with:
+- Organisation-level security policies and compliance requirements
+- Approved infrastructure templates for standard application architectures
+- Pre-configured CI/CD pipeline templates for each supported stack
+- Connected cloud accounts with appropriate permission scoping per team
+
+Application teams get a self-service interface to provision environments, set up pipelines, and manage deployments within the guardrails the platform team established. The platform team doesn't become a bottleneck for every infrastructure request.
+
+## Embedded SREs
+
+Some organisations embed SRE resources within application teams rather than centralising them. This model maximises context — the SRE deeply understands the specific application — but creates consistency challenges across teams.
+
+QuickInfra supports this model by standardising the infrastructure layer so embedded SREs don't each reinvent the same patterns. Two embedded SREs in different teams using QuickInfra will end up with consistent infrastructure configurations because they're working from the same templates and policies.
+
+## The Right Model for Your Scale
+
+Startups and small companies: one person handling all infrastructure, QuickInfra handling the automation. Mid-stage companies: a small platform team (2-4 engineers) using QuickInfra as their primary tooling. Large organisations: a full platform engineering team building on top of QuickInfra alongside other internal tooling.
+    `,
+  },
+
+  // ── POST 48 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "postgres-migration-aws-rds-zero-downtime",
+    title:    "Migrating PostgreSQL to AWS RDS With Zero Downtime: A Step-by-Step Guide",
+    excerpt:  "Moving a production PostgreSQL database to AWS RDS without any downtime requires careful planning. Here's the exact process — including CDC, cutover timing, and rollback.",
+    category: "Migration",
+    tags:     ["PostgreSQL", "RDS", "Database Migration", "Zero Downtime", "AWS DMS"],
+    author:   "QuickInfra Team",
+    date:     "2025-09-22",
+    readTime: "9 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=1200&q=80",
+    content: `
+Migrating a production PostgreSQL database to AWS RDS while keeping the application running requires a systematic approach. A maintenance window approach (take the app down, dump, restore, point at new DB, bring up) is simpler to execute but not always acceptable. This guide covers the zero-downtime path using logical replication.
+
+## Pre-Migration Assessment
+
+Before you touch anything, answer these questions: What is the database size? What is the current replication lag tolerance (RPO during migration)? Are there any PostgreSQL features used that RDS doesn't support (extensions, superuser-required operations)? What's the current Postgres version, and what version will you target on RDS?
+
+RDS supports PostgreSQL 13 through 16. Check the list of supported extensions — most common ones (pgcrypto, uuid-ossp, PostGIS) are supported, but some are not.
+
+## Phase 1: Provision the Target RDS Instance
+
+Use QuickInfra to provision the RDS PostgreSQL instance with your target configuration. Place it in the same VPC as your application servers (or in the target VPC if you're migrating that too). Enable Multi-AZ. Set the parameter group to enable logical replication: set \`rds.logical_replication = 1\` and \`wal_level = logical\`.
+
+## Phase 2: Initial Bulk Load
+
+Use \`pg_dump --format=custom\` to export the source database. Transfer to an S3 bucket in your AWS account. Restore to the target RDS instance using \`pg_restore\`. For large databases (hundreds of GB), AWS Database Migration Service (DMS) handles the bulk load more efficiently.
+
+## Phase 3: Continuous Replication
+
+Once the bulk load completes, set up logical replication from the source to the target. Create a replication slot on the source, create a subscription on the target pointing at the source. PostgreSQL replication will catch up the delta (changes made during bulk load) and stay in sync.
+
+Monitor replication lag — it should reach near-zero within a few minutes of the subscription starting on a healthy network.
+
+## Phase 4: Application Cutover
+
+When replication lag is consistently below 1 second, schedule the cutover. The process:
+1. Enable maintenance mode or take the application read-only
+2. Wait for replication lag to hit zero
+3. Update the database connection string in your application configuration to point at the RDS endpoint
+4. Disable read-only mode / remove maintenance mode
+5. Verify application functionality
+
+Total downtime: typically under 60 seconds.
+
+## Phase 5: Cleanup
+
+After 24-48 hours of clean operation on RDS, decommission the source database. Drop the replication slot to avoid WAL accumulation on the now-decommissioned source.
+    `,
+  },
+
+  // ── POST 49 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "cloudtrail-audit-logging-aws-security",
+    title:    "AWS CloudTrail and Audit Logging: What QuickInfra Monitors and Why It Matters",
+    excerpt:  "CloudTrail is the black box recorder for your AWS account. Here's how QuickInfra uses CloudTrail data to provide security monitoring, compliance evidence, and incident investigation capability.",
+    category: "Security",
+    tags:     ["CloudTrail", "Audit Logging", "AWS", "Security", "Compliance"],
+    author:   "QuickInfra Team",
+    date:     "2025-09-29",
+    readTime: "6 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&q=80",
+    content: `
+AWS CloudTrail records every API call made in your AWS account: who called what, when, from which IP, and with what result. This data is the foundation of security monitoring, compliance evidence, and incident investigation. QuickInfra verifies CloudTrail is configured correctly and uses the event data for security analysis.
+
+## CloudTrail Configuration Requirements
+
+A properly configured CloudTrail has: a multi-region trail (captures events in all regions, not just the one you think you're using), management events enabled (all API calls), data events enabled for S3 and Lambda if relevant, log file validation enabled (ensures logs haven't been tampered with), and logs delivered to an S3 bucket in a dedicated logging account.
+
+QuickInfra's compliance scan verifies all of these as CIS AWS Foundations Benchmark controls. A trail that only covers one region, or doesn't have log file validation, creates compliance findings.
+
+## What QuickInfra Monitors in CloudTrail
+
+QuickInfra ingests CloudTrail management events and analyses them for:
+
+- **Root account usage** — any API call from the root account is a CRITICAL security finding
+- **IAM changes** — new users, policy attachments, access key creation flagged for review
+- **Security group changes** — rules that open access to 0.0.0.0/0 flagged immediately
+- **S3 bucket policy changes** — public access enablement flagged as CRITICAL
+- **CloudTrail disabling** — any attempt to stop a trail is a CRITICAL finding
+- **Failed authentication** — repeated authentication failures indicating brute force
+
+## Incident Investigation
+
+When a security incident occurs, CloudTrail is where you start the investigation. An unexpected EC2 instance appeared in your account — who created it, when, from which IP? A database was dropped — who had the RDS DeleteDBInstance permission and when was it called? CloudTrail answers these questions.
+
+QuickInfra's CloudTrail viewer lets you query events by user, resource type, action, and time range without downloading and processing raw CloudTrail logs from S3.
+
+## Evidence for Compliance Audits
+
+SOC 2 auditors want evidence that access to production systems is logged and reviewed. CloudTrail provides the logging evidence. QuickInfra's user access review in combination with CloudTrail provides the review evidence — here are the logs, here is the quarterly access review that confirmed appropriate access was in place.
+    `,
+  },
+
+  // ── POST 50 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "ecs-fargate-production-deployment-quickinfra",
+    title:    "ECS Fargate in Production: A Complete Configuration Guide With QuickInfra",
+    excerpt:  "ECS Fargate is the pragmatic choice for containerised workloads that don't need Kubernetes. Here's how to configure a production Fargate service correctly — networking, secrets, scaling, and logging.",
+    category: "Cloud Infrastructure",
+    tags:     ["ECS", "Fargate", "Containers", "AWS", "Production"],
+    author:   "QuickInfra Team",
+    date:     "2025-10-06",
+    readTime: "8 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1605745341112-85968b19335b?w=1200&q=80",
+    content: `
+ECS Fargate removes the EC2 instance management layer entirely — you define a task (which container to run, how much CPU/memory it needs), and Fargate runs it. No servers to patch, no capacity to manage. For containerised web applications and APIs, this is usually the right production choice when Kubernetes complexity isn't justified.
+
+## Task Definition
+
+The ECS Task Definition is the core configuration unit: container image, CPU/memory allocation, environment variables, port mappings, logging configuration, and IAM task role. QuickInfra generates the task definition from your project configuration and manages revisions — every update to your container image or configuration creates a new task definition revision.
+
+Critical configurations QuickInfra enforces:
+- **Task role** with least-privilege IAM permissions (not the task execution role — the role the container code uses)
+- **Secrets from Secrets Manager** injected as environment variables via the secrets configuration, not as plain-text environment variables
+- **CloudWatch Logs** configured as the log driver with a dedicated log group
+
+## Networking
+
+Fargate tasks run in awsvpc networking mode — each task gets its own elastic network interface with its own security group. This is distinct from EC2 launch type where containers share the host's network.
+
+QuickInfra places Fargate tasks in private subnets with outbound internet access through a NAT Gateway. The security group allows inbound only from the Application Load Balancer security group — no direct internet access to tasks.
+
+## Service Configuration
+
+An ECS Service maintains the desired number of task instances, handles health checking, integrates with the load balancer, and manages rolling deployments. QuickInfra configures the service with:
+- Minimum healthy percent: 50% (allows rolling deployments without over-provisioning)
+- Maximum percent: 200% (new tasks start before old ones stop)
+- Health check grace period: 60 seconds (prevents premature health check failures during startup)
+- Circuit breaker with rollback (if a new deployment fails health checks, automatically roll back to the previous revision)
+
+## Auto Scaling
+
+Fargate services scale based on Application Auto Scaling policies. QuickInfra configures target tracking on CPU utilisation (target 60%) and optionally on ALB request count per target. Scale-in cooldown is set to 300 seconds to prevent thrashing.
+
+## Cost Optimisation for Fargate
+
+Fargate pricing is based on vCPU and memory per second. Right-sizing Fargate task CPU and memory to your actual requirements has a direct cost impact — a task configured for 1 vCPU and 2GB that only needs 0.25 vCPU and 512MB is costing 4x more than necessary. QuickInfra's monitoring layer tracks per-task CPU and memory utilisation and surfaces right-sizing recommendations.
+    `,
+  },
+
+  // ── POST 51 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "gitops-workflow-argocd-quickinfra",
+    title:    "GitOps With ArgoCD and QuickInfra: Managing Infrastructure and Application State From Git",
+    excerpt:  "GitOps treats your git repository as the single source of truth for both application and infrastructure state. Here's how to implement a GitOps workflow using ArgoCD alongside QuickInfra.",
+    category: "CI/CD",
+    tags:     ["GitOps", "ArgoCD", "Kubernetes", "Git", "CI/CD"],
+    author:   "QuickInfra Team",
+    date:     "2025-10-13",
+    readTime: "7 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=1200&q=80",
+    content: `
+GitOps extends the principles of infrastructure-as-code to application deployment: git is the single source of truth for what should be running, and a reconciliation agent continuously ensures reality matches the declared state in git. ArgoCD is the most widely adopted GitOps tool for Kubernetes workloads.
+
+## How GitOps Differs From Traditional CI/CD
+
+In a traditional push-based CI/CD pipeline, the pipeline has deploy credentials and pushes changes to the target environment when a build completes. If a human makes a manual change directly in the target environment, the pipeline doesn't know and won't reconcile.
+
+In a GitOps pull-based model, an agent running in the cluster (ArgoCD) pulls the desired state from git and continuously reconciles. Manual changes to the cluster are detected and flagged — or automatically reverted. The pipeline's job is to update the git repository (change the image tag), not to deploy directly.
+
+## ArgoCD Architecture
+
+ArgoCD runs in your Kubernetes cluster and watches a git repository. When the repository changes, ArgoCD applies the changes to the cluster. You can configure it to apply automatically (auto-sync) or to wait for manual approval (manual sync). The ArgoCD UI shows the diff between what git declares and what the cluster contains.
+
+## QuickInfra's Role
+
+QuickInfra handles the infrastructure layer beneath Kubernetes: the EKS cluster itself, node groups, VPC, security groups, IAM roles, and managed services (RDS, ElastiCache) that the application uses. ArgoCD handles the Kubernetes workload layer on top.
+
+This division is clean: QuickInfra manages "what infrastructure exists," ArgoCD manages "what runs on the infrastructure."
+
+## The CI Pipeline's Job in a GitOps World
+
+In a GitOps workflow, the CI pipeline has a narrow responsibility: build the container image, run tests, push the image to ECR, and update the image tag in the git repository. That's it. The deploy happens when ArgoCD detects the tag change and syncs the application.
+
+QuickInfra's CI/CD pipeline supports this pattern via a Custom Script stage that commits the new image tag to your GitOps repository after a successful image build.
+
+## Rollbacks
+
+GitOps makes rollbacks explicit: revert the commit that changed the image tag, and ArgoCD automatically deploys the previous version. No special rollback command, no separate rollback pipeline — just a git operation.
+    `,
+  },
+
+  // ── POST 52 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "microservices-infrastructure-patterns-aws",
+    title:    "Microservices Infrastructure on AWS: Patterns for Service Discovery, Communication, and Isolation",
+    excerpt:  "Running microservices at production scale requires infrastructure patterns beyond what a monolith needs. Here's how to architect the AWS layer for a microservices system — and where QuickInfra helps.",
+    category: "Cloud Infrastructure",
+    tags:     ["Microservices", "AWS", "Service Mesh", "Architecture", "API Gateway"],
+    author:   "QuickInfra Team",
+    date:     "2025-10-20",
+    readTime: "8 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=1200&q=80",
+    content: `
+Microservices architecture trades monolith complexity for distributed system complexity. The operational requirements change significantly: instead of managing one application, you manage dozens. Instead of one deployment, you manage dozens of independent deployments. The infrastructure layer needs to support this complexity without becoming a bottleneck.
+
+## Service Discovery
+
+When Service A needs to call Service B, it needs to know Service B's address. In a microservices system where services scale independently and instances come and go, static configuration doesn't work. You need service discovery.
+
+AWS App Mesh with AWS Cloud Map provides service discovery for ECS and EKS workloads: services register themselves, callers query Cloud Map to find current addresses. QuickInfra's ECS Fargate templates can be configured with App Mesh sidecar proxies for service mesh capabilities.
+
+For simpler cases, an internal Application Load Balancer per service provides a stable DNS name — services discover each other by fixed internal hostnames rather than dynamic IPs.
+
+## Service-Level Isolation
+
+Each microservice should have its own:
+- **Target group / load balancer** — isolated ingress
+- **Security group** — explicit allow rules for which services can call it
+- **IAM task role** — least-privilege access to AWS services
+- **ECR repository** — independent container image lifecycle
+
+QuickInfra manages each service as a separate deployment project with its own infrastructure configuration, keeping per-service isolation at the infrastructure level.
+
+## API Gateway
+
+For public-facing microservices, AWS API Gateway provides a managed API layer: routing, authentication, rate limiting, request transformation, and API documentation. QuickInfra supports API Gateway provisioning as part of infrastructure projects — the gateway, routes, integrations, stages, and usage plans.
+
+## Circuit Breakers
+
+A microservices system where one slow service causes cascading failures throughout the system is a common failure mode. Circuit breakers (implemented in your service code or via a service mesh) stop calls to failing services and return cached responses or errors immediately, preventing the cascade.
+
+At the infrastructure level, ECS Service Connect (AWS's built-in service mesh) provides circuit breaking without requiring a separate sidecar like Envoy.
+
+## Data Isolation
+
+Microservices should own their data — each service has its own database, not a shared schema. This is a design principle, not just an infrastructure one, but the infrastructure layer should enforce it: different services should not share database credentials or have direct network access to each other's databases.
+
+QuickInfra's security group templates for database resources default to allowing access only from the specific application security group, making cross-service database access structurally difficult.
+    `,
+  },
+
+  // ── POST 53 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "quickinfra-compliance-dashboard-walkthrough",
+    title:    "Inside QuickInfra's Compliance Dashboard: How to Read, Act On, and Export Your Security Score",
+    excerpt:  "QuickInfra's Compliance Dashboard gives you a real-time security posture score across six frameworks. Here's how to interpret the results, prioritise remediation, and generate audit evidence.",
+    category: "Security",
+    tags:     ["Compliance", "Security", "SOC 2", "Dashboard", "QuickInfra"],
+    author:   "QuickInfra Team",
+    date:     "2025-10-27",
+    readTime: "6 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200&q=80",
+    content: `
+The Compliance Dashboard is one of the most-used sections of the QuickInfra console for teams pursuing security certifications or managing continuous compliance. Here's a detailed walkthrough of how to use it effectively.
+
+## The Overview Score
+
+The dashboard opens with six framework score cards: CIS AWS Foundations, SOC 2, HIPAA, PCI-DSS, GDPR, and ISO 27001. Each shows a percentage score — the proportion of applicable controls that currently pass. Green is 85%+, amber is 60-85%, red is below 60%.
+
+Don't treat the score as a final exam result. Treat it as a work queue prioritiser. A SOC 2 score of 72% means 28% of SOC 2-relevant controls have findings that need resolution.
+
+## Drilling Into Findings
+
+Click any framework card to see the full list of controls for that framework, each with pass/fail status. Failed controls expand to show:
+
+- The specific check that failed (e.g., "S3 bucket does not have server-side encryption enabled")
+- The resource that failed (the specific bucket name, instance ID, or security group)
+- The severity (CRITICAL, HIGH, MEDIUM, LOW)
+- The remediation path (direct action button or link to the relevant Infrastructure Project)
+
+## Prioritisation
+
+QuickInfra's default sort puts CRITICAL findings at the top. Work through CRITICALs first — these are the findings that represent the most immediate security risk or the controls auditors will focus on first. Common CRITICALs include: public S3 buckets, security groups with unrestricted inbound access, root account API usage, and CloudTrail disabled.
+
+## Accepting Risk
+
+Not every finding needs to be remediated — some represent accepted business risk with compensating controls. QuickInfra allows you to mark specific findings as "accepted risk" with a justification note, exempting them from the score calculation and producing an accepted risk register for auditors.
+
+## Generating Audit Reports
+
+For SOC 2 type II or ISO 27001 audits, go to **Compliance → Export Report**. Select the framework, the date range (for type II evidence, you typically need a 6-12 month period), and the report format. QuickInfra generates a PDF with compliance scores, individual control results, pass/fail history, and accepted risk entries.
+
+## Continuous vs Point-in-Time
+
+Compliance scores update continuously as your infrastructure changes. A resource provisioned at 10am that fails a compliance check will appear in the dashboard by 10:05am. This continuous view is what enables compliance as a daily operational practice rather than a pre-audit scramble.
+    `,
+  },
+
+  // ── POST 54 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "infrastructure-drift-detection-remediation",
+    title:    "Infrastructure Drift: Why It Happens, How to Detect It, and How QuickInfra Fixes It",
+    excerpt:  "Infrastructure drift — the gap between your declared IaC configuration and actual cloud state — is the silent killer of infrastructure reliability. Here's how QuickInfra detects and resolves it.",
+    category: "IaC",
+    tags:     ["Drift Detection", "Terraform", "IaC", "Configuration Management", "AWS"],
+    author:   "QuickInfra Team",
+    date:     "2025-11-03",
+    readTime: "6 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1535223289827-42f1e9919769?w=1200&q=80",
+    content: `
+Infrastructure drift happens the moment someone makes a change to a cloud resource outside of the IaC process. An engineer resizes an instance in the AWS console because the on-call situation didn't allow time for a Terraform change. A security team adds a firewall rule directly to fix an incident. An auto-scaling event changes instance counts. Each of these events creates a gap between what your Terraform code says exists and what actually exists.
+
+## Why Drift Is a Problem
+
+Drift isn't just a compliance issue — it's an operational reliability issue. When your Terraform configuration doesn't reflect reality, the next \`terraform apply\` may produce unexpected changes. Resources Terraform doesn't know about may be deleted. Resources that were manually modified may have their changes reverted.
+
+Drift also undermines the core promise of IaC: if your git repository doesn't represent the actual state of your infrastructure, you can't reliably recreate it from code.
+
+## How QuickInfra Detects Drift
+
+QuickInfra runs drift detection on a scheduled basis for all Infrastructure Projects. A drift check runs \`terraform plan\` against the current state and the actual cloud resources, compares the output, and identifies any differences. Differences are categorised by type:
+
+- **Configuration drift**: an attribute of an existing resource changed (instance type, security group rule, tag)
+- **Missing resource**: a resource in state no longer exists in AWS (was deleted outside Terraform)
+- **Unknown resource**: a resource exists in AWS that isn't in state (was created outside Terraform)
+
+## Responding to Drift
+
+When drift is detected, QuickInfra presents you with three options for each drifted resource:
+
+**Accept the drift** (import): The manual change was intentional. Import the current state into Terraform so your configuration matches reality. Then update your IaC code to match.
+
+**Revert the drift**: The manual change was unintended. Re-apply the Terraform configuration to restore the resource to its declared state.
+
+**Ignore the drift**: The change is temporary (e.g., an auto-scaling count change) and should not affect the next apply.
+
+## Preventing Drift
+
+The best drift strategy is prevention. QuickInfra supports restricting direct AWS console access for engineers who have QuickInfra project access — all changes should go through the platform. IAM Service Control Policies can enforce this at the org level.
+
+For changes that genuinely need to go through the console (emergency security fixes, incident response), QuickInfra's process is: make the manual change, then update the IaC configuration to reflect it within 24 hours and run a plan to verify alignment.
+    `,
+  },
+
+  // ── POST 55 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "lambda-serverless-infrastructure-quickinfra",
+    title:    "Serverless on AWS: Lambda Functions and Their Infrastructure With QuickInfra",
+    excerpt:  "Lambda functions still need infrastructure: IAM roles, VPC configuration, event source mappings, dead letter queues, and monitoring. Here's how QuickInfra manages the infrastructure layer for serverless workloads.",
+    category: "Automation",
+    tags:     ["Lambda", "Serverless", "AWS", "Event-Driven", "Functions"],
+    author:   "QuickInfra Team",
+    date:     "2025-11-10",
+    readTime: "6 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&q=80",
+    content: `
+"Serverless" doesn't mean no infrastructure — it means someone else manages the servers. Lambda functions still require IAM roles, execution environments, event triggers, networking configuration (if they need VPC access), monitoring, and dead letter queue handling. QuickInfra manages this infrastructure layer for Lambda-based workloads.
+
+## Lambda Function IAM Roles
+
+Every Lambda function needs an execution role — the IAM identity it assumes when running. The execution role needs at minimum the AWSLambdaBasicExecutionRole managed policy (permission to write CloudWatch Logs). For VPC-connected Lambdas, AWSLambdaVPCAccessExecutionRole is also required.
+
+Beyond the baseline, the function only needs the permissions it actually uses: if a Lambda reads from DynamoDB, its role gets dynamodb:GetItem on the specific table. QuickInfra generates scoped execution role policies from your function configuration.
+
+## VPC Configuration
+
+Lambdas that need to access resources in your VPC (RDS, ElastiCache, internal APIs) must be VPC-configured. VPC-connected Lambdas have higher cold start times and require ENI quota headroom in your VPC. QuickInfra places VPC-connected Lambdas in private subnets (not isolated subnets — they need outbound internet access through NAT Gateway for external API calls).
+
+## Event Source Mappings
+
+Lambda functions are triggered by events. QuickInfra supports configuring event source mappings for:
+- **SQS**: Lambda polls the queue, processes messages in batches
+- **DynamoDB Streams**: Lambda processes change events from a table
+- **Kinesis Data Streams**: Lambda processes records from a stream
+- **EventBridge**: Lambda responds to scheduled events or custom event patterns
+- **S3**: Lambda responds to object creation/deletion events
+
+Each event source mapping has configuration: batch size, concurrency limits, error handling, and filtering.
+
+## Dead Letter Queues
+
+When a Lambda invocation fails, the failed event can be sent to a Dead Letter Queue (SQS) or SNS topic. QuickInfra configures DLQs for all asynchronous Lambda invocations. Without a DLQ, failed asynchronous events disappear silently.
+
+## Monitoring
+
+CloudWatch Logs are configured automatically for every Lambda function. QuickInfra adds CloudWatch alarms for: error rate above threshold, throttle rate above threshold, duration approaching timeout (if a function that should complete in 1 second takes 25 of a 30-second timeout, that's a warning), and concurrent execution count approaching account limit.
+    `,
+  },
+
+  // ── POST 56 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "dns-route53-aws-quickinfra-configuration",
+    title:    "DNS and Route 53 on AWS: Health Checks, Failover Routing, and Domain Management With QuickInfra",
+    excerpt:  "DNS is the entry point to everything. Route 53 does more than just resolve hostnames — health checks, failover routing, and latency-based routing are powerful availability tools. Here's how QuickInfra configures them.",
+    category: "Cloud Infrastructure",
+    tags:     ["Route 53", "DNS", "AWS", "Health Checks", "Failover"],
+    author:   "QuickInfra Team",
+    date:     "2025-11-17",
+    readTime: "6 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=1200&q=80",
+    content: `
+Route 53 is AWS's DNS service, but calling it "just DNS" undersells it significantly. Route 53 health checks, routing policies, and alias records provide availability and performance capabilities that most teams underutilise. QuickInfra's Route 53 resource configuration exposes these capabilities in its infrastructure projects.
+
+## Alias Records vs CNAME Records
+
+For AWS resources (ALBs, CloudFront distributions, S3 website endpoints), use Alias records rather than CNAME records. Alias records are free, support the zone apex (yourdomain.com, not just www.yourdomain.com), and return updated IPs when the target changes — unlike a CNAME that points to a hostname that must then be resolved again.
+
+QuickInfra generates Alias records for all AWS-resource targets in your infrastructure projects.
+
+## Health Checks
+
+Route 53 health checks actively probe your application: HTTP/HTTPS endpoint checks verify that your application responds with a 2xx status code. Health check results determine which routing policy decisions Route 53 makes.
+
+Configure health checks for every production endpoint that has a failover counterpart. QuickInfra's health check configuration supports custom paths (/health, /ping), custom ports, and string matching in responses.
+
+## Failover Routing
+
+Failover routing uses health checks to direct traffic between a primary and secondary target. If the primary health check fails, Route 53 automatically routes traffic to the secondary. This is the mechanism for simple, DNS-level failover between regions or between primary and standby environments.
+
+QuickInfra configures failover routing with appropriate TTLs (low TTL of 60 seconds during active failover, configurable) so clients pick up the DNS change quickly.
+
+## Latency-Based Routing
+
+For globally distributed applications, latency-based routing directs users to the AWS region that offers the lowest latency for their location. A user in Mumbai gets routed to ap-south-1, a user in Frankfurt gets routed to eu-west-1.
+
+QuickInfra supports latency-based routing policies with health check integration — if the lowest-latency region fails its health check, Route 53 falls back to the next-lowest-latency region.
+
+## Private Hosted Zones
+
+For internal DNS within your VPC (services resolving each other by private hostname), Route 53 Private Hosted Zones provide DNS resolution without exposing names publicly. QuickInfra provisions private hosted zones for all VPCs that contain multi-service architectures.
+    `,
+  },
+
+  // ── POST 57 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "waf-ddos-protection-aws-cloudfront-quickinfra",
+    title:    "WAF and DDoS Protection on AWS: Securing Your Application Layer With QuickInfra",
+    excerpt:  "Application layer attacks — SQL injection, XSS, credential stuffing, DDoS — require protection beyond security groups and NACLs. Here's how QuickInfra configures AWS WAF and Shield for production workloads.",
+    category: "Security",
+    tags:     ["WAF", "DDoS", "AWS Shield", "CloudFront", "Application Security"],
+    author:   "QuickInfra Team",
+    date:     "2025-11-24",
+    readTime: "7 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&q=80",
+    content: `
+Security groups and NACLs work at the network layer — they can block IPs and ports, but they can't inspect HTTP request content. Application layer attacks (SQL injection, XSS, SSRF, credential stuffing, bot traffic) require inspection at Layer 7. AWS WAF provides this capability.
+
+## AWS WAF Fundamentals
+
+AWS WAF is a web application firewall that can be attached to CloudFront distributions, Application Load Balancers, and API Gateways. WAF rules inspect HTTP requests — URLs, headers, body, query parameters — and allow or block requests based on conditions you configure.
+
+Rule groups are the core unit of WAF configuration: a set of related rules that share a capacity budget. AWS provides managed rule groups maintained by AWS and third-party vendors.
+
+## Managed Rule Groups QuickInfra Enables
+
+For most web applications, QuickInfra configures:
+
+- **AWSManagedRulesCommonRuleSet**: Protects against common web exploits including OWASP Top 10
+- **AWSManagedRulesKnownBadInputsRuleSet**: Blocks requests with patterns known to be malicious
+- **AWSManagedRulesAmazonIpReputationList**: Blocks traffic from AWS-known malicious IPs and botnets
+
+For applications handling user authentication:
+- **AWSManagedRulesBotControlRuleSet**: Detects and blocks bot traffic (at additional cost)
+- Custom rate-limiting rules to block credential stuffing (too many login attempts from a single IP)
+
+## Rate-Based Rules
+
+Rate-based rules block IPs that send more than a configurable number of requests in a 5-minute window. This is the primary defence against DDoS at the WAF layer and against brute-force authentication attacks. QuickInfra configures rate-based rules with thresholds appropriate to your application's expected traffic patterns.
+
+## AWS Shield
+
+AWS Shield Standard is included with all AWS accounts and provides protection against common network and transport layer DDoS attacks. Shield Advanced (paid) adds protection against sophisticated application-layer DDoS, 24/7 access to the AWS DDoS Response Team, and cost protection for scaling events caused by DDoS.
+
+For applications with significant brand or revenue exposure, QuickInfra recommends Shield Advanced and configures the CloudFront + ALB stack that provides the best DDoS surface area reduction.
+
+## Logging WAF Decisions
+
+WAF can log every allow and block decision to CloudWatch Logs, S3, or Kinesis Data Firehose. QuickInfra enables WAF logging to S3 for audit and investigation purposes. Block logs are surfaced in the Security section as potential attack traffic.
+    `,
+  },
+
+  // ── POST 58 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "cost-allocation-tagging-aws-quickinfra",
+    title:    "Cost Allocation Tagging on AWS: How to Know What Everything Costs and Who Owns It",
+    excerpt:  "Without proper tagging, AWS cost data is an undifferentiated mass. Here's how to design and enforce a tagging strategy that gives you cost clarity per team, project, and environment — using QuickInfra.",
+    category: "Cloud Infrastructure",
+    tags:     ["Cost Allocation", "Tagging", "FinOps", "AWS", "Cost Management"],
+    author:   "QuickInfra Team",
+    date:     "2025-12-01",
+    readTime: "6 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1200&q=80",
+    content: `
+Most engineering organisations that complain about cloud cost visibility don't have a cost problem — they have a tagging problem. Without consistent tags, Cost Explorer shows total spend by AWS service but can't tell you which team, which project, or which environment is responsible. Cost allocation tagging solves this.
+
+## The Minimum Viable Tag Set
+
+Four tags cover most cost attribution requirements:
+
+- **team**: Which engineering team owns this resource (payments, identity, data, platform)
+- **environment**: dev, staging, production
+- **project**: The specific project or product this resource serves
+- **cost-centre**: The billing unit or business unit (important for larger organisations)
+
+These four tags enable: cost breakdown by team, by environment across all teams, by project, and by business unit. Add a **managed-by** tag (quickinfra, terraform, manual) to identify how resources were created.
+
+## AWS Cost Allocation Tags
+
+AWS has a two-step tagging process: you apply tags to resources (which anyone can do), and you activate tags for cost allocation in the Billing console (which only an account admin can do). Tags that aren't activated don't appear in Cost Explorer groupings.
+
+QuickInfra includes a setup guide that walks through activating the standard tag set for cost allocation in your AWS accounts.
+
+## Enforcing Tags With QuickInfra
+
+QuickInfra enforces mandatory tags on all resources it provisions. You configure the required tag keys in **Organisation Settings → Tagging Policy**. Any Infrastructure Project or Pipeline that creates a resource must have values for all required tags — the project creation form validates this before generating Terraform.
+
+The compliance scan flags untagged resources as findings, giving you visibility into resources created outside QuickInfra that don't have the required tags.
+
+## Cost Explorer With Tags
+
+With consistent tagging, Cost Explorer becomes significantly more useful. Filter by team tag to see one team's total spend across all services and environments. Filter by environment + team to see what development environments are costing relative to production. Filter by project to see the total cost of a specific initiative including all the infrastructure it's using.
+
+## Chargeback and Showback
+
+For organisations that internally charge cloud costs to business units, cost allocation tags enable chargeback: the finance team can use Cost Explorer tag groupings to produce monthly reports of cloud spend per business unit for internal billing.
+    `,
+  },
+
+  // ── POST 59 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "on-premises-to-cloud-migration-checklist",
+    title:    "On-Premises to Cloud Migration Checklist: 50 Things to Verify Before, During, and After",
+    excerpt:  "Cloud migrations fail due to overlooked details — not big architectural mistakes. Here's the comprehensive checklist QuickInfra recommends for every on-premises to AWS migration.",
+    category: "Migration",
+    tags:     ["Migration", "Checklist", "AWS", "On-Premises", "Cloud"],
+    author:   "QuickInfra Team",
+    date:     "2025-12-08",
+    readTime: "8 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&q=80",
+    content: `
+Cloud migration projects fail in predictable ways. Not usually because of architectural decisions — those get sufficient attention. They fail because someone forgot to check the database SSL certificate expiry, or didn't test the application with the new latency profile, or discovered that a dependency only supports IPv4 after migrating the network.
+
+This checklist covers the things that get missed.
+
+## Pre-Migration Assessment
+
+- [ ] Document every service, its dependencies, and its team owner
+- [ ] Identify all external IP dependencies (firewall rules, partner systems that whitelist your IPs)
+- [ ] Check software licence portability to cloud environments
+- [ ] Verify all application dependencies support the target OS version
+- [ ] Identify any hardcoded IP addresses in application configuration
+- [ ] Check database character set and collation compatibility
+- [ ] Identify any cron jobs and their schedules — where do they move?
+- [ ] Document all DNS names used internally and externally
+- [ ] Inventory all TLS certificates and their expiry dates
+- [ ] Establish baseline performance metrics for current on-premises environment
+
+## Infrastructure Preparation
+
+- [ ] VPC CIDR ranges don't overlap with existing VPCs or on-premises networks
+- [ ] Subnets span at least two availability zones
+- [ ] Security groups follow principle of least privilege
+- [ ] All storage volumes have encryption enabled
+- [ ] Backup policies are in place and tested before migration begins
+- [ ] Route 53 health checks configured for all critical endpoints
+- [ ] CloudTrail enabled on target AWS account
+
+## Application Readiness
+
+- [ ] Application can handle increased network latency (cloud vs on-premises)
+- [ ] Connection pool sizes are appropriate for the target instance type
+- [ ] Database connection strings are in configuration files, not hardcoded
+- [ ] Logging outputs to stdout/stderr or centrally configurable path
+- [ ] Application health check endpoint exists and returns meaningful status
+- [ ] Session handling works correctly across multiple instances
+- [ ] Static asset serving is configured for S3/CloudFront (if applicable)
+
+## Data Migration
+
+- [ ] Estimated migration time fits within the maintenance window (or CDC replication configured)
+- [ ] Data validation queries prepared to verify record counts and checksums post-migration
+- [ ] Sensitive data identified and confirmed to be encrypted during transfer
+- [ ] Rollback procedure documented and tested
+
+## Cutover and Post-Migration
+
+- [ ] DNS TTL reduced 24 hours before cutover
+- [ ] Smoke tests prepared and ready to run immediately post-cutover
+- [ ] Rollback decision criteria defined (what triggers a rollback decision?)
+- [ ] On-premises environment kept running for 48 hours post-cutover
+- [ ] All monitoring alerts active on migrated environment before cutover
+- [ ] Team members on standby during and after cutover window
+    `,
+  },
+
+  // ── POST 60 ─────────────────────────────────────────────────────────────────
+  {
+    slug:     "quickinfra-product-roadmap-2025-2026",
+    title:    "What's Next for QuickInfra: Platform Vision and Upcoming Features",
+    excerpt:  "QuickInfra is building the end-to-end InfraOps automation platform. Here's where the product is heading — multi-cloud support, AI-assisted configuration, and deeper developer platform capabilities.",
+    category: "DevOps",
+    tags:     ["Roadmap", "Product", "QuickInfra", "Multi-Cloud", "AI"],
+    author:   "QuickInfra Team",
+    date:     "2025-12-15",
+    readTime: "6 min read",
+    featured: false,
+    image:    "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1200&q=80",
+    content: `
+QuickInfra started as an AWS infrastructure automation platform. The vision is broader: a complete InfraOps platform that spans cloud providers, integrates with every tool in the modern DevOps toolchain, and eventually brings AI assistance to infrastructure decisions that today require deep expertise.
+
+## Multi-Cloud Support
+
+AWS is where most Indian enterprises run their primary workloads, and it remains QuickInfra's core focus. Multi-cloud expansion is on the roadmap in two phases:
+
+Phase 1 (next 12 months): Azure support. Many enterprises that use AWS for primary workloads use Azure for specific services — Active Directory integration, Microsoft 365 tooling, Azure DevOps pipelines. QuickInfra will support connecting Azure subscriptions, provisioning Azure VMs, AKS clusters, and Azure SQL — with the same template-based approach as AWS.
+
+Phase 2 (18-24 months): GCP support, initially targeting the ML/AI workload use case where GCP's TPU infrastructure and Vertex AI have genuine advantages.
+
+## AI-Assisted Configuration
+
+Infrastructure decisions involve trade-offs that are hard to reason about without experience: which instance type to choose given a workload profile, whether to use Fargate or EC2, what CIDR range to allocate given existing networks. These decisions rely on heuristics that experienced engineers have built up over years.
+
+QuickInfra is building an AI assistant that can reason about these trade-offs from your actual workload data — utilisation history, cost data, compliance requirements — and recommend configurations with explanations. Not autocomplete for Terraform syntax, but recommendations grounded in your specific context.
+
+## Developer Self-Service Portal
+
+The internal developer portal concept — a unified front-end that lets application developers provision environments, check deployment status, and manage their application's cloud resources without needing platform engineering support for each request — is a core part of the QuickInfra roadmap.
+
+The portal will be configurable by platform teams: define which resources are self-service, which require approval, and which are off-limits for application teams. Application developers get a curated, safe interface. Platform teams get visibility and control.
+
+## Enhanced Ansible Integration
+
+Ansible support in QuickInfra today covers basic playbook execution via Custom Scripts. The roadmap includes a first-class Ansible project type: managed inventory from infrastructure projects, role-based playbook organisation, variable management, and execution history — parallel to the Terraform infrastructure project experience.
+
+## Feedback and Direction
+
+QuickInfra's roadmap is shaped significantly by customer feedback. The features above represent the current direction, but what gets prioritised and sequenced is influenced by which capabilities our customers are most actively asking for. If your team has a specific need that QuickInfra doesn't yet address, reach out — it may already be on the roadmap, or your use case may help us prioritise it.
+    `,
+  },
 ];

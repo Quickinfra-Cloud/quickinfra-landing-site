@@ -102,7 +102,7 @@ function CicdWidget() {
 
   return (
     <div style={{ height: 520, width: "100%", opacity: mounted ? 1 : 0, transform: mounted ? "translateY(0) scale(1)" : "translateY(28px) scale(0.97)", transition: "opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)", willChange: "opacity, transform" }}>
-      <div className="h-full" style={{ animation: "float 5s ease-in-out infinite", willChange: "transform" }}>
+      <div className="h-full" >
         <div className="h-full flex flex-col rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 shadow-2xl shadow-violet-500/10 dark:shadow-black/50">
           {/* Header */}
           <div className="flex-shrink-0 flex items-center justify-between px-5 py-3 bg-gradient-to-r from-violet-700 to-purple-700">

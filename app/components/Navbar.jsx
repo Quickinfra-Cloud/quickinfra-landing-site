@@ -206,7 +206,7 @@ export default function Navbar() {
                 />
               </div>
               {/* Wordmark */}
-              <div className="relative  mt-2 h-8 w-28 shrink-0">
+              <div className="relative  mt-2 h-7 w-28 shrink-0">
                 <Image
                   src="/companyLogo/quickinfra.png"
                   alt="QuickInfra"

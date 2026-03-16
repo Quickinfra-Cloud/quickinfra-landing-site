@@ -20,7 +20,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
+      <body suppressHydrationWarning
         className={`${jakarta.variable} font-sans antialiased
           bg-white dark:bg-slate-950
           text-slate-900 dark:text-white

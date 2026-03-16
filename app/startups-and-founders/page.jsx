@@ -175,10 +175,10 @@ export default function StartupsPage() {
             >
               <div
                 className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-2xl shadow-indigo-500/10 dark:shadow-black/40"
-                style={{ animation: "float 5s ease-in-out infinite" }}
+                
               >
                 {/* Card header */}
-                <div className="px-5 py-3.5 bg-gradient-to-r from-indigo-600 via-indigo-600 to-violet-600 flex items-center justify-between">
+                <div className="px-5 py-3.5 bg-linear-to-r from-indigo-600 via-indigo-600 to-violet-600 flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <span className="relative flex h-2.5 w-2.5">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />

@@ -249,11 +249,11 @@ function PlatformConsole() {
         willChange: "opacity, transform",
       }}
     >
-      <div className="h-full" style={{ animation: "float 5s ease-in-out infinite", willChange: "transform" }}>
+      <div className="h-full" >
         <div className="h-full flex rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50 shadow-2xl shadow-blue-500/10 dark:shadow-black/50">
 
           {/* ── Sidebar ── */}
-          <div className="flex-shrink-0 w-28 bg-[#0f172a] flex flex-col">
+          <div className="shrink-0 w-28 bg-[#0f172a] flex flex-col">
             {/* Logo strip */}
             <div className="px-3 py-3.5 border-b border-white/8">
               <div className="text-[10px] font-extrabold text-white/60 tracking-widest uppercase">QI</div>
