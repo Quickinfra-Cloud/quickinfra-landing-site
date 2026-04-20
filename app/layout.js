@@ -2,6 +2,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import ThemeProvider from "./components/ThemeProvider";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import ChatbotScript from "./components/ChatbotScript";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -20,7 +21,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body suppressHydrationWarning
+      <body
+        suppressHydrationWarning
         className={`${jakarta.variable} font-sans antialiased
           bg-white dark:bg-slate-950
           text-slate-900 dark:text-white
@@ -31,6 +33,8 @@ export default function RootLayout({ children }) {
           <main>{children}</main>
           <Footer />
         </ThemeProvider>
+
+        <ChatbotScript />
       </body>
     </html>
   );
