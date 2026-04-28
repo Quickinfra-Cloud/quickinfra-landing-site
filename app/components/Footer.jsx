@@ -59,7 +59,7 @@ const SOCIALS = [
   // { icon: Github, href: "", label: "GitHub" },
 ];
 
-const BADGES = ["ISO 27001", "ISO 9001", "AWS Select Partner", "SOC 2 Ready"];
+const BADGES = ["ISO/IEC 27001", "ISO/IEC 9001", "AWS Qualified Software", "SOC 2 Ready"];
 
 export default function Footer() {
   return (

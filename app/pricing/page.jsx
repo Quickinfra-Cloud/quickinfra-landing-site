@@ -553,7 +553,7 @@ export default function PricingPage() {
             
           </div>
           <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">
-            No Credit Card · Cancel Anytime · ISO 27001 Certified
+            No Credit Card · Cancel Anytime · ISO/IEC 27001 Certified
           </p>
         </div>
       </section>

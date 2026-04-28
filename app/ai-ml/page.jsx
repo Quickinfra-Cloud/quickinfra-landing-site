@@ -925,7 +925,7 @@ export default function AiMlPage() {
             </Link>
           </div>
           <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">
-            ISO 27001 · AWS Select Partner · GPU-Ready Infrastructure
+            ISO/IEC 27001 · AWS Qualified Software · GPU-Ready Infrastructure
           </p>
         </div>
       </section>

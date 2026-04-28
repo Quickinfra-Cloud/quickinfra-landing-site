@@ -339,7 +339,7 @@ export default function AboutPage() {
               </p>
               <div className="flex flex-col gap-3">
                 {[
-                  "AWS Select Partner with proven cloud expertise",
+                  "AWS Qualified Software with proven cloud expertise",
                   "Serving startups, engineering teams, and enterprise SMEs",
                   "Headquartered in Pune, India — serving clients globally",
                 ].map((item) => (
@@ -389,7 +389,7 @@ export default function AboutPage() {
                     },
                     {
                       label: "Partner Status",
-                      value: "AWS Select Partner",
+                      value: "AWS Qualified Software",
                       color: "#f59e0b",
                     },
                     {
@@ -430,7 +430,7 @@ export default function AboutPage() {
 
               {/* Floating badge */}
               <div className="absolute -top-4 -right-4 px-3 py-2 rounded-xl bg-blue-600 text-white text-[10px] font-extrabold shadow-lg shadow-blue-600/30 border border-blue-500">
-                ISO 27001 Certified
+                ISO/IEC 27001 Certified
               </div>
             </div>
           </div>

@@ -155,7 +155,7 @@ These aren't optional settings you have to remember to enable. They're the basel
 
 ## Continuous Compliance Scanning
 
-The Security section in QuickInfra runs automated compliance checks against your AWS resources on a continuous basis. The Compliance Posture Dashboard tracks your score across six frameworks: CIS AWS Foundations, SOC 2, HIPAA, PCI-DSS, GDPR, and ISO 27001.
+The Security section in QuickInfra runs automated compliance checks against your AWS resources on a continuous basis. The Compliance Posture Dashboard tracks your score across six frameworks: CIS AWS Foundations, SOC 2, HIPAA, PCI-DSS, GDPR, and ISO/IEC 27001.
 
 Each framework check examines specific AWS resource configurations. A CIS check for S3 might verify that bucket versioning is enabled, that public access is blocked, and that server-side encryption is configured. A PCI-DSS check might verify that database instances are in private subnets and that security groups don't allow unrestricted access to database ports.
 
@@ -616,7 +616,7 @@ For workloads where running two full environments isn't practical, rolling deplo
 
 ## Deployment History and Audit Trail
 
-Every deploy is recorded: who triggered it, what version was deployed, what the diff was from the previous version, how long it took, and whether it succeeded or was rolled back. This audit trail is queryable from the console and can be exported for compliance purposes. For teams working under SOC 2 or ISO 27001, this is change management documentation generated automatically.
+Every deploy is recorded: who triggered it, what version was deployed, what the diff was from the previous version, how long it took, and whether it succeeded or was rolled back. This audit trail is queryable from the console and can be exported for compliance purposes. For teams working under SOC 2 or ISO/IEC 27001, this is change management documentation generated automatically.
 
 ## Rollback in One Click
 
@@ -1009,7 +1009,7 @@ Go to **Users → User List → Invite User**. Enter the email address, select t
 
 ## Access Reviews
 
-The **User Access** view shows every user in your organisation alongside their current role assignments, last login date, and any project-specific access scopes. SOC 2 and ISO 27001 require periodic access reviews — typically quarterly — to verify that access is still appropriate. QuickInfra's User Access view gives you the data you need for this review in one place.
+The **User Access** view shows every user in your organisation alongside their current role assignments, last login date, and any project-specific access scopes. SOC 2 and ISO/IEC 27001 require periodic access reviews — typically quarterly — to verify that access is still appropriate. QuickInfra's User Access view gives you the data you need for this review in one place.
 
 ## Audit Logging
 
@@ -1277,7 +1277,7 @@ Compliance is expensive when treated as a one-time audit exercise. A company tha
 
 ## What Compliance Frameworks Actually Require
 
-SOC 2, HIPAA, PCI-DSS, and ISO 27001 differ in specifics but share a common structure: they define **controls** (what must be true about your systems), require **evidence** (proof that the controls are in place), and mandate **continuous operation** (controls must be active all the time, not just at audit time).
+SOC 2, HIPAA, PCI-DSS, and ISO/IEC 27001 differ in specifics but share a common structure: they define **controls** (what must be true about your systems), require **evidence** (proof that the controls are in place), and mandate **continuous operation** (controls must be active all the time, not just at audit time).
 
 For cloud infrastructure, this translates to requirements like:
 - All data encrypted at rest and in transit
@@ -1288,7 +1288,7 @@ For cloud infrastructure, this translates to requirements like:
 
 ## QuickInfra's Compliance Posture Dashboard
 
-The Security section in QuickInfra runs continuous compliance checks against your connected AWS accounts. The **Compliance Posture Dashboard** shows your current score across six frameworks: CIS AWS Foundations, SOC 2, HIPAA, PCI-DSS, GDPR, and ISO 27001.
+The Security section in QuickInfra runs continuous compliance checks against your connected AWS accounts. The **Compliance Posture Dashboard** shows your current score across six frameworks: CIS AWS Foundations, SOC 2, HIPAA, PCI-DSS, GDPR, and ISO/IEC 27001.
 
 Scores update continuously as infrastructure changes are made. A new security group rule that opens port 22 to the world immediately lowers your CIS score and creates a finding — you don't find out about it in the next monthly audit.
 
@@ -2408,7 +2408,7 @@ The Compliance Dashboard is one of the most-used sections of the QuickInfra cons
 
 ## The Overview Score
 
-The dashboard opens with six framework score cards: CIS AWS Foundations, SOC 2, HIPAA, PCI-DSS, GDPR, and ISO 27001. Each shows a percentage score — the proportion of applicable controls that currently pass. Green is 85%+, amber is 60-85%, red is below 60%.
+The dashboard opens with six framework score cards: CIS AWS Foundations, SOC 2, HIPAA, PCI-DSS, GDPR, and ISO/IEC 27001. Each shows a percentage score — the proportion of applicable controls that currently pass. Green is 85%+, amber is 60-85%, red is below 60%.
 
 Don't treat the score as a final exam result. Treat it as a work queue prioritiser. A SOC 2 score of 72% means 28% of SOC 2-relevant controls have findings that need resolution.
 
@@ -2431,7 +2431,7 @@ Not every finding needs to be remediated — some represent accepted business ri
 
 ## Generating Audit Reports
 
-For SOC 2 type II or ISO 27001 audits, go to **Compliance → Export Report**. Select the framework, the date range (for type II evidence, you typically need a 6-12 month period), and the report format. QuickInfra generates a PDF with compliance scores, individual control results, pass/fail history, and accepted risk entries.
+For SOC 2 type II or ISO/IEC 27001 audits, go to **Compliance → Export Report**. Select the framework, the date range (for type II evidence, you typically need a 6-12 month period), and the report format. QuickInfra generates a PDF with compliance scores, individual control results, pass/fail history, and accepted risk entries.
 
 ## Continuous vs Point-in-Time
 

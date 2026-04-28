@@ -316,7 +316,7 @@ export default function CicdPage() {
           <div className="flex flex-wrap gap-4 justify-center">
             <Link href="https://console.quickinfra.cloud/" className="flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-bold bg-violet-600 hover:bg-violet-500 text-white shadow-xl shadow-violet-600/25 transition-all hover:-translate-y-0.5">Start Free Trial <ArrowRight size={16} /></Link>
           </div>
-          <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">ISO 27001 · AWS Select Partner · Zero YAML Guaranteed</p>
+          <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">ISO/IEC 27001 · AWS Qualified Software · Zero YAML Guaranteed</p>
         </div>
       </section>
 

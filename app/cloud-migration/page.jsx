@@ -564,8 +564,8 @@ export default function CloudMigrationPage() {
                 }}
               >
                 {[
-                  ["AWS", "Select Partner"],
-                  ["ISO 27001", "Certified"],
+                  ["AWS", "Qualified Software"],
+                  ["ISO/IEC 27001", "Certified"],
                   ["Zero", "Downtime Migration"],
                 ].map(([v, l]) => (
                   <div key={l}>
@@ -796,7 +796,7 @@ export default function CloudMigrationPage() {
                 </div>
                 <div>
                   <div className="text-sm font-extrabold">{name}</div>
-                  <div className="text-[10px] text-slate-400 mt-0.5">{tag}</div>
+                  {/* <div className="text-[10px] text-slate-400 mt-0.5">{tag}</div> */}
                 </div>
               </div>
             ))}
@@ -976,7 +976,7 @@ export default function CloudMigrationPage() {
             </Link>
           </div>
           <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">
-            ISO 27001 · AWS Select Partner · Zero Downtime Guaranteed
+            ISO/IEC 27001 · AWS Qualified Software · Zero Downtime Guaranteed
           </p>
         </div>
       </section>

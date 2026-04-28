@@ -10,7 +10,7 @@ import {
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const TRUST_BADGES = [
-  { label: "ISO 27001",     sub: "Certified"         },
+  { label: "ISO/IEC 27001",     sub: "Certified"         },
   { label: "AWS Select",    sub: "Partner"           },
   { label: "ISO 9001:2015", sub: "Quality Certified" },
   { label: "SOC 2",         sub: "Ready"             },
@@ -67,7 +67,7 @@ const FAQS = [
   },
   {
     q: "Which cloud providers do you support?",
-    a: "AWS (where we are a Select Partner), Microsoft Azure, Google Cloud Platform, and Oracle Cloud Infrastructure. Multi-cloud deployments are fully supported.",
+    a: "AWS (where we are a Qualified Software), Microsoft Azure, Google Cloud Platform, and Oracle Cloud Infrastructure. Multi-cloud deployments are fully supported.",
   },
   {
     q: "Is there a free trial available?",
@@ -296,7 +296,7 @@ export default function ContactPage() {
             </a>
           </div>
           <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">
-            ISO 27001 · AWS Select Partner · No Credit Card Required
+            ISO/IEC 27001 · AWS Qualified Software · No Credit Card Required
           </p>
         </div>
       </section>

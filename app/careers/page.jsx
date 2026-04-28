@@ -9,7 +9,7 @@ import { ArrowRight, MapPin, Clock, Briefcase, Users, Zap, Shield, ChevronDown, 
 const STATS = [
   { value: "4",     label: "Open Positions",     sub: "Across engineering & operations" },
   { value: "100%",  label: "Remote Friendly",    sub: "Work from anywhere in India"     },
-  { value: "AWS",   label: "Select Partner",     sub: "Work on cutting-edge cloud tech" },
+  { value: "AWS",   label: "Qualified Software",     sub: "Work on cutting-edge cloud tech" },
   { value: "Fast",  label: "Growing Team",       sub: "Early-stage, high ownership"     },
 ];
 
@@ -292,7 +292,7 @@ export default function CareersPage() {
             className="text-base sm:text-lg text-slate-500 dark:text-slate-400 font-light leading-relaxed mb-10 max-w-xl mx-auto"
             style={{ opacity: heroVisible ? 1 : 0, transform: heroVisible ? "translateY(0)" : "translateY(18px)", transition: "opacity 0.65s ease 0.16s, transform 0.65s ease 0.16s" }}
           >
-            QuickInfra is a fast-growing cloud DevOps automation platform and AWS Select Partner. We're a small team building tools that make production-grade infrastructure accessible to every engineering team — and we're looking for people who care deeply about that mission.
+            QuickInfra is a fast-growing cloud DevOps automation platform and AWS Qualified Software. We're a small team building tools that make production-grade infrastructure accessible to every engineering team — and we're looking for people who care deeply about that mission.
           </p>
           <div
             className="flex flex-wrap gap-4 justify-center"
@@ -412,7 +412,7 @@ export default function CareersPage() {
               Email HR
             </Link>
           </div>
-          <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">AWS Select Partner · Pune, India · Remote Friendly</p>
+          <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">AWS Qualified Software · Pune, India · Remote Friendly</p>
         </div>
       </section>
 

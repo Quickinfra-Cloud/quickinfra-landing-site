@@ -146,7 +146,7 @@ function MonitorWidget() {
           <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 bg-[#0f172a] border-b border-white/8">
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-[#ff5f57]" /><div className="w-3 h-3 rounded-full bg-[#febc2e]" /><div className="w-3 h-3 rounded-full bg-[#28c840]" /></div>
-              <span className="ml-1 text-white/80 text-xs font-bold">InfraOps Monitor</span>
+              <span className="ml-1 text-white/80 text-xs font-bold">Infra Monitor</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="relative flex h-1.5 w-1.5"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-60" /><span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-400" /></span>
@@ -246,7 +246,7 @@ export default function MonitoringPage() {
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-7 border border-cyan-200 dark:border-cyan-500/30 bg-cyan-50 dark:bg-cyan-500/10"
                 style={{ opacity: heroVisible ? 1 : 0, transform: heroVisible ? "translateY(0)" : "translateY(12px)", transition: "opacity 0.6s ease, transform 0.6s ease" }}>
                 <BarChart2 size={11} className="text-cyan-600 dark:text-cyan-400" />
-                <span className="text-xs font-bold tracking-widest text-cyan-600 dark:text-cyan-400 uppercase">InfraOps Monitoring</span>
+                <span className="text-xs font-bold tracking-widest text-cyan-600 dark:text-cyan-400 uppercase">Infra Monitoring</span>
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.07] tracking-tight mb-6"
                 style={{ opacity: heroVisible ? 1 : 0, transform: heroVisible ? "translateY(0)" : "translateY(18px)", transition: "opacity 0.65s ease 0.08s, transform 0.65s ease 0.08s" }}>
@@ -359,7 +359,7 @@ export default function MonitoringPage() {
           <div className="flex flex-wrap gap-4 justify-center">
             <Link href="https://console.quickinfra.cloud/" className="flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-bold bg-cyan-600 hover:bg-cyan-500 text-white shadow-xl shadow-cyan-600/25 transition-all hover:-translate-y-0.5">Start Free Trial <ArrowRight size={16} /></Link>
           </div>
-          <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">ISO 27001 · AWS Select Partner · SOC 2 Ready</p>
+          <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">ISO/IEC 27001 · AWS Qualified Software · SOC 2 Ready</p>
         </div>
       </section>
 

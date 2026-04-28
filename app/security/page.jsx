@@ -8,7 +8,7 @@ import { ArrowRight, Shield, Lock, Eye, AlertTriangle, CheckCircle, RefreshCw, P
 
 const STATS = [
   { value: "100%", label: "Compliant Day One",      sub: "Controls baked in, not bolted on"       },
-  { value: "6+",   label: "Frameworks Supported",   sub: "SOC 2, HIPAA, PCI-DSS, ISO 27001 & more"},
+  { value: "6+",   label: "Frameworks Supported",   sub: "SOC 2, HIPAA, PCI-DSS, ISO/IEC 27001 & more"},
   { value: "0",    label: "Manual Audits Needed",   sub: "Continuous automated compliance checks"  },
   { value: "97",   label: "Avg CIS Benchmark Score", sub: "Out of 100 across all provisioned infra" },
 ];
@@ -61,7 +61,7 @@ const FRAMEWORKS = [
   },
   {
     id: "iso27001",
-    label: "ISO 27001",
+    label: "ISO/IEC 27001",
     color: "#3b82f6",
     score: 97,
     description: "International standard for Information Security Management Systems (ISMS).",
@@ -120,11 +120,11 @@ const SCAN_LOGS = [
 ];
 
 const FEATURES = [
-  { icon: Shield,       title: "Compliance Baked into Every Deploy",  tag: "DevSecOps",    color: "#ef4444", desc: "SOC 2, HIPAA, PCI-DSS, ISO 27001, CIS, and NIST controls are enforced at the infrastructure level — automatically applied to every provisioned resource." },
+  { icon: Shield,       title: "Compliance Baked into Every Deploy",  tag: "DevSecOps",    color: "#ef4444", desc: "SOC 2, HIPAA, PCI-DSS, ISO/IEC 27001, CIS, and NIST controls are enforced at the infrastructure level — automatically applied to every provisioned resource." },
   { icon: Eye,          title: "Continuous Compliance Monitoring",    tag: "Posture",      color: "#f59e0b", desc: "Real-time compliance posture across all frameworks. Drift from any control triggers an immediate alert with remediation steps — no quarterly audits needed." },
   { icon: Lock,         title: "Zero-Trust Network Architecture",     tag: "Network",      color: "#8b5cf6", desc: "Private subnets, least-privilege security groups, no public exposure by default. Network boundaries enforced by Terraform — not post-hoc firewall rules." },
   { icon: AlertTriangle,title: "SAST & Container Security Scanning",  tag: "Scanning",     color: "#3b82f6", desc: "Every CI/CD run includes SAST, dependency scanning, and container image scanning via Trivy. Vulnerabilities are blocked before they reach production." },
-  { icon: CheckCircle,  title: "Audit-Ready Evidence Collection",     tag: "Audit",        color: "#10b981", desc: "Automated evidence collection for SOC 2 and ISO 27001 audits. Access logs, change history, policy docs, and control mappings — always up to date." },
+  { icon: CheckCircle,  title: "Audit-Ready Evidence Collection",     tag: "Audit",        color: "#10b981", desc: "Automated evidence collection for SOC 2 and ISO/IEC 27001 audits. Access logs, change history, policy docs, and control mappings — always up to date." },
   { icon: RefreshCw,    title: "Auto-Remediation on Violations",      tag: "Automation",   color: "#06b6d4", desc: "When a resource drifts from its compliance baseline, QuickInfra auto-remediates — reverts the change, logs the event, and notifies your team." },
 ];
 
@@ -350,7 +350,7 @@ export default function SecurityPage() {
               </h1>
               <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 font-light leading-relaxed mb-8 max-w-xl"
                 style={{ opacity: heroVisible ? 1 : 0, transform: heroVisible ? "translateY(0)" : "translateY(18px)", transition: "opacity 0.65s ease 0.16s, transform 0.65s ease 0.16s" }}>
-                SOC 2, HIPAA, PCI-DSS, ISO 27001, CIS, and NIST controls are baked into every infrastructure deployment — not bolted on later. Continuous compliance monitoring so you're always audit-ready.
+                SOC 2, HIPAA, PCI-DSS, ISO/IEC 27001, CIS, and NIST controls are baked into every infrastructure deployment — not bolted on later. Continuous compliance monitoring so you're always audit-ready.
               </p>
               <div className="flex flex-wrap gap-3 mb-10"
                 style={{ opacity: heroVisible ? 1 : 0, transform: heroVisible ? "translateY(0)" : "translateY(18px)", transition: "opacity 0.65s ease 0.24s, transform 0.65s ease 0.24s" }}>
@@ -361,7 +361,7 @@ export default function SecurityPage() {
               </div>
               <div className="flex flex-wrap gap-6"
                 style={{ opacity: heroVisible ? 1 : 0, transition: "opacity 0.65s ease 0.32s" }}>
-                {[["ISO 27001", "Certified"], ["SOC 2", "Ready"], ["PCI-DSS", "Compliant"], ["HIPAA", "Ready"]].map(([v, l]) => (
+                {[["ISO/IEC 27001", "Certified"], ["SOC 2", "Ready"], ["PCI-DSS", "Compliant"], ["HIPAA", "Ready"]].map(([v, l]) => (
                   <div key={v}><div className="text-sm font-extrabold text-red-600 dark:text-red-400">{v}</div><div className="text-xs text-slate-400 mt-0.5">{l}</div></div>
                 ))}
               </div>
@@ -517,7 +517,7 @@ export default function SecurityPage() {
           <p className="text-[10px] font-bold tracking-widest uppercase text-red-600 dark:text-red-400 mb-6">Get Started</p>
           <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-6">Stop patching. Start compliant.</h2>
           <p className="text-base text-slate-500 dark:text-slate-400 font-light leading-relaxed mb-10">
-            Start your free trial. SOC 2, HIPAA, PCI-DSS, and ISO 27001 compliance enforced from the first deploy. No security team needed.
+            Start your free trial. SOC 2, HIPAA, PCI-DSS, and ISO/IEC 27001 compliance enforced from the first deploy. No security team needed.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link href="https://console.quickinfra.cloud/" className="flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-bold bg-red-600 hover:bg-red-500 text-white shadow-xl shadow-red-600/25 transition-all hover:-translate-y-0.5">
@@ -525,7 +525,7 @@ export default function SecurityPage() {
             </Link>
             
           </div>
-          <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">ISO 27001 · AWS Select Partner · SOC 2 Ready · PCI-DSS · HIPAA</p>
+          <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">ISO/IEC 27001 · AWS Qualified Software · SOC 2 Ready · PCI-DSS · HIPAA</p>
         </div>
       </section>
 

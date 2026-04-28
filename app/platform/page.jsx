@@ -82,24 +82,24 @@ const PLATFORM_MODULES = [
     ],
   },
   {
-    id: "migration",
-    label: "Migration",
+    id: "deployment",
+    label: "Deployment",
     icon: Cloud,
     color: "#06b6d4",
-    title: "Cloud Migration",
-    desc: "Your transition is secure, efficient, and aligned with business objectives. A template-based approach makes migration an empowering step towards future-ready operations with zero downtime.",
-    highlights: ["On-premise to cloud in days", "Zero-downtime migration engine", "App & database migration", "Multi-cloud strategy support"],
+    title: "Cloud Deployment",
+    desc: "Deploy to any cloud in minutes. Pre-built templates handle the heavy lifting — no manual config, no downtime, no surprises. From dev to prod, every deployment is repeatable and reliable.",
+    highlights: ["Deploy to any cloud in minutes", "Zero-downtime rollouts", "App & database deployments", "Multi-cloud support"],
     metrics: [
-      { label: "Migration time",   before: "Months",      after: "Days"        },
-      { label: "Downtime",         before: "Significant", after: "Zero"        },
+      { label: "Deployment time",   before: "Hours",       after: "Minutes"     },
+      { label: "Downtime",          before: "Significant", after: "Zero"        },
     ],
     consoleLines: [
-      { text: "Migration plan generated · 5 services",  color: "#64748b" },
-      { text: "Pre-flight checks: PASSED",              color: "#4ade80" },
-      { text: "Migrating: web-app service...",          color: "#67e8f9" },
-      { text: "Migrating: postgres-db...",              color: "#67e8f9" },
-      { text: "Cutover complete · zero downtime",       color: "#4ade80" },
-      { text: "Migration status: SUCCESS",              color: "#4ade80" },
+      { text: "Deployment plan generated · 5 services",  color: "#64748b" },
+      { text: "Pre-flight checks: PASSED",               color: "#4ade80" },
+      { text: "Deploying: web-app service...",           color: "#67e8f9" },
+      { text: "Deploying: postgres-db...",               color: "#67e8f9" },
+      { text: "Rollout complete · zero downtime",        color: "#4ade80" },
+      { text: "Deployment status: SUCCESS",              color: "#4ade80" },
     ],
   },
   {
@@ -109,8 +109,7 @@ const PLATFORM_MODULES = [
     color: "#f59e0b",
     title: "Automated InfraOps",
     desc: "Minimises manual cloud management with precise resource provisioning and predictive scaling. Faster deployment cycles, stringent security posture, and streamlined infrastructure optimisation.",
-    highlights: ["Predictive auto-scaling", "Cost anomaly detection", "24/7 automated monitoring", "Self-healing infrastructure"],
-    metrics: [
+highlights: ["Automated resource lifecycle management",  "Multi-cloud cost governance", "Continuous compliance enforcement"],    metrics: [
       { label: "Ops incidents",    before: "12/mo",  after: "0/mo"       },
       { label: "Manual ops work",  before: "40%",    after: "~0%"        },
     ],
@@ -128,7 +127,7 @@ const PLATFORM_MODULES = [
     label: "Monitoring",
     icon: BarChart2,
     color: "#10b981",
-    title: "InfraOps Monitoring",
+    title: "CLoud Monitoring",
     desc: "Elevates monitoring by blending advanced DevOps security with comprehensive diagnostics. Continuous vigilance over cloud health and cybersecurity — proactively securing against emerging threats.",
     highlights: ["Real-time cloud health dashboards", "Predictive alert engine", "Cost visibility per service", "Multi-cloud observability"],
     metrics: [
@@ -422,7 +421,7 @@ export default function PlatformPage() {
                 className="text-base sm:text-lg text-slate-500 dark:text-slate-400 font-light leading-relaxed mb-8 max-w-xl"
                 style={{ opacity: heroVisible ? 1 : 0, transform: heroVisible ? "translateY(0)" : "translateY(18px)", transition: "opacity 0.65s ease 0.16s, transform 0.65s ease 0.16s" }}
               >
-                Your one-stop internal developer platform where automation merges with deep technical
+                Your one-stop platform where automation merges with deep technical
                 expertise — ensuring seamless operations and fast, compliant launches. Built for
                 startups and large enterprises alike.
               </p>
@@ -441,7 +440,7 @@ export default function PlatformPage() {
                 className="flex flex-wrap gap-6"
                 style={{ opacity: heroVisible ? 1 : 0, transition: "opacity 0.65s ease 0.32s" }}
               >
-                {[["ISO 27001", "Certified"], ["AWS", "Select Partner"], ["200+", "Integrations"]].map(([l, s]) => (
+                {[["ISO/IEC 27001", "Certified"], ["AWS", "Qualified Software"], ["SOC 2", "Ready"]].map(([l, s]) => (
                   <div key={l}>
                     <div className="text-xs font-extrabold text-blue-600 dark:text-blue-500 tracking-wide">{l}</div>
                     <div className="text-xs text-slate-500 dark:text-slate-500 mt-0.5">{s}</div>
@@ -647,7 +646,7 @@ export default function PlatformPage() {
             Ready to transform your<br />DevOps and InfraOps?
           </h2>
           <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 font-light leading-relaxed mb-10">
-            Start your free trial today. No credit card. No DevOps engineer needed.
+            Start your free trial today. No credit card. <br/>
             Production-ready infra in under an hour.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
@@ -657,7 +656,7 @@ export default function PlatformPage() {
            
           </div>
           <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">
-            ISO 27001 · AWS Select Partner · SOC 2 Ready
+            ISO/IEC 27001 · AWS Qualified Software · SOC 2 Ready
           </p>
         </div>
       </section>

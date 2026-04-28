@@ -521,7 +521,7 @@ export default function EngineeringTeamsPage() {
            
           </div>
           <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">
-            ISO 27001 · AWS Select Partner · SOC 2 Ready
+            ISO/IEC 27001 · AWS Qualified Software · SOC 2 Ready
           </p>
         </div>
       </section>

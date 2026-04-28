@@ -177,7 +177,7 @@ const CASE_STUDIES = [
 const STATS = [
   { value: "100+", label: "Cloud Projects", color: "#3b82f6" },
   { value: "<15m", label: "Avg Response Time", color: "#10b981" },
-  { value: "AWS", label: "Select Partner", color: "#f59e0b" },
+  { value: "AWS", label: "Qualified Software", color: "#f59e0b" },
   { value: "24/7", label: "Infrastructure Ops", color: "#8b5cf6" },
 ];
 
@@ -255,7 +255,7 @@ export default function AWSPartnersPage() {
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-[#f59e0b] animate-pulse" />
                 <span className="text-xs font-bold tracking-widest text-[#d97706] dark:text-[#fbbf24] uppercase">
-                  AWS Select Partner
+                  AWS Qualified Software
                 </span>
               </div>
 
@@ -318,7 +318,7 @@ export default function AWSPartnersPage() {
                   sub="AWS Partner Network"
                 />
                 <AWSBadge label="DevOps Competency" sub="In Progress" />
-                <AWSBadge label="ISO 27001" sub="Certified" />
+                <AWSBadge label="ISO/IEC 27001" sub="Certified" />
               </div>
             </div>
 
@@ -472,7 +472,7 @@ export default function AWSPartnersPage() {
               Exclusive AWS Partner Benefits
             </h2>
             <p className="text-base text-slate-500 dark:text-slate-400 font-light max-w-2xl mx-auto">
-              As an AWS Select Partner specialising in DevOps excellence,
+              As an AWS Qualified Software specialising in DevOps excellence,
               QuickInfra delivers transformative cloud solutions with exclusive
               access to resources and expertise unavailable elsewhere.
             </p>
@@ -858,7 +858,7 @@ export default function AWSPartnersPage() {
             </Link>
           </div>
           <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">
-            AWS Select Partner · ISO 27001 · SOC 2 Ready
+            AWS Qualified Software · ISO/IEC 27001 · SOC 2 Ready
           </p>
         </div>
       </section>

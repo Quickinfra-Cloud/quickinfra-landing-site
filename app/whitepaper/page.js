@@ -434,7 +434,7 @@ export default function WhitepapersPage() {
 
       <div className="border-t border-slate-100 dark:border-slate-800 py-8 px-4 text-center">
         <p className="text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">
-          ISO 27001 · AWS Select Partner · SOC 2 Ready
+          ISO/IEC 27001 · AWS Qualified Software · SOC 2 Ready
         </p>
       </div>
 

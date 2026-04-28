@@ -21,8 +21,8 @@ const FEATURES = [
   { icon: Zap,       title: "Auto Infrastructure Provisioning", tag: "IaC",           desc: "Define once, deploy anywhere. Auto-generates Terraform configs and provisions cloud resources — no scripts, no ops tickets." },
   { icon: RefreshCw, title: "One-Click CI/CD Setup",            tag: "CI/CD",         desc: "From repo to production in minutes. Preconfigured pipelines, zero YAML wrestling. Your team ships features, not fixes." },
   { icon: Shield,    title: "Security & Compliance",            tag: "DevSecOps",     desc: "SOC 2, PCI-DSS, HIPAA, GDPR controls baked into every deployment. Security is your default configuration." },
-  { icon: Cloud,     title: "Cloud Migration",                  tag: "Migration",     desc: "Template-based migration engine that moves workloads with zero downtime. Assess, plan, execute — one dashboard." },
-  { icon: BarChart2, title: "InfraOps Monitoring",              tag: "Observability", desc: "Real-time visibility into your cloud stack. Cost anomaly detection, predictive alerts, and health dashboards." },
+  { icon: Cloud,     title: "Cloud Deployment",                  tag: "Deployments",     desc: "Deploy to any cloud in minutes. Pre-built templates handle the heavy lifting — no manual config, no downtime, no surprises." },
+  { icon: BarChart2, title: "Cloud Monitoring",              tag: "Observability", desc: "Real-time visibility into your cloud stack. Cost anomaly detection, predictive alerts, and health dashboards." },
   { icon: Settings,  title: "Automated InfraOps",               tag: "Automation",    desc: "Predictive scaling, drift detection, and continuous cost optimisation — running 24/7 so your team doesn't have to." },
 ];
 
@@ -33,7 +33,7 @@ const PERSONAS = [
     tag: "Move fast, break nothing",
     color: "#3b82f6",
     pain: "You're shipping features but infra setup is eating your sprints. One misconfigured pipeline can kill a launch.",
-    solution: "Production-grade cloud in hours, not weeks. Auto-provisioned, pre-secured, compliant from day one. Focus on your product.",
+    solution: "Create production-grade cloud in hours, not weeks. Auto-provisioned, pre-secured, compliant from day one. Focus on your product.",
     metrics: [
       { label: "Setup time",  before: "3 weeks",  after: "4 hours"  },
       { label: "Infra cost",  before: "₹2.4L/mo", after: "₹84K/mo" },
@@ -45,7 +45,7 @@ const PERSONAS = [
     tag: "Let engineers do engineering",
     color: "#8b5cf6",
     pain: "Your best devs are writing Terraform and debugging YAML instead of building the product you hired them for.",
-    solution: "Automate the entire ops layer. Auto-generated IaC, one-click CI/CD, zero pipeline babysitting. Engineers ship features.",
+    solution: "Automate the entire ops layer. Auto-generated IaC, one-click CI/CD, zero pipeline overhead. Engineers ship features.",
     metrics: [
       { label: "Dev productivity", before: "1x",     after: "4x"    },
       { label: "Deploy frequency", before: "Weekly", after: "Daily" },
@@ -620,7 +620,7 @@ export default function HomePage() {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-7 border border-blue-200 dark:border-blue-500/30 bg-blue-50 dark:bg-blue-500/10">
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-                <span className="text-xs font-bold tracking-widest text-blue-600 dark:text-blue-400 uppercase">AWS Select Partner</span>
+                <span className="text-xs font-bold tracking-widest text-blue-600 dark:text-blue-400 uppercase">AWS Qualified Software</span>
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.07] tracking-tight mb-6">
                 Ship Code.<br />
@@ -636,7 +636,7 @@ export default function HomePage() {
                 
               </div>
               <div className="flex flex-wrap gap-6 mt-10">
-                {[["ISO 27001", "Certified"], ["AWS", "Select Partner"], ["SOC 2", "Ready"]].map(([l, s]) => (
+                {[["ISO/IEC 27001", "Certified"], ["AWS", "Qualified Software"], ["SOC 2", "Ready"]].map(([l, s]) => (
                   <div key={l}>
                     <div className="text-xs font-extrabold text-blue-600 dark:text-blue-500 tracking-wide">{l}</div>
                     <div className="text-xs text-slate-500 dark:text-slate-500 mt-0.5">{s}</div>
@@ -699,7 +699,7 @@ export default function HomePage() {
           </div>
           <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-4">QuickInfra collapses months of ops work into hours.</h3>
           <p className="text-base text-slate-500 dark:text-slate-400 leading-relaxed font-light">
-            One internal developer platform that auto-provisions infra, wires up CI/CD, enforces compliance, and keeps your cloud healthy — continuously, automatically.
+            One platform that auto-provisions infra, wires up CI/CD, enforces compliance, and keeps your cloud healthy — continuously, automatically.
           </p>
         </div>
       </section>
@@ -927,9 +927,10 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,rgba(59,130,246,0.07),transparent)] dark:bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,rgba(59,130,246,0.12),transparent)]" />
         <div className="relative max-w-2xl mx-auto text-center">
           <p className="text-[10px] font-bold tracking-widest uppercase text-blue-600 dark:text-blue-500 mb-6">Get Started</p>
-          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-6">Done babysitting<br />your infra?</h2>
+          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-6"> Put your cloud infra on autopilot?</h2>
           <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 font-light leading-relaxed mb-10">
-            Start your free trial today. No credit card. No DevOps engineer needed. Production-ready infra in under an hour.
+            Start your free trial today. No credit card.
+            <br/> Production-ready infra in under an hour.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link href="https://console.quickinfra.cloud/" className="flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/25 hover:shadow-blue-600/40 transition-all hover:-translate-y-0.5">
@@ -938,7 +939,7 @@ export default function HomePage() {
            
           </div>
           <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">
-            ISO 27001 · AWS Select Partner · SOC 2 Ready
+            ISO/IEC 27001 · AWS Qualified Software · SOC 2 Ready
           </p>
         </div>
       </section>

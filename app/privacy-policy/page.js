@@ -329,7 +329,7 @@ export default function PrivacyPolicyPage() {
             We are fully committed to protecting the privacy and security of our customers. Here is how we collect, use, and safeguard your data.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-6">
-            {[["ISO 27001", "Certified"], ["SOC 2", "Ready"], ["GDPR", "Compliant"]].map(([l, s]) => (
+            {[["ISO/IEC 27001", "Certified"], ["SOC 2", "Ready"], ["GDPR", "Compliant"]].map(([l, s]) => (
               <div key={l} className="text-center">
                 <div className="text-xs font-extrabold text-blue-600 dark:text-blue-500 tracking-wide">{l}</div>
                 <div className="text-xs text-slate-500 dark:text-slate-500 mt-0.5">{s}</div>
@@ -435,7 +435,7 @@ export default function PrivacyPolicyPage() {
       {/* ── FOOTER NOTE ───────────────────────────────────────────────────── */}
       <div className="border-t border-slate-100 dark:border-slate-800 py-8 px-4 text-center">
         <p className="text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">
-          ISO 27001 · AWS Select Partner · SOC 2 Ready · GDPR Compliant
+          ISO/IEC 27001 · AWS Qualified Software · SOC 2 Ready · GDPR Compliant
         </p>
       </div>
 

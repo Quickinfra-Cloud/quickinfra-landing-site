@@ -62,10 +62,9 @@ const LOGS = {
 const FEATURES = [
   { icon: Zap,       title: "Auto-Generated Terraform",     tag: "IaC",         color: "#3b82f6", desc: "Describe your infra requirements once. QuickInfra generates production-grade Terraform — VPCs, subnets, security groups, compute, databases — automatically." },
   { icon: Shield,    title: "Compliance by Default",        tag: "Security",    color: "#ef4444", desc: "Every provisioned resource inherits CIS benchmarks, SOC 2, HIPAA, and PCI-DSS controls. Security policies are infra-level, not afterthoughts." },
-  { icon: Cloud,     title: "Multi-Cloud Support",          tag: "Portability", color: "#06b6d4", desc: "Provision across AWS, Azure, and GCP from a single control plane. Unified resource model, one dashboard, no cloud-specific scripts to maintain." },
+  { icon: Cloud,     title: "Multi-Cloud Support",          tag: "Portability", color: "#06b6d4", desc: "Provision across AWS, Azure, and GCP from a single platform. Unified resource model, one dashboard, no cloud-specific scripts to maintain." },
   { icon: RefreshCw, title: "Drift Detection & Correction", tag: "Reliability", color: "#8b5cf6", desc: "Continuous state comparison between your IaC definition and live cloud resources. Auto-remediates drift without manual intervention." },
-  { icon: BarChart2, title: "Cost Optimisation",            tag: "FinOps",      color: "#f59e0b", desc: "Right-sizing recommendations, idle resource detection, and reserved instance guidance — surfaced before and after provisioning." },
-  { icon: Settings,  title: "Module Library",               tag: "Templates",   color: "#10b981", desc: "Pre-built Terraform modules for every common pattern — blue/green EC2, RDS HA, EKS clusters, CloudFront distributions." },
+{ icon:  BarChart2, title: "Scale & Teardown on Demand", tag: "Elasticity", color: "#ec4899", desc: "Spin up full environments or tear them down in one click. Scale infra up for peak load, delete it when you're done — no orphaned resources, no surprise bills." },  { icon: Settings,  title: "Module Library",               tag: "Templates",   color: "#10b981", desc: "Pre-built Terraform modules for every common pattern — blue/green EC2, RDS HA, EKS clusters, CloudFront distributions." },
 ];
 
 const HOW_IT_WORKS = [
@@ -78,7 +77,7 @@ const HOW_IT_WORKS = [
 const METRICS = [
   { before: "3 weeks",   after: "4 hours",   label: "Initial setup",     color: "#3b82f6" },
   { before: "Manual",    after: "Generated", label: "Terraform writing", color: "#8b5cf6" },
-  { before: "₹2.4L/mo",  after: "₹84K/mo",  label: "Infra cost",        color: "#f59e0b" },
+  { before: "$1.3L/mo",  after: "$84K/mo",  label: "Infra cost",        color: "#f59e0b" },
   { before: "Reactive",  after: "Automated", label: "Drift handling",    color: "#10b981" },
 ];
 
@@ -361,11 +360,11 @@ export default function InfraProvisioningPage() {
         <div className="relative max-w-2xl mx-auto text-center">
           <p className="text-[10px] font-bold tracking-widest uppercase text-blue-600 dark:text-blue-500 mb-6">Get Started</p>
           <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-6">Cloud infra, without the ops overhead.</h2>
-          <p className="text-base text-slate-500 dark:text-slate-400 font-light leading-relaxed mb-10">Start your free trial. No credit card. No DevOps engineer needed. Production-ready infra in under an hour.</p>
+          <p className="text-base text-slate-500 dark:text-slate-400 font-light leading-relaxed mb-10">Start your free trial. No credit card. <br/> Production-ready infra in under an hour.</p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link href="https://console.quickinfra.cloud/" className="flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/25 transition-all hover:-translate-y-0.5">Start Free Trial <ArrowRight size={16} /></Link>
           </div>
-          <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">ISO 27001 · AWS Select Partner · SOC 2 Ready</p>
+          <p className="mt-6 text-[10px] font-bold tracking-widest uppercase text-slate-300 dark:text-slate-700">ISO/IEC 27001 · AWS Qualified Software · SOC 2 Ready</p>
         </div>
       </section>
 
