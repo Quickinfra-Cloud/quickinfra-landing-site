@@ -207,9 +207,9 @@ export default function Footer() {
               <MapPin size={13} />
             </span>
             <span className="font-light leading-relaxed">
-              Clover Hills Plaza, Office 523, 5th Floor,
+               Office Number - 1506, 15th Floor, Nyati Enthral,
               <br className="hidden sm:block" />
-              Kondhwa, Pune — 411048
+               Kharadi South Main Road, Pune, Maharashtra 411014
             </span>
           </div>
         </div>

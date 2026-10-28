@@ -42,7 +42,7 @@ const CONTACT_CHANNELS = [
     title: "Office",
     color: "#10b981",
     detail: "Pune, Maharashtra",
-    sub: "Clover Hills Plaza, Office No. 523, 5th Floor, NIBM-Undri Road, Kondhwa, Pune-411048",
+    sub: " Office Number - 1506, 15th Floor, Nyati Enthral, Kharadi South Main Road, Pune, Maharashtra 411014",
     href: "https://maps.google.com/?q=Clover+Hills+Plaza+Kondhwa+Pune",
     cta: "View on Maps",
     primary: false,

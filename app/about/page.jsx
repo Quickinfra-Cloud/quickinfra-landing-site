@@ -63,41 +63,82 @@ const TEAM = [
     name: "Nayil Kazi",
     role: "Founder & CEO",
     tag: "Sales · Strategy · Vision",
-    color: "#3b82f6",
+    color: "#2563eb",
     initial: "NK",
-    bio: "A seasoned sales and marketing expert with a robust track record in enterprise software. Co-founded QuickInfra to bridge the significant skill gap in the cloud domain.",
+    linkedin: "",
+    bio: "Enterprise sales and marketing expert who co-founded QuickInfra to close the cloud skills gap.",
   },
   {
-    name: "Sudarshan Jadhav",
+    name: "Khalid Khan",
+    role: "CTO",
+    tag: "Technology · Architecture · Engineering",
+    color: "#0e7490",
+    initial: "KK",
+    linkedin: "",
+    bio: "Leads QuickInfra's technology vision and engineering roadmap.",
+  },
+  {
+    name: "Arfa Shaikh",
+    role: "Project Manager",
+    tag: "Planning · Execution · Coordination",
+    color: "#be185d",
+    initial: "AS",
+    linkedin: "",
+    bio: "Keeps every project on track from kickoff to launch.",
+  },
+  {
+    name: "Shafin Kazi",
+    role: "Delivery Manager",
+    tag: "Delivery · Customer Success",
+    color: "#0f766e",
+    initial: "SK",
+    linkedin: "",
+    bio: "Makes sure every customer rollout lands on time and on scope.",
+  },
+   {
+    name: "Aryan Patil",
     role: "Senior Engineer",
-    tag: "Full-Stack · Cloud-Native ",
-    color: "#8b5cf6",
-    initial: "SJ",
-    bio: "Engineering professional who excels in product development, full-stack engineering, and cloud-native architectures. Transforms complex challenges into user-focused solutions.",
+    tag: "Full-Stack · Cloud-Native",
+    color: "#7c3aed",
+    initial: "AP",
+    linkedin: "",
+    bio: "Full-stack and cloud-native engineer focused on user-first product.",
   },
   {
     name: "Dhiraj Dagabaj",
     role: "Senior Engineer",
-    tag: "Cloud Infrastructure · DevOps ",
-    color: "#f59e0b",
+    tag: "Cloud Infrastructure · DevOps",
+    color: "#b45309",
     initial: "DD",
-    bio: "Technology leader with hands-on experience in cloud infrastructure and cloud-native application development. Builds the reliable, scalable systems that power QuickInfra.",
+    linkedin: "",
+    bio: "Builds the reliable, scalable cloud systems that power QuickInfra.",
+  },
+  {
+    name: "Vikrant Shetty",
+    role: "Marketing Lead",
+    tag: "Marketing · Brand · Growth",
+    color: "#c2410c",
+    initial: "VS",
+    linkedin: "",
+    bio: "Drives QuickInfra's brand, demand and go-to-market.",
   },
   {
     name: "Feroz Khan",
     role: "Chief Technology Advisor",
-    tag: "Advisory Board · 25+ yrs exp",
-    color: "#10b981",
+    tag: "25+ yrs exp",
+    color: "#047857",
     initial: "FK",
-    bio: "25+ years building enterprise-grade applications. Formerly led the Cloud CoE at NTT Data. His vision: automate cloud processes to make adoption easy for every organisation.",
+    linkedin: "",
+    bio: "Formerly led the Cloud CoE at NTT Data. Champions automation to make cloud adoption easy.",
   },
   {
     name: "Asad Khan",
     role: "Business Strategy Advisor",
-    tag: "Advisory Board · LambdaTest CEO",
-    color: "#ef4444",
+    tag: "LambdaTest CEO",
+    color: "#b91c1c",
     initial: "AK",
-    bio: "Co-founder and CEO of LambdaTest. Guides QuickInfra's strategic direction with deep market understanding and a proven track record in testing and automation.",
+    linkedin: "",
+    bio: "Co-founder and CEO of LambdaTest. Guides QuickInfra's strategic direction.",
   },
 ];
 
@@ -555,108 +596,116 @@ export default function AboutPage() {
       {/* ── TEAM ─────────────────────────────────────────────────────────── */}
       <section className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 border-y border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[10px] font-bold tracking-widest uppercase text-blue-600 dark:text-blue-500 mb-3">
+          <div className="flex flex-col items-center text-center gap-4 mb-14">
+            <span className="px-3.5 py-1.5 rounded-full bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-300 text-xs font-bold tracking-widest uppercase">
               The People
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
               Meet Our Team
             </h2>
-            <p className="text-base text-slate-500 dark:text-slate-400 font-light max-w-lg mx-auto">
+            <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 font-light max-w-xl leading-relaxed">
               A small, opinionated team of engineers and strategists who've
               spent years in the cloud.
             </p>
           </div>
 
-          {/* Core team — 3 col */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-5">
-            {TEAM.slice(0, 3).map(
-              ({ name, role, tag, color, initial, bio }) => (
+          {/* Core team — centred profile cards */}
+          <div className="flex flex-wrap justify-center gap-6">
+            {TEAM.slice(0, -2).map(
+              ({ name, role, color, initial, bio, linkedin }) => (
                 <div
                   key={name}
-                  className="group rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-7 hover:-translate-y-1 transition-all hover:shadow-xl cursor-default overflow-hidden relative"
+                  className="w-full sm:w-[264px] flex flex-col items-center text-center gap-3.5 px-6 pt-9 pb-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_12px_32px_rgba(15,23,42,0.06)] hover:-translate-y-1 hover:shadow-xl transition-all"
                 >
-                  {/* Top colour stripe */}
+                  {/* Avatar with ring */}
                   <div
-                    className="absolute top-0 inset-x-0 h-0.5 transition-all duration-300"
-                    style={{
-                      background: `linear-gradient(90deg, ${color}, ${color}55)`,
-                    }}
-                  />
-
-                  <div className="flex items-center gap-4 mb-5">
+                    className="w-[104px] h-[104px] rounded-full p-[5px]"
+                    style={{ border: `2px solid ${color}` }}
+                  >
                     <div
-                      className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 text-lg font-extrabold text-white shadow-lg"
-                      style={{
-                        background: `linear-gradient(135deg, ${color}, ${color}cc)`,
-                        boxShadow: `0 8px 20px ${color}30`,
-                      }}
+                      className="w-full h-full rounded-full flex items-center justify-center text-white text-3xl font-extrabold"
+                      style={{ background: color }}
                     >
                       {initial}
                     </div>
-                    <div>
-                      <div className="text-sm font-extrabold tracking-tight">
-                        {name}
-                      </div>
-                      <div
-                        className="text-xs font-bold mt-0.5"
-                        style={{ color }}
-                      >
-                        {role}
-                      </div>
-                      <div className="text-[10px] text-slate-400 dark:text-slate-600 mt-0.5">
-                        {tag}
-                      </div>
-                    </div>
                   </div>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 font-light leading-relaxed">
+
+                  <div className="flex flex-col items-center gap-1.5">
+                    <div className="text-lg font-extrabold tracking-tight">
+                      {name}
+                    </div>
+                    <span className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold">
+                      {role}
+                    </span>
+                  </div>
+
+                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                     {bio}
                   </p>
+
+                  {linkedin && (
+                    <a
+                      href={linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${name} on LinkedIn`}
+                      className="mt-1 w-11 h-11 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-blue-600 hover:border-blue-300 dark:hover:text-blue-400 dark:hover:border-blue-600 transition-colors"
+                    >
+                      <Linkedin size={18} />
+                    </a>
+                  )}
                 </div>
               ),
             )}
           </div>
 
-          {/* Advisory board — 2 col centered */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-3xl mx-auto">
-            {TEAM.slice(3).map(({ name, role, tag, color, initial, bio }) => (
-              <div
-                key={name}
-                className="group rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-7 hover:-translate-y-1 transition-all hover:shadow-xl cursor-default overflow-hidden relative"
-              >
-                <div
-                  className="absolute top-0 inset-x-0 h-0.5"
-                  style={{
-                    background: `linear-gradient(90deg, ${color}, ${color}55)`,
-                  }}
-                />
-                <div className="flex items-center gap-4 mb-5">
+          {/* Advisory board — dark cards */}
+          <div className="flex flex-col items-center gap-6 mt-16">
+            <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight">
+              Advisory Board
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl">
+              {TEAM.slice(-2).map(
+                ({ name, role, tag, color, initial, bio, linkedin }) => (
                   <div
-                    className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 text-lg font-extrabold text-white shadow-lg"
-                    style={{
-                      background: `linear-gradient(135deg, ${color}, ${color}cc)`,
-                      boxShadow: `0 8px 20px ${color}30`,
-                    }}
+                    key={name}
+                    className="flex gap-5 items-start p-7 rounded-3xl bg-slate-900 dark:bg-slate-800/80 border border-slate-900 dark:border-slate-700 text-slate-200"
                   >
-                    {initial}
+                    <div
+                      className="w-[72px] h-[72px] flex-shrink-0 rounded-full flex items-center justify-center text-white text-xl font-extrabold"
+                      style={{ background: color }}
+                    >
+                      {initial}
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <span className="self-start px-2.5 py-0.5 rounded-full bg-slate-800 dark:bg-slate-700 text-slate-300 text-[11px] font-bold tracking-wider uppercase">
+                        Advisor
+                      </span>
+                      <div className="text-lg font-extrabold text-white">
+                        {name}
+                      </div>
+                      <div className="text-sm font-semibold text-blue-300">
+                        {role} · {tag}
+                      </div>
+                      <p className="mt-1 text-sm text-slate-300 leading-relaxed">
+                        {bio}
+                      </p>
+                      {linkedin && (
+                        <a
+                          href={linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`${name} on LinkedIn`}
+                          className="mt-2 self-start inline-flex items-center gap-2 text-sm font-semibold text-blue-300 hover:text-blue-200"
+                        >
+                          <Linkedin size={16} /> LinkedIn
+                        </a>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-sm font-extrabold tracking-tight">
-                      {name}
-                    </div>
-                    <div className="text-xs font-bold mt-0.5" style={{ color }}>
-                      {role}
-                    </div>
-                    <div className="text-[10px] text-slate-400 dark:text-slate-600 mt-0.5">
-                      {tag}
-                    </div>
-                  </div>
-                </div>
-                <p className="text-sm text-slate-500 dark:text-slate-400 font-light leading-relaxed">
-                  {bio}
-                </p>
-              </div>
-            ))}
+                ),
+              )}
+            </div>
           </div>
         </div>
       </section>
@@ -748,9 +797,9 @@ export default function AboutPage() {
                       Office
                     </div>
                     <div className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                      Clover Hills Plaza, Office No. 523, 5th Floor,
+                      Office Number - 1506, 15th Floor, Nyati Enthral,
                       <br />
-                      NIBM-Undri Road, Kondhwa, Pune – 411048
+                       Kharadi South Main Road, Pune, Maharashtra 411014
                     </div>
                   </div>
                 </div>
